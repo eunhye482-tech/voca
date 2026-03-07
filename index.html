@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Master - Dark Mode</title>
+    <style>
+        :root { 
+            --chalk-bg: #1A2421;    --chalk-board: #2D3A35; --chalk-white: #ECECEC; 
+            --point-yellow: #FFD43B; --point-orange: #FF922B; --border-line: #3E4C46;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #0F1412; display: flex; justify-content: center; height: 100vh; overflow: hidden; color: var(--chalk-white); }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: var(--chalk-bg); display: flex; flex-direction: column; position: relative; border-left: 1px solid var(--border-line); border-right: 1px solid var(--border-line); }
+        header { padding: 40px 20px 20px; text-align: center; }
+        .logo-area h1 { font-size: 2.2rem; margin: 0; font-weight: 900; color: var(--point-yellow); letter-spacing: -1.5px; }
+        .logo-area p { margin: 5px 0 0; font-size: 0.9rem; font-weight: 600; color: var(--point-orange); letter-spacing: 2px; text-transform: uppercase; }
+        main { flex: 1; padding: 0 25px; overflow-y: auto; }
+        .selection-group { margin-bottom: 25px; }
+        .group-label { font-size: 0.85rem; font-weight: 800; color: #8C9F96; margin-bottom: 12px; display: block; padding-left: 5px; }
+        .btn-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .choice-btn { background: var(--chalk-board); border: 1px solid var(--border-line); border-radius: 12px; color: var(--chalk-white); padding: 12px 0; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .choice-btn.selected { background: var(--point-yellow); color: #000; border-color: var(--point-yellow); }
+        .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+        .num-btn { aspect-ratio: 1; background: var(--chalk-board); border: 1px solid var(--border-line); border-radius: 8px; color: var(--chalk-white); font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+        .num-btn.selected { background: var(--point-orange); border-color: var(--point-orange); color: white; }
+        .test-btn { grid-column: span 2; aspect-ratio: auto; height: 45px; background: #3a4d46; border: 1px solid var(--point-orange); color: var(--point-orange); font-weight: 800; }
+        .test-btn.selected { background: var(--point-orange); color: white; }
+        footer { padding: 20px 25px 40px; }
+        .start-btn { width: 100%; background: var(--point-yellow); border: none; padding: 18px; border-radius: 15px; font-size: 1.2rem; font-weight: 900; color: #000; cursor: pointer; }
+        main::-webkit-scrollbar { width: 0; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <header><div class="logo-area"><h1>English Master</h1><p>2026 수능 완성/연습</p></div></header>
+    <main>
+        <div class="selection-group">
+            <span class="group-label">STEP 1. 교재 선택</span>
+            <div class="btn-row">
+                <button class="choice-btn" onclick="selectBook('수특', this)">수특</button>
+                <button class="choice-btn" onclick="selectBook('영독', this)">영독</button>
+                <button class="choice-btn" onclick="selectBook('완성', this)">완성</button>
+            </div>
+        </div>
+        <div class="selection-group" id="lecture-group-container" style="display: none;">
+            <span class="group-label">STEP 2. 강(Unit) 및 테스트 선택</span>
+            <div class="grid-6" id="lecture-group"></div>
+        </div>
+        <div class="selection-group" id="num-group-container" style="display: none;">
+            <span class="group-label">STEP 3. 지문 선택</span>
+            <div class="grid-6" id="num-group"></div>
+        </div>
+    </main>
+    <footer><button class="start-btn" onclick="startLearning()">학습 시작하기</button></footer>
+</div>
+
+<script>
+    const config = {
+        '수특': { lectures: 30, unitPassages: 4, mini: 3, miniPassages: 28 },
+        '영독': { lectures: 12, unitPassages: 12, mini: 3, miniPassages: 28 },
+        '완성': { lectures: 16, unitPassages: 5, mini: 6, miniPassages: 28 }
+    };
+    let selections = { book: '', type: 'normal', lecture: '', num: '' };
+
+    function selectBook(book, btn) {
+        document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selections = { book: book, type: 'normal', lecture: '', num: '' };
+        const lectureArea = document.getElementById('lecture-group');
+        lectureArea.innerHTML = '';
+        document.getElementById('lecture-group-container').style.display = 'block';
+        document.getElementById('num-group-container').style.display = 'none';
+
+        const data = config[book];
+        for (let i = 1; i <= data.lectures; i++) {
+            const lBtn = document.createElement('button');
+            lBtn.className = 'num-btn';
+            lBtn.innerText = i;
+            lBtn.onclick = function() {
+                lectureArea.querySelectorAll('.num-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selections.type = 'normal';
+                selections.lecture = i;
+                generatePassages();
+            };
+            lectureArea.appendChild(lBtn);
+        }
+        for (let j = 1; j <= data.mini; j++) {
+            const tBtn = document.createElement('button');
+            tBtn.className = 'num-btn test-btn';
+            tBtn.innerText = `TEST ${j}`;
+            tBtn.onclick = function() {
+                lectureArea.querySelectorAll('.num-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selections.type = 'test';
+                selections.lecture = j;
+                generatePassages();
+            };
+            lectureArea.appendChild(tBtn);
+        }
+    }
+
+    function generatePassages() {
+        const numGroup = document.getElementById('num-group');
+        numGroup.innerHTML = '';
+        document.getElementById('num-group-container').style.display = 'block';
+        const data = config[selections.book];
+        const count = (selections.type === 'normal') ? data.unitPassages : data.miniPassages;
+        const isSuwanNormal = (selections.book === '완성' && selections.type === 'normal');
+        for (let i = 1; i <= count; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'num-btn';
+            if (isSuwanNormal) {
+                const labels = ["기출", "1", "2", "3", "4"];
+                btn.innerText = labels[i-1] || i;
+            } else { btn.innerText = i; }
+            btn.onclick = function() {
+                numGroup.querySelectorAll('.num-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selections.num = i;
+            };
+            numGroup.appendChild(btn);
+        }
+    }
+
+    function startLearning() {
+        if (!selections.lecture || !selections.num) { alert('모두 선택해주세요!'); return; }
+        
+        let folderName = selections.lecture;
+        if (selections.type === 'test') {
+            const prefix = (selections.book === '영독') ? 'minitest' : (selections.book === '수특') ? 'test' : '실전모의고사';
+            folderName = prefix + selections.lecture;
+        }
+        
+        // 🍎 핵심: index.html이 H3 폴더 안에 있으므로 'H3/'를 경로에서 제거
+        // 결과 예: ./영독/1/1.html
+        const finalPath = "./" + selections.book + "/" + folderName + "/" + selections.num + ".html";
+        
+        window.location.href = finalPath;
+    }
+</script>
+</body>
+</html>
