@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 4-11</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 4-11</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Melodies are defined not by the absolute value of each pitch, but by the pattern or relation of successive pitches across time; most people have no trouble recognizing a melody that is played in a higher or lower key than they’ve heard it in before.", ko: "멜로디는 각 음의 절대적인 수치가 아니라 시간이 흐르면서 이어지는 음들의 패턴이나 관계에 의해 정의됩니다. 대부분의 사람들은 이전에 들었던 것보다 더 높거나 낮은 조로 연주되는 멜로디를 인식하는 데 어려움이 없습니다.", voca: ["defined:정의되는", "absolute:절대적인", "pitch:음의 높이", "successive:연속적인", "recognizing:인식하는", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In fact, many melodies do not have a “correct” starting pitch; they just float freely in space, starting anywhere.", ko: "사실, 많은 멜로디는 '정확한' 시작 음을 가지고 있지 않습니다. 그것들은 단지 공간 속에서 자유롭게 떠다니며 어디에서나 시작됩니다.", voca: ["correct:정확한", "starting pitch:시작 음", "float:떠다니다", "freely:자유롭게", "space:공간", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "“Happy Birthday” is an example of this.", ko: "“생일 축하합니다” 노래가 이것의 한 예입니다.", voca: ["example:예시", "Happy Birthday:생일 축하 노래", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "One way to think about a melody, then, is as an abstract prototype that is derived from specific combinations of key, tempo, instrumentation, and so on.", ko: "그렇다면 멜로디에 대해 생각하는 한 가지 방법은 조, 템포, 악기 편성 등의 특정 조합에서 파생된 추상적인 원형으로 보는 것입니다.", voca: ["abstract:추상적인", "prototype:원형", "derived:파생된", "specific:특정한", "instrumentation:악기 편성", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "A cognitive psychologist would say that a melody is an auditory object that maintains its identity in spite of transformations, just as a chair maintains its identity when you move it to the other room, turn it upside down, or paint it red.", ko: "인지 심리학자라면 멜로디란 변형에도 불구하고 정체성을 유지하는 청각적 대상이라고 말할 것입니다. 마치 의자를 다른 방으로 옮기거나 거꾸로 뒤집거나 빨간색으로 칠해도 정체성이 유지되는 것과 같습니다.", voca: ["cognitive:인지의", "auditory:청각의", "maintains:유지하다", "identity:정체성", "transformations:변형", "upside down:거꾸로", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "So, for example, if you hear a song played louder than you are accustomed to, you still identify it as the same song. The same holds for changes in the absolute pitch values of the song, which can be changed so long as the relative distances between them remain the same.", ko: "예를 들어, 평소 익숙한 것보다 더 크게 연주되는 노래를 듣더라도 당신은 여전히 그것을 같은 노래로 식별합니다. 노래의 절대적인 음의 수치 변화도 마찬가지인데, 음들 사이의 상대적 거리가 동일하게 유지되는 한 바뀔 수 있습니다.", voca: ["accustomed to:~에 익숙한", "identify:식별하다", "holds for:~에도 적용되다", "relative:상대적인", "distances:거리", "remain:유지되다", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Essence of Melody</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 멜로디를 정의하는 상대적 관계</span><div class="struct-text">멜로디는 절대적인 음의 높이가 아니라, 시간의 흐름에 따른 음들 사이의 '패턴'과 '상대적 관계'에 의해 정의됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 추상적 원형으로서의 음악</span><div class="struct-text">멜로디는 특정한 조나 악기 편성에 얽매이지 않는 추상적인 원형(Prototype)입니다. '생일 축하 노래'를 어떤 높이에서 시작하든 우리가 같은 노래로 인식하는 이유입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 인지적 대상의 정체성 유지</span><div class="struct-text">심리학적으로 멜로디는 음량이나 조가 변하더라도 음 간의 상대적 거리가 유지되는 한 그 정체성을 잃지 않는 '청각적 대상'입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">절대적 음 높이가 아닌 음들 사이의 상대적 관계와 패턴을 통해 유지되는 멜로디의 인지적 정체성</span><span class="topic-eng">The cognitive identity of a melody maintained through the relative relationships and patterns between pitches rather than absolute values.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

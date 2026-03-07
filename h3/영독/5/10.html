@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 5-10</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 5-10</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "In the forest, there are unwritten guidelines for tree etiquette.", ko: "숲에는 나무의 에티켓에 관한 불문율의 지침들이 있습니다.", voca: ["forest:숲", "unwritten:불문율의/기록되지 않은", "guidelines:지침", "etiquette:에티켓", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "These guidelines lay down the proper appearance for upright members of ancient forests and acceptable forms of behavior.", ko: "이 지침들은 고대 숲의 직립한 구성원들이 갖추어야 할 적절한 외양과 수용 가능한 행동 양식을 규정합니다.", voca: ["lay down:규정하다", "proper:적절한", "appearance:외양", "upright:직립한", "acceptable:수용 가능한", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This is what a mature, well-behaved seasonal tree looks like.", ko: "이것이 성숙하고 예의 바른 계절수(수종)의 모습입니다.", voca: ["mature:성숙한", "well-behaved:예의 바른", "seasonal:계절의", "looks like:~처럼 보이다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "It has a ramrod-straight trunk with a regular, orderly arrangement of wood fibers.", ko: "그것은 목재 섬유가 규칙적이고 질서 있게 배열된, 아주 곧은 줄기를 가지고 있습니다.", voca: ["ramrod-straight:아주 곧은", "trunk:줄기", "regular:규칙적인", "orderly:질서 있는", "arrangement:배열", "fibers:섬유", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The roots stretch out evenly in all directions and reach down into the earth under the tree.", ko: "뿌리는 모든 방향으로 고르게 뻗어 나가 나무 아래 땅속 깊이 도달합니다.", voca: ["roots:뿌리", "stretch out:뻗어 나가다", "evenly:고르게", "directions:방향", "earth:땅/지구", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In its youth, the tree had narrow branches extending sideways from its trunk. They died back a long time ago, and the tree sealed them off with fresh bark and new wood so that what you see now is a long, smooth column.", ko: "어린 시절에 그 나무는 줄기에서 옆으로 뻗어 나온 좁은 가지들이 있었습니다. 그것들은 오래전에 죽어 없어졌고, 나무는 신선한 껍질과 새 목재로 그것들을 봉인하여 지금 당신이 보는 것은 길고 매끄러운 기둥입니다.", voca: ["youth:어린 시절", "sideways:옆으로", "died back:죽어 없어지다", "sealed off:봉인하다", "bark:나무껍질", "smooth:매끄러운", "column:기둥", "🍎", "🍎", "🍎"] },
+        { en: "Only when you get to the top do you see a symmetrical crown formed of strong branches angling upward like arms raised to heaven.", ko: "꼭대기에 도달해서야 비로소 하늘로 들어 올린 팔처럼 위쪽으로 각을 이룬 튼튼한 가지들로 형성된 대칭적인 나무갓(crown)을 볼 수 있습니다.", voca: ["symmetrical:대칭적인", "crown:나무갓", "angling:각을 이루는", "upward:위쪽으로", "heaven:하늘", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "An ideally formed tree such as this can grow very old. Similar rules hold for conifers, except that the topmost branches should be horizontal or bent slightly downward.", ko: "이와 같이 이상적으로 형성된 나무는 아주 오래 살 수 있습니다. 침엽수에도 유사한 규칙이 적용되는데, 다만 맨 꼭대기 가지들이 수평이거나 약간 아래로 구부러져야 한다는 점이 다릅니다.", voca: ["ideally:이상적으로", "hold for:~에 적용되다", "conifers:침엽수", "topmost:맨 꼭대기의", "horizontal:수평의", "bent:구부러진", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Etiquette of Trees</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 숲의 보이지 않는 지침</span><div class="struct-text">숲속의 나무들은 조화롭게 성장하기 위해 지켜야 할 '에티켓'과 같은 적절한 외양과 행동의 불문율을 따릅니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 이상적인 나무의 형태</span><div class="struct-text">잘 자란 나무는 아주 곧은 줄기와 고르게 뻗은 뿌리를 가지며, 하단부의 잔가지는 스스로 정리하여 매끄러운 기둥 형태를 유지합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 장수의 비결과 수종별 차이</span><div class="struct-text">꼭대기에 대칭적인 가지들을 가진 이상적인 형태의 나무는 오래 살 수 있습니다. 활엽수와 침엽수 사이에 약간의 형태 차이는 있지만, 질서 있는 성장의 규칙은 동일하게 적용됩니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">숲 생태계에서 장수와 조화로운 성장을 위해 나무들이 따르는 이상적인 외형적·행동적 규칙</span><span class="topic-eng">The unwritten guidelines and ideal structural characteristics for orderly growth and longevity among forest trees.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

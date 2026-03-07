@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 5-5</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 5-5</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The search for approval has its own challenges.", ko: "승인을 구하는 것에는 그 자체의 어려움이 있습니다.", voca: ["search:찾기/갈구", "approval:승인/인정", "challenges:어려움/도전", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In the formative period of childhood the child seeks the approval of its caretakers as a means of securing their love.", ko: "아동기의 형성기에 아이는 부모의 사랑을 확보하기 위한 수단으로 보호자의 승인을 구합니다.", voca: ["formative:형성하는", "childhood:어린 시절", "caretakers:보호자", "means:수단", "securing:확보하는", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This persists into adulthood where there is a general need for the approval of others, especially loved ones, or those who are admired or looked up to because they have particular qualities or skills.", ko: "이것은 성인기까지 지속되어 타인, 특히 사랑하는 사람이나 특정한 자질이나 기술을 가지고 있어 존경하거나 우러러보는 사람들의 승인에 대한 일반적인 욕구가 존재하게 됩니다.", voca: ["persists:지속되다", "adulthood:성인기", "admired:존경받는", "looked up to:~을 우러러보다", "particular:특정한", "qualities:자질", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "But this can turn into an unhealthy, excessive need for approval if the individual is uncertain about his or her own independence, rights, responsibilities and effectiveness (the ability to influence things).", ko: "하지만 개인이 자신의 독립성, 권리, 책임 및 유능함(사물에 영향을 미치는 능력)에 대해 확신하지 못한다면, 이것은 승인에 대한 건강하지 않고 과도한 욕구로 변할 수 있습니다.", voca: ["excessive:과도한", "uncertain:불확실한", "independence:독립성", "responsibilities:책임", "effectiveness:유능함/효과성", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The constant searching for approval is based on the fear that the other’s love will be withdrawn and that you will be left helpless and unloved.", ko: "승인을 끊임없이 구하는 것은 상대방의 사랑이 철회되고 자신이 무력하고 사랑받지 못한 채 남겨질 것이라는 두려움에 근거합니다.", voca: ["constant:끊임없는", "withdrawn:철회된", "helpless:무력한", "unloved:사랑받지 못하는", "fear:두려움", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This, of course, is an extension of a childhood pattern whereby the individual feels that he or she never received enough (unconditional) approval or love from her or his parents. As a result they learn to feel unworthy and that they don’t have the right to expect unconditional love and approval.", ko: "이것은 물론, 개인이 부모로부터 충분한 (무조건적인) 승인이나 사랑을 결코 받지 못했다고 느끼는 어린 시절 패턴의 연장선입니다. 그 결과 그들은 자신이 가치 없다고 느끼고 무조건적인 사랑과 승인을 기대할 권리가 없다고 배우게 됩니다.", voca: ["extension:연장", "whereby:~하는", "unconditional:무조건적인", "unworthy:가치 없는", "expect:기대하다", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Psychology of Approval Seeking</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 아동기의 승인 욕구와 사랑</span><div class="struct-text">어린 시절 부모의 승인을 구하는 것은 생존을 위한 사랑을 확보하려는 본능적인 수단입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 성인기의 과도한 승인 욕구</span><div class="struct-text">자신의 독립성과 책임감에 확신이 없는 성인은 타인의 인정에 과도하게 집착하게 되며, 이는 사랑을 잃을지도 모른다는 깊은 공포에서 기인합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 결핍의 연장선</span><div class="struct-text">이러한 패턴은 어린 시절 무조건적인 사랑을 충분히 받지 못한 경험의 연장이며, 스스로를 가치 없다고 느끼게 만드는 악순환을 낳습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">어린 시절의 애정 결핍에서 기인한 성인기의 과도하고 불안한 타인 승인 욕구</span><span class="topic-eng">The excessive and unhealthy need for approval in adulthood rooted in the lack of unconditional love during childhood.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

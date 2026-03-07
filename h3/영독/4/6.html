@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 4-6</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 4-6</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Among the attempts to resist fast fashion are consumer movements to make more informed, ethical decisions as they purchase, use, and repair their clothing.", ko: "패스트 패션에 저항하려는 시도들 중에는 의류를 구매하고 사용하며 수선할 때 더 정보에 근거한 윤리적인 결정을 내리려는 소비자 운동이 있습니다.", voca: ["attempts:시도", "resist:저항하다", "informed:정보에 근거한", "ethical:윤리적인", "purchase:구매하다", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The “slow fashion” movement, for example, encourages buying fewer clothes of higher quality and wearing them longer, purchasing clothes produced (or at least sold) locally, and thinking critically about the labor and environmental conditions surrounding their production and distribution.", ko: "예를 들어, '슬로우 패션' 운동은 더 적은 수의 고품질 의류를 사서 더 오래 입고, 지역에서 생산된(또는 적어도 판매된) 옷을 구매하며, 생산 및 유통을 둘러싼 노동 및 환경 조건에 대해 비판적으로 생각할 것을 권장합니다.", voca: ["slow fashion:슬로우 패션", "higher quality:고품질", "locally:지역적으로", "critically:비판적으로", "distribution:유통", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Some consumers have become more active in producing (sewing or knitting) and repairing their own clothing.", ko: "일부 소비자들은 자신만의 옷을 직접 제작(바느질이나 뜨개질)하고 수선하는 데 더 적극적이 되었습니다.", voca: ["active:적극적인", "producing:제작", "sewing:바느질", "knitting:뜨개질", "repairing:수선", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The design historian Fiona Hackney refers to the “quiet activism” of everyday making.", ko: "디자인 역사학자인 Fiona Hackney는 일상적인 제작의 '조용한 활력주의'를 언급합니다.", voca: ["historian:역사학자", "refers to:~을 언급하다", "quiet activism:조용한 활력주의", "everyday:일상적인", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "She argues for “the emergence of a new, historically conscious, socially engaged amateur practice.”", ko: "그녀는 '새롭고, 역사적으로 의식 있으며, 사회적으로 참여하는 아마추어 관행의 출현'을 주장합니다.", voca: ["emergence:출현", "conscious:의식 있는", "engaged:참여하는", "amateur:아마추어", "practice:관행", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This practice represents a return to the intimate connection of production (making) with consumption (use, wear) before the industrialization of fibers, textiles, and apparel.", ko: "이러한 관행은 섬유, 직물, 의류의 산업화 이전의 제작(생산)과 사용(소비) 사이의 밀접한 연결로의 회귀를 나타냅니다.", voca: ["represents:나타내다", "intimate:밀접한", "industrialization:산업화", "textiles:직물", "apparel:의류", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Industrialization changed the production-consumption dynamic in at least two ways: Factory-made, store-bought clothes were more detached from consumer-made ones, and they also tended to be less expensive.", ko: "산업화는 최소 두 가지 방식으로 생산-소비 역학을 변화시켰습니다. 공장에서 만들어지고 상점에서 구매하는 옷은 소비자가 직접 만든 옷과 더 분리되었으며, 또한 가격이 더 저렴해지는 경향이 있었습니다.", voca: ["dynamic:역학", "detached:분리된", "tended to:~하는 경향이 있다", "expensive:비싼", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Prior to industrialization, only wealthy people could afford a closet of many garments.", ko: "산업화 이전에는 부유한 사람들만이 많은 옷이 들어있는 옷장을 가질 여유가 있었습니다.", voca: ["Prior to:~ 이전에", "wealthy:부유한", "afford:~할 여유가 있다", "garments:의복/옷", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Among working-class people, formal clothes were often prized possessions that were included in wills.", ko: "노동자 계급 사람들 사이에서 예복은 종종 유언장에 포함될 정도로 소중한 소유물이었습니다.", voca: ["working-class:노동자 계급", "formal clothes:예복", "prized:소중한", "possessions:소유물", "wills:유언장", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Slow Fashion Movement</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 패스트 패션에 대한 저항</span><div class="struct-text">소비자들은 더 윤리적이고 정보에 기반한 결정을 내리며 패스트 패션에 저항하기 시작했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 슬로우 패션과 조용한 활력주의</span><div class="struct-text">슬로우 패션은 소량의 고품질 의류, 지역 생산, 노동 환경에 대한 비판적 사고를 권장합니다. 직접 옷을 만들고 고쳐 입는 '조용한 활력주의'는 생산과 소비의 밀접한 연결을 회복하려는 시도입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 산업화 이전으로의 가치 회귀</span><div class="struct-text">산업화는 옷을 저렴하게 만들었지만 생산과 소비를 단절시켰습니다. 현대의 슬로우 패션 운동은 옷이 유언장에 포함될 정도로 귀했던 시절의 '소유의 가치'를 되찾으려 합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">패스트 패션의 대안으로서 생산과 소비의 밀접한 연결을 추구하는 슬로우 패션과 직접 제작의 가치</span><span class="topic-eng">Slow fashion and the value of self-production as alternatives to fast fashion, seeking to restore the connection between making and use.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

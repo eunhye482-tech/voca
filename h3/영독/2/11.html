@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 2-11</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 2-11</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "What is true is that regret happens when we view a large-world problem like a small-world problem.", ko: "사실인 것은 우리가 대규모 세계의 문제를 소규모 세계의 문제처럼 볼 때 후회가 발생한다는 것입니다.", voca: ["regret:후회", "view:보다/간주하다", "large-world:대규모 세계", "small-world:소규모 세계", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In a small world, where all choices, consequences, and probabilities are known, we can be certain about how much we would have won if only we had picked a different horse in a race or chosen different numbers in the lottery.", ko: "모든 선택, 결과, 확률이 알려진 소규모 세계에서는 경마에서 다른 말을 골랐거나 복권에서 다른 번호를 선택했더라면 얼마나 많은 금액을 땄을지에 대해 확신할 수 있습니다.", voca: ["consequences:결과", "probabilities:확률", "certain:확신하는", "lottery:복권", "picked:선택한", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "However, in a large world, where not all choices, consequences, and probabilities are known, we can never truly compare the choices we made with those we didn’t make.", ko: "하지만 모든 선택, 결과, 확률이 알려지지 않은 대규모 세계에서는 우리가 한 선택과 하지 않은 선택을 결코 진정으로 비교할 수 없습니다.", voca: ["truly:진정으로", "compare:비교하다", "choices:선택", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We can never know what would have happened if we had taken another job, or married another person, or moved to another city because those scenarios don’t play out without us.", ko: "우리가 다른 직업을 가졌거나, 다른 사람과 결혼했거나, 다른 도시로 이사했더라면 어떤 일이 일어났을지 결코 알 수 없는데, 왜냐하면 그러한 시나리오들은 우리 없이 전개되지 않기 때문입니다.", voca: ["scenarios:시나리오", "play out:전개되다", "happened:일어난", "married:결혼한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "So, when we conjure up regrets about what might have been, we are comparing what we know to what we don’t know. What’s worse is that, much like the upward social comparisons we make on social media, we torture ourselves with how the realities of our situation stack up against an imagined ideal.", ko: "그래서 우리가 일어날 수도 있었던 일에 대한 후회를 떠올릴 때, 우리는 아는 것과 모르는 것을 비교하고 있는 것입니다. 설상가상으로, 소셜 미디어에서 하는 상향 사회 비교와 마찬가지로, 우리는 우리 상황의 현실을 상상된 이상과 비교하며 스스로를 고통스럽게 합니다.", voca: ["conjure up:~을 떠올리다", "upward:상향의", "torture:고문하다/괴롭히다", "stack up against:~과 비교되다", "imagined:상상된", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Mechanism of Regret</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 후회가 발생하는 근본 원인</span><div class="struct-text">후회는 우리가 살고 있는 복잡한 '대규모 세계'의 문제를 모든 결과가 예측 가능한 '소규모 세계'의 논리로 바라볼 때 발생합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 비교 불가능한 선택지들</span><div class="struct-text">확률과 결과가 고정된 복권이나 경마와 달리, 직업·결혼·거주지 같은 인생의 선택들은 우리가 참여하지 않은 시나리오를 결코 알 수 없으므로 실제와 가상을 비교하는 것은 불가능합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 상상된 이상과의 무의미한 비교</span><div class="struct-text">우리는 아는 현실을 모르는 가상(상상된 이상)과 비교하며 스스로를 괴롭힙니다. 이는 소셜 미디어의 상향 비교처럼 우리를 불행하게 만드는 인지적 오류입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">알려지지 않은 가능성(가상)과 현실을 비교함으로써 발생하는 후회의 비논리성과 고통</span><span class="topic-eng">The illogicality and pain of regret caused by comparing reality with unknown possibilities.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

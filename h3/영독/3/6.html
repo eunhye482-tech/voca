@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 3-6</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 3-6</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "Prestige is a particular form of status that only humans recognize.", ko: "위신은 오직 인간만이 인식하는 특별한 형태의 지위입니다.", voca: ["Prestige:위신", "particular:특별한", "status:지위", "recognize:인식하다", "human:인간", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Most animals observe the advantages of dominance, such as being the most powerful or aggressive individual, and these are also important for humans: fearsome warriors are celebrated universally.", ko: "대부분의 동물은 가장 강력하거나 공격적인 개체가 되는 것과 같은 우세함의 이점을 관찰하며, 이것들은 인간에게도 중요합니다. 즉, 무시무시한 전사들은 보편적으로 칭송받습니다.", voca: ["observe:관찰하다", "dominance:우세함", "aggressive:공격적인", "fearsome:무시무시한", "universally:보편적으로", "celebrated:유명한/칭송받는", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Prestige is almost the opposite.", ko: "위신은 거의 그 정반대입니다.", voca: ["opposite:반대의", "almost:거의", "status:상태", "prestige:위신", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Prestigious individuals are ones worthy of learning from—they are experts, older people.", ko: "위신이 있는 개인들은 배울 가치가 있는 사람들, 즉 전문가나 노련한 사람들입니다.", voca: ["Prestigious:위신 있는", "worthy of:~할 가치가 있는", "experts:전문가", "learning:배우는 것", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "And if someone has prestige in one field, they become high-status individuals and their influence won’t be limited to their field; we are likely to copy all their decisions.", ko: "그리고 만약 누군가가 한 분야에서 위신을 가지고 있다면, 그들은 높은 지위의 개인이 되고 그들의 영향력은 자신의 분야에 국한되지 않을 것입니다. 우리는 그들의 모든 결정을 모방할 가능성이 높습니다.", voca: ["influence:영향력", "limited:제한된", "likely to:~할 가능성이 높은", "copy:모방하다/복사하다", "decisions:결정", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Indeed, prestige may have evolved as a way to enhance the benefits of cultural transmission.", ko: "참으로, 위신은 문화적 전달의 이점을 강화하는 방법으로 진화했을지 모릅니다.", voca: ["Indeed:참으로", "evolved:진화했다", "enhance:강화하다", "benefits:이점", "cultural:문화적인", "transmission:전달", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Success in one area of life affords someone the status of general opinion leader.", ko: "인생의 한 분야에서의 성공은 누군가에게 일반적인 여론 주도자라는 지위를 제공합니다.", voca: ["affords:제공하다", "general:일반적인", "opinion leader:여론 주도자", "Success:성공", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We want to learn from successful individuals, or even simply be associated with them in some way, so that their reputation rubs off on us. That’s why a golfing hero can sell you a watch.", ko: "우리는 성공한 개인들로부터 배우고 싶어 하거나, 혹은 그들의 명성이 우리에게 옮겨오도록 단순히 그들과 어떤 식으로든 연관되기를 원합니다. 그것이 골프 영웅이 여러분에게 시계를 팔 수 있는 이유입니다.", voca: ["associated with:~와 연관된", "reputation:명성", "rubs off on:~에게 옮겨가다", "golfing hero:골프 영웅", "simply:단순히", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Evolution of Prestige</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 인간만의 독특한 지위, '위신'</span><div class="struct-text">동물 세계의 지위가 힘과 공격성(우세함)에 기초한다면, 인간에게는 전문가나 어른처럼 '배울 가치가 있는 사람'에게 부여하는 '위신'이라는 독특한 지위가 존재합니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 위신의 전이성과 문화적 전달</span><div class="struct-text">한 분야에서 위신을 얻은 사람은 전반적인 여론 주도자가 되며, 사람들은 그들의 전공 분야를 넘어 모든 결정을 모방하려 합니다. 이는 유익한 문화 정보를 효율적으로 전달받기 위한 진화의 산물입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 명성의 후광 효과</span><div class="struct-text">우리는 성공한 사람과 연관됨으로써 그들의 명성이 우리에게도 전해지길 원합니다. 골프 선수가 시계 광고 모델로 성공하는 이유가 바로 이 위신의 강력한 영향력 때문입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">문화적 전달과 정보 습득의 효율성을 위해 진화한 인간 특유의 지위 형태인 '위신'의 특성</span><span class="topic-eng">The characteristics of prestige as a uniquely human form of status evolved for efficient cultural transmission and learning.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

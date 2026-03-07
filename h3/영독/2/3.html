@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 2-3</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; color: var(--text-dark); }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 2-3</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    // fullData 내용 - 원문 전체 반영
+const fullData = [
+    { en: "An indication of the power of TV to “capture” people’s memory is provided by the results of a study by James Ost and coworkers.", ko: "사람들의 기억을 '포착'하는 TV의 힘에 대한 지표는 James Ost와 동료들의 연구 결과에 의해 제공됩니다.", voca: ["indication:지표", "capture:포착하다", "memory:기억", "coworkers:동료", "provided:제공된", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+    { en: "They approached people in an English shopping center and asked if they would participate in a study examining how well people can remember tragic events.", ko: "그들은 영국의 한 쇼핑센터에서 사람들에게 다가가 사람들이 비극적인 사건을 얼마나 잘 기억할 수 있는지 조사하는 연구에 참여할 의사가 있는지 물었습니다.", voca: ["approached:다가간", "examine:조사하다", "remember:기억하다", "tragic:비극적인", "events:사건", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+    { en: "The target event involved Princess Diana and Dodi Fayed, whose deaths in a car crash in Paris on August 31, 1997, were widely covered on British television.", ko: "표적 사건은 1997년 8월 31일 파리에서의 자동차 사고로 인한 다이애나 비와 그녀의 동반자 도디 파예드의 사망 사건으로, 영국 TV에서 널리 보도되었습니다.", voca: ["involved:관련된", "car crash:차 사고", "widely:널리", "covered:보도된", "companion:동반자", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+    { en: "Participants were asked: “Have you seen the paparazzi’s video-recording of the car crash in which Diana and Dodi Fayed lost their lives?”", ko: "참가자들은 '다이애나와 도디 파예드가 목숨을 잃은 자동차 사고에 대한 파파라치의 비디오 녹화 영상을 보셨습니까?'라는 질문을 받았습니다.", voca: ["video-recording:비디오 녹화", "lost their lives:목숨을 잃다", "statement:진술", "asked:질문받은", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+    { en: "Of the 45 people who responded to this question, 20 said they had seen the film.", ko: "이 질문에 응답한 45명 중 20명이 그 영상을 본 적이 있다고 말했습니다.", voca: ["responded:응답한", "seen:본 적 있는", "question:질문", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+    { en: "This was, however, impossible, because no such film exists. The car crash was reported on TV, but not actually shown.", ko: "하지만 이것은 불가능한 일이었는데, 그런 영상은 존재하지 않기 때문입니다. 그 차 사고는 TV에 보도되었을 뿐 실제로 보여진 적은 없습니다.", voca: ["impossible:불가능한", "exists:존재하다", "reported:보도된", "actually:실제로", "shown:보여진", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+    { en: "The extensive media coverage of this event apparently caused some people to remember something—seeing the film—that didn’t actually occur.", ko: "이 사건에 대한 광범위한 미디어 보도는 분명히 일부 사람들로 하여금 실제로 일어나지 않은 일, 즉 영상을 본 것을 기억하게 만들었습니다.", voca: ["extensive:광범위한", "coverage:보도", "apparently:분명히/보아하니", "occur:발생하다", "caused:야기했다", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+];
+// 주제: 실제 존재하지 않는 영상조차 보았다고 믿게 만드는 미디어 보도의 강력한 기억 포착 및 왜곡 효과
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>TV's Power to Capture Memory</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 미디어의 기억 포착 능력 연구</span><div class="struct-text">James Ost의 연구는 다이애나 비의 비극적인 사고 보도를 통해 미디어가 사람들의 기억을 얼마나 강력하게 왜곡하고 지배하는지 실험했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 존재하지 않는 영상에 대한 가짜 기억</span><div class="struct-text">참가자의 44%가 파파라치의 사고 영상을 봤다고 답했지만, 사실 그런 영상은 세상에 존재하지 않았으며 단지 TV 보도로만 전해졌을 뿐입니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 보도 양이 기억을 만든다</span><div class="struct-text">실제 영상이 없었음에도 불구하고 광범위하고 반복적인 보도 노출은 사람들이 일어나지 않은 일조차 보았다고 믿게 만드는 '가짜 기억'을 형성했습니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">광범위한 미디어 보도가 실제로 존재하지 않는 사건조차 믿게 만드는 기억 왜곡 효과</span><span class="topic-eng">The memory distortion caused by extensive media coverage of tragic events.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

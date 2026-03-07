@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 5-9</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 5-9</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The emerging power shift, where smaller and edge players are gaining more visibility and voice, is particularly important to children and youth.", ko: "더 작고 주변부에 있던 주체들이 더 많은 가시성과 목소리를 얻고 있는 최근의 권력 이동은 어린이와 청소년들에게 특히 중요합니다.", voca: ["emerging:나타나는/신흥의", "power shift:권력 이동", "visibility:가시성", "voice:목소리/발언권", "particularly:특히", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "If we look at children and youth through the lens of digital media, we have a population that has been historically subject to a higher degree of systematic and institutional control in the kinds of information and social communication to which they have access.", ko: "디지털 미디어라는 렌즈를 통해 어린이와 청소년을 바라본다면, 그들은 역사적으로 그들이 접근할 수 있는 정보와 사회적 소통의 종류에 있어 더 높은 수준의 체계적이고 제도적인 통제를 받아온 집단입니다.", voca: ["lens:관점/렌즈", "subject to:~의 영향을 받는", "systematic:체계적인", "institutional:제도적인", "access:접근", "historically:역사적으로", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This is one reason why the alchemy between youth and digital media has been distinctive; it disrupts the existing set of power relations between adult authority and young people.", ko: "이것이 청소년과 디지털 미디어 사이의 마법 같은 결합(alchemy)이 독특했던 한 가지 이유인데, 그것이 성인의 권위와 젊은이들 사이의 기존 권력 관계를 무너뜨리기 때문입니다.", voca: ["alchemy:마법 같은 결합", "distinctive:독특한", "disrupts:붕괴시키다/방해하다", "existing:기존의", "authority:권위", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "While many studies of children, youth, and media have for decades stressed the status of young people as competent and full social subjects, digital media increasingly insist that we acknowledge this viewpoint.", ko: "어린이, 청소년, 그리고 미디어에 대한 많은 연구들이 수십 년 동안 젊은이들을 유능하고 완전한 사회적 주체로서의 지위를 강조해 왔지만, 디지털 미디어는 우리가 이러한 관점을 인정해야 한다고 점점 더 강하게 요구하고 있습니다.", voca: ["decades:수십 년", "stressed:강조했다", "competent:유능한", "subjects:주체", "viewpoint:관점", "increasingly:점점 더", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Not only must we see youth as legitimate social and political actors, but we must also recognize them as potential innovators and drivers of new media change.", ko: "우리는 청소년을 정당한 사회적, 정치적 행위자로 보아야 할 뿐만 아니라, 그들을 잠재적인 혁신가이자 새로운 미디어 변화의 추진 동력으로 인식해야 합니다.", voca: ["legitimate:정당한/법적인", "actors:행위자", "potential:잠재적인", "innovators:혁신가", "drivers:동력/추진자", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Youth and the Digital Power Shift</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 주변부 주체의 부상과 청소년</span><div class="struct-text">최근 사회 전반에서 소외되었던 주체들이 목소리를 얻는 권력 이동이 일어나고 있으며, 이는 특히 청소년에게 큰 의미를 가집니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 디지털 미디어와 권력 관계의 재편</span><div class="struct-text">역사적으로 성인 중심의 제도적 통제를 받아온 청소년들은 디지털 미디어와의 결합을 통해 성인의 권위와 청소년 사이의 기존 권력 관계를 혁신적으로 변화시키고 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 사회적 행위자이자 혁신의 주역</span><div class="struct-text">이제 청소년을 단순히 보호의 대상으로만 보는 것이 아니라, 정당한 정치적·사회적 주체이자 미디어 변화를 이끄는 혁신가로 인정해야 합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">디지털 미디어를 통해 기존의 성인 중심 통제에서 벗어나 사회적 행위자 및 미디어 혁신가로 부상하는 청소년의 지위 변화</span><span class="topic-eng">The shift in the status of youth from controlled subjects to legitimate social actors and innovators through the lens of digital media.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

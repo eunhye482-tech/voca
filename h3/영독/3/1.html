@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master 3-1</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .main-title-card h1 { margin: 0; font-size: 1.4rem; font-weight: 900; line-height: 1.3; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-item:last-child { border: none; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; font-weight: 500; text-align: justify; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 10px; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; margin-bottom: 10px; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master 3-1</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "There is evidence that low self-esteem people are less evaluatively consistent in their self-descriptions.", ko: "자존감이 낮은 사람들은 자기 묘사에 있어 평가의 일관성이 떨어진다는 증거가 있습니다.", voca: ["evidence:증거", "self-esteem:자존감", "evaluatively:평가적으로", "consistent:일관된", "self-descriptions:자기 묘사", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "When Campbell and Fehr examined how subjects rated themselves on sets of adjectives that were either uniformly positive or uniformly negative, subjects with low self-esteem not only gave ratings that were (on average) less positive or more negative, but their ratings within each set exhibited more individual scatter or greater variance.", ko: "Campbell과 Fehr가 피실험자들이 균일하게 긍정적이거나 균일하게 부정적인 형용사 세트에 대해 스스로를 어떻게 평가하는지 조사했을 때, 자존감이 낮은 피실험자들은 (평균적으로) 덜 긍정적이거나 더 부정적인 평가를 내렸을 뿐만 아니라, 각 세트 내에서의 평가가 더 개인적인 분산이나 더 큰 변동을 보였습니다.", voca: ["examined:조사했다", "adjectives:형용사", "uniformly:균일하게", "ratings:평가", "scatter:분산", "variance:변동", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "High self-esteem subjects strongly and consistently endorsed the positive adjectives and rejected the negative adjectives.", ko: "자존감이 높은 피실험자들은 긍정적인 형용사들을 강하고 일관되게 지지했고 부정적인 형용사들을 거부했습니다.", voca: ["consistently:일관되게", "endorsed:지지했다", "rejected:거부했다", "positive:긍정적인", "negative:부정적인", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Low self-esteem subjects did not, in contrast, strongly and consistently endorse the negative adjectives and reject the positive adjectives.", ko: "그에 반해서, 자존감이 낮은 피실험자들은 부정적인 형용사들을 강하고 일관되게 지지하거나 긍정적인 형용사들을 거부하지 않았습니다.", voca: ["contrast:대조", "strongly:강하게", "endorse:지지하다", "reject:거부하다", "subjects:피실험자", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Rather, they gave more intermediate ratings and more variable ratings to both types of adjectives.", ko: "오히려, 그들은 두 유형의 형용사 모두에 대해 더 중간 단계의 평가와 더 가변적인 평가를 내렸습니다.", voca: ["intermediate:중간의", "variable:가변적인", "Rather:오히려", "types:유형", "ratings:평가", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Therefore, it appears that low and high self-esteem individuals differ not only in the average positivity of their self-views, but also in the extent to which their self-views are evaluatively consistent with one another.", ko: "따라서 자존감이 낮고 높은 개인들은 자기 견해의 평균적인 긍정성뿐만 아니라, 그들의 자기 견해가 서로 얼마나 평가적으로 일관된 지의 정도에서도 차이가 나는 것으로 보입니다.", voca: ["appears:~인 것으로 보이다", "positivity:긍정성", "extent:정도/범위", "evaluatively:평가적으로", "consistent:일관된", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>Self-Esteem and Self-View Consistency</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 자존감에 따른 자기 묘사의 차이</span><div class="struct-text">연구에 따르면 자존감이 낮은 사람들은 자존감이 높은 사람들에 비해 자기 자신을 평가할 때 일관성이 떨어지는 경향이 있습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 긍정/부정 형용사 평가 실험</span><div class="struct-text">실험 결과, 고자존감 집단은 긍정적 특성을 확고히 지지하고 부정적 특성을 거부한 반면, 저자존감 집단은 중간 정도의 모호하고 가변적인 평가를 내렸습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 자기 견해의 긍정성과 일관성</span><div class="struct-text">두 집단은 단순히 자기를 긍정적으로 보느냐의 차이를 넘어, 자신에 대한 견해들이 서로 얼마나 논리적으로 일치하느냐에서도 큰 차이를 보입니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">자존감 높낮이에 따른 자기 평가의 긍정 수준과 평가적 일관성의 차이</span><span class="topic-eng">The difference in positivity and evaluative consistency of self-views based on self-esteem levels.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
