@@ -2,122 +2,207 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mock Exam Master v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Master - Dark Mode</title>
     <style>
-        :root {
-            --bg-pink: #fdf2f2; --point-pink: #eebbbb;
-            --soft-pink: #f9dcdc; --text-color: #4a3f3f;
-            --correct: #88b04b; --wrong: #ff6b6b;
+        :root { 
+            --chalk-bg: #1A2421;    /* 어두운 카키/심해색 배경 */
+            --chalk-board: #2D3A35; /* 칠판 색상 */
+            --chalk-white: #ECECEC; /* 부드러운 흰색 글자 */
+            --point-yellow: #FFD43B; /* 노랑 포인트 */
+            --point-orange: #FF922B; /* 주황 포인트 */
+            --border-line: #3E4C46;
         }
-        body { font-family: sans-serif; background-color: var(--bg-pink); color: var(--text-color); margin: 0; padding: 10px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 450px; background: white; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; min-height: 95vh; display: flex; flex-direction: column; }
-        header { background: var(--point-pink); color: white; padding: 20px; text-align: center; font-size: 1.2rem; font-weight: bold; }
-        .menu { display: flex; flex-direction: column; padding: 20px; gap: 12px; }
-        .set-btn { padding: 20px; border: none; border-radius: 12px; background: var(--soft-pink); color: var(--text-color); cursor: pointer; font-weight: bold; font-size: 1rem; text-align: left; transition: 0.2s; }
-        .set-btn:active { transform: scale(0.97); background: var(--point-pink); }
         
-        #quiz-area { display: none; padding: 15px; }
-        .quiz-item { margin-bottom: 50px; border-bottom: 2px dashed var(--soft-pink); padding-bottom: 30px; }
-        .passage { background: #fffcfc; padding: 15px; border-radius: 12px; border: 1px solid var(--soft-pink); line-height: 1.7; font-size: 0.92rem; margin-bottom: 15px; white-space: pre-wrap; }
-        .q-text { font-weight: bold; margin-bottom: 15px; font-size: 1rem; color: #333; }
-        .option { display: block; padding: 14px; margin-bottom: 8px; border: 1px solid #f0f0f0; border-radius: 10px; cursor: pointer; font-size: 0.9rem; background: #fff; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #0F1412; display: flex; justify-content: center; height: 100vh; overflow: hidden; color: var(--chalk-white); }
         
-        .option.correct { background-color: #e8f5e9 !important; border-color: var(--correct) !important; color: var(--correct) !important; font-weight: bold; }
-        .option.wrong { background-color: #ffebee !important; border-color: var(--wrong) !important; color: var(--wrong) !important; }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: var(--chalk-bg); display: flex; flex-direction: column; position: relative; border-left: 1px solid var(--border-line); border-right: 1px solid var(--border-line); }
         
-        .explanation { display: none; margin-top: 15px; padding: 15px; border-radius: 10px; background: #fef9f9; font-size: 0.85rem; border-left: 4px solid var(--point-pink); }
-        .writing-input { width: 100%; height: 90px; padding: 12px; border: 2px solid var(--soft-pink); border-radius: 10px; font-size: 0.9rem; margin-bottom: 10px; }
-        .check-btn { width: 100%; padding: 12px; background: var(--point-pink); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .home-btn { width: 100%; padding: 15px; background: #999; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .header { padding: 15px; text-align: center; font-weight: bold; color: var(--point-yellow); border-bottom: 1px solid var(--border-line); background: var(--chalk-bg); font-size: 1.1rem; }
+        
+        .content { flex: 1; padding: 20px; overflow-y: auto; }
+        
+        .section-label { font-size: 0.9rem; font-weight: bold; color: var(--point-orange); margin: 20px 0 10px 5px; display: block; opacity: 0.9; }
+        .section-label:first-child { margin-top: 5px; }
+        
+        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        
+        button { 
+            border: 1px solid var(--border-line); 
+            background: var(--chalk-board); 
+            border-radius: 12px; 
+            padding: 12px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s;
+            color: var(--chalk-white);
+            outline: none;
+        }
+        
+        /* 버튼 선택 시 스타일 */
+        button:active, button.selected { 
+            background: var(--point-yellow); 
+            color: #1A2421; 
+            border-color: var(--point-yellow); 
+            box-shadow: 0 0 12px rgba(255, 212, 59, 0.4);
+        }
+        
+        .book-btn { flex: 1; min-width: 80px; }
+        .lecture-btn { width: calc(33.33% - 6px); font-size: 0.85rem; padding: 10px 0; }
+        .num-btn { width: calc(20% - 7px); font-size: 0.85rem; padding: 10px 0; }
+        
+        /* 테스트/모의고사 버튼 (주황색 포인트) */
+        .mini-btn { width: calc(50% - 4px); border-color: var(--point-orange); color: var(--point-orange); }
+        .mini-btn.selected { background: var(--point-orange); color: white; border-color: var(--point-orange); }
+        
+        .footer { padding: 15px; background: var(--chalk-bg); border-top: 1px solid var(--border-line); }
+        
+        .btn-start-final { 
+            background: var(--point-orange); 
+            color: white; 
+            padding: 18px; 
+            border-radius: 15px; 
+            border: none; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: transform 0.1s, background 0.2s; 
+        }
+        
+        .btn-start-final:active { transform: scale(0.98); background: #E8590C; }
+        
+        /* 스크롤바 커스텀 (어두운 배경에 맞게) */
+        .content::-webkit-scrollbar { width: 4px; }
+        .content::-webkit-scrollbar-thumb { background: var(--border-line); border-radius: 10px; }
     </style>
 </head>
 <body>
+<div class="phone-container">
+    <div class="header">🌙 English Master - 지문 선택</div>
+    <div class="content">
+        <span class="section-label">📍 교재 선택</span>
+        <div class="btn-group">
+            <button class="book-btn" id="btn-su" onclick="selectBook(this, '수특')">수특</button>
+            <button class="book-btn" onclick="selectBook(this, '영독')">영독</button>
+            <button class="book-btn" onclick="selectBook(this, '완성')">완성</button>
+        </div>
 
-<div class="app-container">
-    <header>MOCK EXAM MASTER</header>
-    <div id="main-menu" class="menu">
-        <button class="set-btn" onclick="startSet(1)">SET 01</button>
-        <button class="set-btn" onclick="startSet(2)">SET 02</button>
-        <button class="set-btn" onclick="startSet(3)">SET 03</button>
-        <button class="set-btn" onclick="startSet(4)">SET 04</button>
-        <button class="set-btn" onclick="startSet(5)">SET 05</button>
+        <span class="section-label">📚 강/테스트 선택</span>
+        <div class="btn-group" id="lecture-group">
+            <div style="color: #666; font-size: 0.8rem; padding: 10px;">교재를 선택해 주세요.</div>
+        </div>
+
+        <span class="section-label">🔢 문항 번호 선택</span>
+        <div class="btn-group" id="num-group">
+            <div style="color: #666; font-size: 0.8rem; padding: 10px;">강을 선택해 주세요.</div>
+        </div>
     </div>
 
-    <div id="quiz-area">
-        <div id="quiz-container"></div>
-        <button class="home-btn" onclick="location.reload()">Main Menu</button>
+    <div class="footer">
+        <button class="btn-start-final" onclick="startLearning()">지문 학습 시작 ▶</button>
     </div>
 </div>
 
 <script>
-    // 1. 지문 전체 텍스트 (생략 없음)
-    const p1 = `The whole of human society operates on knowing the future weather. For example, farmers in India know when the monsoon rains will come next year and so they know when to plant the crops. Farmers in Indonesia know there are two monsoon rains each year, so next year they can have two harvests. This is based on their knowledge of the past, as the monsoons have always come at about the same time each year in living memory. But the need to predict goes deeper than this; it influences every part of our lives. Our houses, roads, railways, airports, offices, and so on are all designed for the local climate. For example, in England all the houses have central heating, as the outside temperature is usually below 20°C, but no air-conditioning, as temperatures rarely go beyond 26°C, while in Australia the opposite is true: most houses have air-conditioning but rarely central heating.`;
-    
-    const p2 = `A job search is not a passive task. When you are searching, you are not browsing, nor are you “just looking”. Browsing is not an effective way to reach a goal you claim to want to reach. If you are acting with purpose, if you are serious about anything you chose to do, then you need to be direct, focused and whenever possible, clever. Everyone else searching for a job has the same goal, competing for the same jobs. You must do more than the rest of the herd. Regardless of how long it may take you to find and get the job you want, being proactive will logically get you results faster than if you rely only on browsing online job boards and emailing an occasional resume. Leave those activities to the rest of the sheep.`;
+    let selections = { book: '', lecture: '', num: '', type: '' };
 
-    const p3 = `Our ability to accurately recognize and label emotions is often referred to as emotional granularity. In the words of Harvard psychologist Susan David, “Learning to label emotions with a more nuanced vocabulary can be absolutely transformative.” David explains that if we don’t have a rich emotional vocabulary, it is difficult to communicate our needs and to get the support that we need from others. But those who are able to distinguish between a range of various emotions “do much, much better at managing the ups and downs of ordinary existence than those who see everything in black and white.” In fact, research shows that the process of labeling emotional experience is related to greater emotion regulation and psychosocial well-being.`;
-
-    // 영작용 지문 (한글 포함)
-    const p1_w = p1.replace("Farmers in Indonesia know there are two monsoon rains each year, so next year they can have two harvests.", "[(가) 인도네시아의 농부들은 매년 두 번의 몬순 비가 있다는 것을 알고 있어서, 내년에 두 번의 수확을 할 수 있다.]");
-    const p3_w = p3.replace("the process of labeling emotional experience is related to greater emotion regulation and psychosocial well-being.", "[(다) 감정적인 경험에 이름을 붙이는 과정은 더 큰 감정 조절 및 사회 심리적 웰빙과 관련이 있다.]");
-
-    // 세트 데이터 (유형: 주제, 요지, 순서, 문법, 영작)
-    const sets = {
-        1: [
-            { type: "choice", p: p1, q: "1. [지문1] 다음 글의 주제로 가장 적절한 것은?", opts: ["1. Weather and farming", "2. Influence of weather knowledge on society", "3. Predicting natural disasters", "4. Global climate patterns", "5. History of architecture"], ans: 1, exp: "날씨 지식이 인간 사회 운영 전반에 미치는 영향이 주제입니다." },
-            { type: "choice", p: p2, q: "2. [지문2] 다음 글의 요지로 가장 적절한 것은?", opts: ["1. 적성 고려", "2. 능동적인 구직 태도의 중요성", "3. 온라인 정보의 한계", "4. 이력서 작성법", "5. 구직 경쟁의 심화"], ans: 1, exp: "구직 활동(job search)은 수동적이 아닌 능동적이어야 함을 강조합니다." },
-            { type: "write", p: p3_w, q: "3. [지문3] 지문의 밑줄 친 (다) 부분을 주어진 단어를 활용하여 영작하시오.", ans: "the process of labeling emotional experience is related to greater emotion regulation and psychosocial well-being.", hint: "process / labeling / related to / well-being", exp: "labeling(동명사 주어)과 related to(~와 관련된) 표현을 활용합니다." }
-        ],
-        2: [
-            { type: "choice", p: `[제시문] Our ability to accurately recognize and label emotions is often referred to as emotional granularity.\n\n(A) David explains that if we don’t have a rich emotional vocabulary, it is difficult to communicate our needs...\n\n(B) But those who are able to distinguish between a range of various emotions “do much, much better...\n\n(C) In the words of Harvard psychologist Susan David, “Learning to label emotions...”`, q: "1. [지문3] 글의 순서로 가장 적절한 것은?", opts: ["1. (A)-(B)-(C)", "2. (A)-(C)-(B)", "3. (B)-(A)-(C)", "4. (C)-(A)-(B)", "5. (C)-(B)-(A)"], ans: 3, exp: "정의(C) -> 문제점(A) -> 대조 및 효과(B) 순이 적절합니다." },
-            { type: "choice", p: p1, q: "2. [지문1] 다음 중 어법상 틀린 것은?\n\n... Our houses, roads, ... are all (4)designing for the local climate.", opts: ["1. knowing", "2. to plant", "3. as", "4. designing", "5. below"], ans: 3, exp: "집과 도로는 설계되는 것이므로 수동태인 designed가 적절합니다." },
-            { type: "write", p: p1_w, q: "3. [지문1] 밑줄 친 (가) 부분을 영작하시오.", ans: "Farmers in Indonesia know there are two monsoon rains each year, so next year they can have two harvests.", hint: "know / monsoon / each / harvests", exp: "so를 사용하여 결과의 절을 연결합니다." }
-        ]
+    const config = {
+        '수특': { unitCount: 30, unitPassages: 4, testCount: 3, testName: 'Test', testPassages: 28 },
+        '영독': { unitCount: 12, unitPassages: 12, testCount: 3, testName: 'Mini', testPassages: 28 },
+        '완성': { unitCount: 13, unitPassages: 5, testCount: 6, testName: '실전', testPassages: 28 }
     };
 
-    function startSet(num) {
-        document.getElementById('main-menu').style.display = 'none';
-        document.getElementById('quiz-area').style.display = 'block';
-        const container = document.getElementById('quiz-container');
-        container.innerHTML = "";
-        const questions = sets[num] || sets[1];
+    function selectBook(el, bookName) {
+        const buttons = el.parentElement.querySelectorAll('button');
+        buttons.forEach(btn => btn.classList.remove('selected'));
+        el.classList.add('selected');
         
-        questions.forEach((item, idx) => {
-            let html = `<div class="quiz-item"><div class="passage">${item.p}</div><div class="q-text">${item.q}</div>`;
-            if(item.type === "choice") {
-                item.opts.forEach((opt, oIdx) => {
-                    html += `<div class="option" onclick="judge(this, ${oIdx}, ${item.ans}, '${item.exp}')">${opt}</div>`;
-                });
+        selections.book = bookName;
+        selections.lecture = '';
+        selections.num = '';
+        
+        renderLectures();
+        document.getElementById('num-group').innerHTML = '<div style="color: #666; font-size: 0.8rem; padding: 10px;">강을 선택해 주세요.</div>';
+    }
+
+    function renderLectures() {
+        const lectureGroup = document.getElementById('lecture-group');
+        lectureGroup.innerHTML = '';
+        const bookData = config[selections.book];
+
+        for (let i = 1; i <= bookData.unitCount; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'lecture-btn';
+            btn.innerText = `${i}강`;
+            btn.onclick = function() { selectLecture(this, `${i}강`, 'normal'); };
+            lectureGroup.appendChild(btn);
+        }
+
+        for (let j = 1; j <= bookData.testCount; j++) {
+            const btn = document.createElement('button');
+            btn.className = 'lecture-btn mini-btn';
+            btn.innerText = `${bookData.testName} ${j}`;
+            btn.onclick = function() { selectLecture(this, `${bookData.testName}${j}`, 'test'); };
+            lectureGroup.appendChild(btn);
+        }
+    }
+
+    function selectLecture(el, lectureName, type) {
+        const buttons = document.getElementById('lecture-group').querySelectorAll('button');
+        buttons.forEach(btn => btn.classList.remove('selected'));
+        el.classList.add('selected');
+        
+        selections.lecture = lectureName;
+        selections.type = type;
+        selections.num = ''; 
+
+        renderNumbers();
+    }
+
+    function renderNumbers() {
+        const numGroup = document.getElementById('num-group');
+        numGroup.innerHTML = '';
+        const bookData = config[selections.book];
+        
+        let count = (selections.type === 'test') ? bookData.testPassages : bookData.unitPassages;
+        const isSuwanNormal = (selections.book === '완성' && selections.type === 'normal');
+        const suwanLabels = ["기출", "1", "2", "3", "4"];
+
+        for (let i = 1; i <= count; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'num-btn';
+            
+            if (isSuwanNormal) {
+                btn.innerText = suwanLabels[i - 1];
+                if(i === 1) btn.style.fontSize = "0.75rem";
             } else {
-                html += `<p style="font-size:0.8rem; color:#888; margin-bottom:8px;">Hint: ${item.hint}</p>
-                         <textarea class="writing-input" id="write-${idx}" placeholder="영작하여 입력..."></textarea>
-                         <button class="check-btn" onclick="checkWrite(${idx}, '${item.ans}')">정답 확인</button>`;
+                btn.innerText = i;
             }
-            html += `<div class="explanation" id="exp-${idx}"></div></div>`;
-            container.innerHTML += html;
-        });
-        window.scrollTo(0,0);
+
+            btn.onclick = function() {
+                const numBtns = numGroup.querySelectorAll('button');
+                numBtns.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selections.num = i;
+            };
+            numGroup.appendChild(btn);
+        }
     }
 
-    function judge(el, chosen, correct, expText) {
-        const parent = el.parentElement;
-        const opts = parent.querySelectorAll('.option');
-        const feedback = parent.querySelector('.explanation');
-        opts.forEach((opt, i) => {
-            opt.style.pointerEvents = "none";
-            if(i === correct) opt.classList.add('correct');
-            else if(i === chosen) opt.classList.add('wrong');
-        });
-        feedback.style.display = "block";
-        feedback.innerHTML = `<strong>${chosen === correct ? "정답! ⭕" : "오답! ❌"}</strong><br>${expText}`;
+    function startLearning() {
+        if (!selections.book || !selections.lecture || !selections.num) {
+            alert('항목을 모두 골라주세요! 🦉');
+            return;
+        }
+        const targetPath = `./${selections.book}/${selections.lecture}/${selections.num}.html`;
+        console.log(targetPath + " 이동 준비 완료");
+        alert("📖 학습을 시작합니다!");
     }
 
-    function checkWrite(idx, ans) {
-        const feedback = document.getElementById(`exp-${idx}`);
-        feedback.style.display = "block";
-        feedback.innerHTML = `<strong>모범 답안:</strong><br>${ans}`;
-    }
+    window.onload = function() {
+        document.getElementById('btn-su').click();
+    };
 </script>
 </body>
 </html>
