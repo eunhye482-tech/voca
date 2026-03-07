@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master #10 - Listening Block</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        /* CSS 6번과 동일 */
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master #10</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "One way we stop listening is when we start preparing a response to what the other person has just said.", ko: "우리가 경청을 멈추는 한 가지 방법은 상대방이 방금 한 말에 대해 대답을 준비하기 시작할 때입니다.", voca: ["preparing:준비하는", "response:대답/반응", "immediately:즉시", "reorganization:재편성", "manager:관리자", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "As soon as you hear news about reorganization, you stop listening and your mind goes into high gear.", ko: "조직 개편에 대한 소식을 듣자마자, 당신은 듣기를 멈추고 마음이 고속 기어로 돌아갑니다.", voca: ["convince:설득하다", "incompatible:양립할 수 없는", "downward spiral:하향 나선형", "rationale:근거/이유", "unfortunately:불행하게도", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "You start thinking of ways to convince your manager not to let that happen.", ko: "당신은 그런 일이 일어나지 않도록 관리자를 설득할 방법을 생각하기 시작합니다.", voca: ["convince:설득하다", "downward:하향의", "spiral:나선", "rationale:이유", "reorganization:재조직", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Meanwhile, your manager has continued talking, laying out the rationale for the decision.", ko: "그동안 관리자는 계속해서 말을 하며 결정에 대한 근거를 설명하고 있습니다.", voca: ["Meanwhile:그동안에", "continued:계속했다", "rationale:근거", "decision:결정", "explaining:설명하는", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "When you prepare your response as the other person is talking, you are missing out on hearing.", ko: "상대방이 말할 때 대답을 준비하면, 당신은 상대방이 공유하는 내용을 듣지 못하게 됩니다.", voca: ["missing out:~을 놓치다", "sharing:공유하는", "response:반응", "convince:설득하다", "preparation:준비", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Barrier to Real Listening</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 듣기 중단과 반응 준비</span><div class="struct-text">상대방의 말이 채 끝나기도 전에 반박하거나 답변할 내용을 머릿속으로 준비하면 진정한 경청은 중단됩니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 조직 개편 사례와 인지적 편향</span><div class="struct-text">부정적인 소식을 듣는 순간, 우리 뇌는 방어 기제에 집중하여 상대방이 설명하는 근거와 긍정적인 측면을 완전히 차단해 버립니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 정보 소외의 결과</span><div class="struct-text">대답 준비에 몰두하느라 상대방이 전달하고자 하는 핵심 가치와 맥락을 놓치게 되며, 이는 소통의 실패로 이어집니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">답변 준비로 인해 상대방의 메시지를 온전히 듣지 못하는 경청의 장애 요인</span><span class="topic-eng">The barriers to effective listening caused by preparing responses while others are speaking.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
