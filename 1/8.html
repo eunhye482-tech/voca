@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master #8 - Image Scanning</title>
+    <style>
+        :root { --yellow-light: #FFFDE7; --yellow-pale: #FFF9C4; --yellow-main: #FBC02D; --yellow-dark: #F57F17; --pink-soft: #FFF5F7; --text-dark: #5D4037; }
+        /* CSS는 6번과 동일 */
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #FFFEF0; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--yellow-dark); border-bottom: 1px solid var(--yellow-pale); background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        .btn-next { background: var(--yellow-main); color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-step3 { background: #FFF59D; color: var(--text-dark); padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; border: 2px solid var(--yellow-main); }
+        .main-title-card { width: 100%; background: var(--yellow-main); padding: 25px 15px; border-radius: 20px; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+        .structure-container { background: var(--yellow-light); border: 2px solid var(--yellow-pale); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .struct-item { margin-bottom: 18px; border-bottom: 1px dashed var(--yellow-pale); padding-bottom: 10px; }
+        .struct-label { font-weight: 900; color: #E65100; font-size: 0.95rem; display: block; margin-bottom: 6px; }
+        .struct-text { font-size: 0.9rem; line-height: 1.6; }
+        .topic-area { background: var(--pink-soft); border: 2px solid #F8BBD0; border-radius: 20px; padding: 20px; text-align: center; }
+        .topic-kor { font-weight: bold; color: #333; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .topic-eng { font-size: 0.85rem; color: #666; font-style: italic; display: block; }
+        .sentence-box { background: var(--yellow-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; border: 2px solid var(--yellow-pale); text-align: center; cursor: pointer; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; }
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--yellow-pale); cursor: pointer; text-align: center; font-weight: 600; }
+        .voca-item.revealed { background: var(--yellow-main); color: var(--text-dark); }
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--yellow-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; }
+        .word-blank.revealed { color: var(--text-dark); border-bottom-color: transparent; font-weight: bold; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; width: 100%; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--yellow-main); margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; position: sticky; bottom: 0; }
+        .btn-prev { background: #F5F5F5; color: #718096; padding: 16px; border-radius: 15px; border: none; width: 30%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master #8</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+<script>
+    const fullData = [
+        { en: "The phrase “image scanning” refers to cognitive processes on visual mental images.", ko: "“심상 주사”라는 문구는 시각적 정신적 이미지에 작용하는 인지 과정을 지칭합니다.", voca: ["scanning:주사(살펴보기)", "cognitive:인지적인", "visual:시각적인", "paradigm:패러다임", "elongated:길쭉한", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "The first image scanning paradigm was designed to investigate the spatial properties of images.", ko: "첫 번째 심상 주사 패러다임은 이미지의 공간적 특성을 조사하기 위해 설계되었습니다.", voca: ["investigate:조사하다", "spatial:공간적인", "properties:특성", "visualize:시각화하다", "feature:특징", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Participants memorized drawings of elongated objects and visualized them.", ko: "참가자들은 길쭉한 물체의 그림을 암기하고 그것들을 시각화했습니다.", voca: ["memorized:암기했다", "drawings:그림", "visualized:시각화했다", "focus:초점", "original:원래의", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Response times increased linearly with increasing distances in visual mental images.", ko: "시각적 정신적 이미지 내에서의 거리가 멀어질수록 응답 시간도 선형적으로 증가했습니다.", voca: ["linearly:선형적으로", "increasing:증가하는", "distance:거리", "evidence:증거", "traversed:가로지른", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This finding evidence that distance is genuinely represented in visual mental images.", ko: "이 결과는 거리가 시각적 정신적 이미지 내에서 실제로 재현된다는 증거가 되었습니다.", voca: ["genuinely:진정으로/실제로", "represented:재현된", "critical:중요한", "probe:탐침/신호", "focus:집중하다", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+    let currentMode = 'INTRO'; let currentIdx = 0; const synth = window.speechSynthesis;
+    function render() {
+        const area = document.getElementById('display-area'); const nav = document.getElementById('nav-area'); const header = document.getElementById('header-title'); area.innerHTML = '';
+        if (currentMode === 'INTRO') {
+            header.innerText = "Step 1. Overview"; nav.classList.add('hidden');
+            area.innerHTML = `<div class="main-title-card"><h1>The Science of Image Scanning</h1></div>
+                <div class="structure-container">
+                    <div class="struct-item"><span class="struct-label">📍 서론: 심상 주사의 정의와 목적</span><div class="struct-text">머릿속에 그린 시각적 이미지 내에서 주의를 이동시키는 과정인 '심상 주사'의 공간적 특성을 규명하기 위해 실험이 설계되었습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 본론: 암기 및 시각화 실험 과정</span><div class="struct-text">참가자들은 길쭉한 물체를 외운 뒤 특정 지점에 집중하다가, 신호가 주어지면 이미지 내의 다른 특징을 찾는 과정을 수행했습니다.</div></div>
+                    <div class="struct-item"><span class="struct-label">📍 결론: 거리와 응답 시간의 선형적 관계</span><div class="struct-text">이동 거리가 멀수록 응답 시간이 비례해서 늘어난다는 결과는, 우리 뇌가 정신적 이미지 속에서도 실제 거리를 구현하고 있음을 입증합니다.</div></div>
+                </div>
+                <div class="topic-area"><span class="topic-kor">심상 주사 실험을 통해 입증된 시각적 정신적 이미지의 공간적 재현 특성</span><span class="topic-eng">The spatial representation of visual mental images evidenced through image scanning experiments.</span></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button><button class="btn-step3" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>`;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3; header.innerText = `STEP ${stepNum}. (${currentIdx + 1}/${fullData.length})`; nav.classList.remove('hidden'); document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button><div id="trans-area" class="trans-content">${item.ko}</div>`; fillVoca(item.voca);
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button><div id="trans-area" class="trans-content">${item.en}</div>`; fillBlanks(item.en); fillVoca(item.voca);
+            }
+        }
+    }
+    function fillVoca(v) { const c = document.getElementById('voca-area'); v.forEach(i => { const d = document.createElement('div'); d.className = 'voca-item'; if(i!=='🍎'){ const [e,k]=i.split(':'); d.innerText=e; d.onclick=function(){this.classList.toggle('revealed');this.innerText=this.classList.contains('revealed')?k:e;}; }else{ d.innerText='🍎';d.style.color="#FF3B30"; } c.appendChild(d); }); }
+    function fillBlanks(s) { const c = document.getElementById('blank-area'); s.split(' ').forEach(w => { const sp = document.createElement('span'); sp.className = 'word-blank'; sp.innerText = w; sp.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; c.appendChild(sp); }); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>
