@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Master - Dark Mode</title>
+    <style>
+        :root { 
+            --chalk-bg: #1A2421;    /* 어두운 카키/심해색 배경 */
+            --chalk-board: #2D3A35; /* 칠판 색상 */
+            --chalk-white: #ECECEC; /* 부드러운 흰색 글자 */
+            --point-yellow: #FFD43B; /* 노랑 포인트 */
+            --point-orange: #FF922B; /* 주황 포인트 */
+            --border-line: #3E4C46;
+        }
+        
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #0F1412; display: flex; justify-content: center; height: 100vh; overflow: hidden; color: var(--chalk-white); }
+        
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: var(--chalk-bg); display: flex; flex-direction: column; position: relative; border-left: 1px solid var(--border-line); border-right: 1px solid var(--border-line); }
+        
+        .header { padding: 15px; text-align: center; font-weight: bold; color: var(--point-yellow); border-bottom: 1px solid var(--border-line); background: var(--chalk-bg); font-size: 1.1rem; }
+        
+        .content { flex: 1; padding: 20px; overflow-y: auto; }
+        
+        .section-label { font-size: 0.9rem; font-weight: bold; color: var(--point-orange); margin: 20px 0 10px 5px; display: block; opacity: 0.9; }
+        .section-label:first-child { margin-top: 5px; }
+        
+        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        
+        button { 
+            border: 1px solid var(--border-line); 
+            background: var(--chalk-board); 
+            border-radius: 12px; 
+            padding: 12px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s;
+            color: var(--chalk-white);
+            outline: none;
+        }
+        
+        /* 버튼 선택 시 스타일 */
+        button:active, button.selected { 
+            background: var(--point-yellow); 
+            color: #1A2421; 
+            border-color: var(--point-yellow); 
+            box-shadow: 0 0 12px rgba(255, 212, 59, 0.4);
+        }
+        
+        .book-btn { flex: 1; min-width: 80px; }
+        .lecture-btn { width: calc(33.33% - 6px); font-size: 0.85rem; padding: 10px 0; }
+        .num-btn { width: calc(20% - 7px); font-size: 0.85rem; padding: 10px 0; }
+        
+        /* 테스트/모의고사 버튼 (주황색 포인트) */
+        .mini-btn { width: calc(50% - 4px); border-color: var(--point-orange); color: var(--point-orange); }
+        .mini-btn.selected { background: var(--point-orange); color: white; border-color: var(--point-orange); }
+        
+        .footer { padding: 15px; background: var(--chalk-bg); border-top: 1px solid var(--border-line); }
+        
+        .btn-start-final { 
+            background: var(--point-orange); 
+            color: white; 
+            padding: 18px; 
+            border-radius: 15px; 
+            border: none; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: transform 0.1s, background 0.2s; 
+        }
+        
+        .btn-start-final:active { transform: scale(0.98); background: #E8590C; }
+        
+        /* 스크롤바 커스텀 (어두운 배경에 맞게) */
+        .content::-webkit-scrollbar { width: 4px; }
+        .content::-webkit-scrollbar-thumb { background: var(--border-line); border-radius: 10px; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header">🌙 English Master - 지문 선택</div>
+    <div class="content">
+        <span class="section-label">📍 교재 선택</span>
+        <div class="btn-group">
+            <button class="book-btn" id="btn-su" onclick="selectBook(this, '수특')">수특</button>
+            <button class="book-btn" onclick="selectBook(this, '영독')">영독</button>
+            <button class="book-btn" onclick="selectBook(this, '완성')">완성</button>
+        </div>
+
+        <span class="section-label">📚 강/테스트 선택</span>
+        <div class="btn-group" id="lecture-group">
+            <div style="color: #666; font-size: 0.8rem; padding: 10px;">교재를 선택해 주세요.</div>
+        </div>
+
+        <span class="section-label">🔢 문항 번호 선택</span>
+        <div class="btn-group" id="num-group">
+            <div style="color: #666; font-size: 0.8rem; padding: 10px;">강을 선택해 주세요.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button class="btn-start-final" onclick="startLearning()">지문 학습 시작 ▶</button>
+    </div>
+</div>
+
+<script>
+    let selections = { book: '', lecture: '', num: '', type: '' };
+
+    const config = {
+        '수특': { unitCount: 30, unitPassages: 4, testCount: 3, testName: 'Test', testPassages: 28 },
+        '영독': { unitCount: 12, unitPassages: 12, testCount: 3, testName: 'Mini', testPassages: 28 },
+        '완성': { unitCount: 13, unitPassages: 5, testCount: 6, testName: '실전', testPassages: 28 }
+    };
+
+    function selectBook(el, bookName) {
+        const buttons = el.parentElement.querySelectorAll('button');
+        buttons.forEach(btn => btn.classList.remove('selected'));
+        el.classList.add('selected');
+        
+        selections.book = bookName;
+        selections.lecture = '';
+        selections.num = '';
+        
+        renderLectures();
+        document.getElementById('num-group').innerHTML = '<div style="color: #666; font-size: 0.8rem; padding: 10px;">강을 선택해 주세요.</div>';
+    }
+
+    function renderLectures() {
+        const lectureGroup = document.getElementById('lecture-group');
+        lectureGroup.innerHTML = '';
+        const bookData = config[selections.book];
+
+        for (let i = 1; i <= bookData.unitCount; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'lecture-btn';
+            btn.innerText = `${i}강`;
+            btn.onclick = function() { selectLecture(this, `${i}강`, 'normal'); };
+            lectureGroup.appendChild(btn);
+        }
+
+        for (let j = 1; j <= bookData.testCount; j++) {
+            const btn = document.createElement('button');
+            btn.className = 'lecture-btn mini-btn';
+            btn.innerText = `${bookData.testName} ${j}`;
+            btn.onclick = function() { selectLecture(this, `${bookData.testName}${j}`, 'test'); };
+            lectureGroup.appendChild(btn);
+        }
+    }
+
+    function selectLecture(el, lectureName, type) {
+        const buttons = document.getElementById('lecture-group').querySelectorAll('button');
+        buttons.forEach(btn => btn.classList.remove('selected'));
+        el.classList.add('selected');
+        
+        selections.lecture = lectureName;
+        selections.type = type;
+        selections.num = ''; 
+
+        renderNumbers();
+    }
+
+    function renderNumbers() {
+        const numGroup = document.getElementById('num-group');
+        numGroup.innerHTML = '';
+        const bookData = config[selections.book];
+        
+        let count = (selections.type === 'test') ? bookData.testPassages : bookData.unitPassages;
+        const isSuwanNormal = (selections.book === '완성' && selections.type === 'normal');
+        const suwanLabels = ["기출", "1", "2", "3", "4"];
+
+        for (let i = 1; i <= count; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'num-btn';
+            
+            if (isSuwanNormal) {
+                btn.innerText = suwanLabels[i - 1];
+                if(i === 1) btn.style.fontSize = "0.75rem";
+            } else {
+                btn.innerText = i;
+            }
+
+            btn.onclick = function() {
+                const numBtns = numGroup.querySelectorAll('button');
+                numBtns.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selections.num = i;
+            };
+            numGroup.appendChild(btn);
+        }
+    }
+
+    function startLearning() {
+        if (!selections.book || !selections.lecture || !selections.num) {
+            alert('항목을 모두 골라주세요! 🦉');
+            return;
+        }
+        const targetPath = `./${selections.book}/${selections.lecture}/${selections.num}.html`;
+        console.log(targetPath + " 이동 준비 완료");
+        alert("📖 학습을 시작합니다!");
+    }
+
+    window.onload = function() {
+        document.getElementById('btn-su').click();
+    };
+</script>
+</body>
+</html>
