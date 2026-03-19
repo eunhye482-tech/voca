@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Ecological Fallacy</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 8</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "사람들이 사건들을 관찰하고 나서 왜 그런 사건들이 일어났는지 설명을 찾는 것은 당연하다.",
+            h: ["it", "be", "natural", "for", "people", "to", "observe", "happening", "and", "then", "seek", "explanation", "for", "why", "those", "happening", "occur"],
+            a: [{w:"It", t:"b"}, {w:"is", t:"b"}, {w:"natural", t:"b"}, {w:"for", t:"f"}, {w:"people", t:"b"}, {w:"to", t:"f"}, {w:"observe", t:"b"}, {w:"happenings", t:"b"}, {w:"and", t:"b"}, {w:"then", t:"b"}, {w:"seek", t:"b"}, {w:"explanations", t:"b"}, {w:"for", t:"f"}, {w:"why", t:"b"}, {w:"those", t:"b"}, {w:"happenings", t:"b"}, {w:"occurred.", t:"b"}]
+        },
+        {
+            k: "그러나 때로는 하나 또는 그 이상의 오해로 인해 추론이 잘못된다.",
+            h: ["but", "sometimes", "the", "reason", "be", "wrong", "because", "of", "one", "or", "more", "misconception"],
+            a: [{w:"But", t:"b"}, {w:"sometimes", t:"b"}, {w:"the", t:"b"}, {w:"reasoning", t:"b"}, {w:"is", t:"b"}, {w:"wrong", t:"b"}, {w:"because", t:"b"}, {w:"of", t:"f"}, {w:"one", t:"b"}, {w:"or", t:"b"}, {w:"more", t:"b"}, {w:"misconceptions.", t:"b"}]
+        },
+        {
+            k: "그중 하나는 생태학적 오류로, 두 가지가 함께 발생한다는 이유만으로 인과 관계가 있다고 주장하는 것이다.",
+            h: ["one", "of", "these", "be", "the", "ecological", "fallacy", "where", "an", "argument", "claim", "that", "there", "be", "a", "causal", "relationship", "between", "two", "thing", "merely", "because", "they", "occur", "together"],
+            a: [{w:"One", t:"b"}, {w:"of", t:"f"}, {w:"these", t:"b"}, {w:"is", t:"b"}, {w:"the", t:"b"}, {w:"ecological", t:"b"}, {w:"fallacy,", t:"b"}, {w:"where", t:"b"}, {w:"an", t:"b"}, {w:"argument", t:"b"}, {w:"claims", t:"b"}, {w:"that", t:"b"}, {w:"there", t:"b"}, {w:"is", t:"b"}, {w:"a", t:"b"}, {w:"causal", t:"b"}, {w:"relationship", t:"b"}, {w:"between", t:"f"}, {w:"two", t:"b"}, {w:"things", t:"b"}, {w:"merely", t:"b"}, {w:"because", t:"b"}, {w:"they", t:"b"}, {w:"occur", t:"b"}, {w:"together.", t:"b"}]
+        },
+        {
+            k: "예를 들어, 1950년대에 범죄율이 이민자가 가장 많은 지역에서 가장 높다는 것이 밝혀졌다.",
+            h: ["for", "example", "in", "the", "1950s", "it", "be", "find", "that", "crime", "rate", "be", "the", "high", "in", "neighborhood", "where", "immigrant", "be", "most", "numerous"],
+            a: [{w:"For", t:"f"}, {w:"example,", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"1950s", t:"b"}, {w:"it", t:"b"}, {w:"was", t:"b"}, {w:"found", t:"b"}, {w:"that", t:"b"}, {w:"crime", t:"b"}, {w:"rates", t:"b"}, {w:"were", t:"b"}, {w:"the", t:"b"}, {w:"highest", t:"b"}, {w:"in", t:"f"}, {w:"neighborhoods", t:"b"}, {w:"where", t:"b"}, {w:"immigrants", t:"b"}, {w:"were", t:"b"}, {w:"most", t:"b"}, {w:"numerous.", t:"b"}]
+        },
+        {
+            k: "일부 사람들은 이민자들이 범죄의 원인이라고 주장하기 위해서 이러한 “동시 발생”을 이용했다.",
+            h: ["some", "people", "use", "this", "co-occurrence", "to", "argue", "that", "immigrant", "be", "a", "cause", "of", "crime"],
+            a: [{w:"Some", t:"b"}, {w:"people", t:"b"}, {w:"used", t:"b"}, {w:"this", t:"b"}, {w:"“co-occurrence”", t:"b"}, {w:"to", t:"f"}, {w:"argue", t:"b"}, {w:"that", t:"b"}, {w:"immigrants", t:"b"}, {w:"were", t:"b"}, {w:"a", t:"b"}, {w:"cause", t:"b"}, {w:"of", t:"f"}, {w:"crime.", t:"b"}]
+        },
+        {
+            k: "하지만 분석 결과 이민자들은 범죄율이 이미 높은 지역에 살 수밖에 없었다는 것이 밝혀졌다.",
+            h: ["but", "a", "careful", "analysis", "of", "this", "situation", "reveal", "that", "immigrant", "be", "force", "to", "live", "in", "neighborhood", "where", "crime", "rate", "be", "already", "high"],
+            a: [{w:"But", t:"b"}, {w:"a", t:"b"}, {w:"careful", t:"b"}, {w:"analysis", t:"b"}, {w:"of", t:"f"}, {w:"this", t:"b"}, {w:"situation", t:"b"}, {w:"revealed", t:"b"}, {w:"that", t:"b"}, {w:"immigrants", t:"b"}, {w:"were", t:"b"}, {w:"forced", t:"b"}, {w:"to", t:"f"}, {w:"live", t:"b"}, {w:"in", t:"f"}, {w:"neighborhoods", t:"b"}, {w:"where", t:"b"}, {w:"crime", t:"b"}, {w:"rates", t:"b"}, {w:"were", t:"b"}, {w:"already", t:"b"}, {w:"high;", t:"b"}]
+        },
+        {
+            k: "그들은 보다 안전한 지역의 더 비싼 주택을 살 여력이 없었다.",
+            h: ["they", "could", "not", "afford", "more", "expensive", "house", "in", "safe", "neighborhood"],
+            a: [{w:"they", t:"b"}, {w:"could", t:"b"}, {w:"not", t:"b"}, {w:"afford", t:"b"}, {w:"more", t:"expensive", t:"b"}, {w:"expensive", t:"b"}, {w:"housing", t:"b"}, {w:"in", t:"f"}, {w:"safer", t:"b"}, {w:"neighborhoods.", t:"b"}]
+        },
+        {
+            k: "주장을 주의 깊게 분석하지 않으면, 관계를 잘못 해석하여 잘못된 믿음을 형성하게 된다.",
+            h: ["unless", "you", "analyze", "the", "claim", "carefully", "you", "would", "misinterpret", "the", "relationship", "and", "thereby", "construct", "a", "faulty", "belief"],
+            a: [{w:"Unless", t:"b"}, {w:"you", t:"b"}, {w:"analyze", t:"b"}, {w:"the", t:"b"}, {w:"claim", t:"b"}, {w:"carefully,", t:"b"}, {w:"you", t:"b"}, {w:"would", t:"b"}, {w:"misinterpret", t:"b"}, {w:"the", t:"b"}, {w:"relationship", t:"b"}, {w:"and", t:"b"}, {w:"thereby", t:"b"}, {w:"construct", t:"b"}, {w:"a", t:"b"}, {w:"faulty", t:"b"}, {w:"belief.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

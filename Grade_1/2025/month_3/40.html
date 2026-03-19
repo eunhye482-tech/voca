@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Creative Thinking</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 9</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "어떤 발명품의 문제를 해결하려 할 때, 문제를 논리적으로 생각하려 애쓰면 저항이라는 벽에 맞닥뜨릴지도 모른다.",
+            h: ["in", "the", "course", "of", "try", "to", "solve", "a", "problem", "with", "an", "invention", "you", "may", "encounter", "a", "brick", "wall", "of", "resistance", "when", "you", "try", "to", "think", "your", "way", "logically", "through", "the", "problem"],
+            a: [{w:"In", t:"f"}, {w:"the", t:"b"}, {w:"course", t:"b"}, {w:"of", t:"f"}, {w:"trying", t:"b"}, {w:"to", t:"f"}, {w:"solve", t:"b"}, {w:"a", t:"b"}, {w:"problem", t:"b"}, {w:"with", t:"f"}, {w:"an", t:"b"}, {w:"invention,", t:"b"}, {w:"you", t:"b"}, {w:"may", t:"b"}, {w:"encounter", t:"b"}, {w:"a", t:"b"}, {w:"brick", t:"b"}, {w:"wall", t:"b"}, {w:"of", t:"f"}, {w:"resistance", t:"b"}, {w:"when", t:"b"}, {w:"you", t:"b"}, {w:"try", t:"b"}, {w:"to", t:"f"}, {w:"think", t:"b"}, {w:"your", t:"b"}, {w:"way", t:"b"}, {w:"logically", t:"b"}, {w:"through", t:"f"}, {w:"the", t:"b"}, {w:"problem.", t:"b"}]
+        },
+        {
+            k: "그러한 논리적 사고는 선형적 과정으로 우리의 추론 능력을 활용한다.",
+            h: ["such", "logical", "think", "be", "a", "linear", "type", "of", "process", "which", "use", "our", "reason", "skill"],
+            a: [{w:"Such", t:"b"}, {w:"logical", t:"b"}, {w:"thinking", t:"b"}, {w:"is", t:"b"}, {w:"a", t:"b"}, {w:"linear", t:"b"}, {w:"type", t:"b"}, {w:"of", t:"f"}, {w:"process,", t:"b"}, {w:"which", t:"b"}, {w:"uses", t:"b"}, {w:"our", t:"b"}, {w:"reasoning", t:"b"}, {w:"skills.", t:"b"}]
+        },
+        {
+            k: "이는 우리가 알고 있거나 경험해 본 영역에서 작업할 때는 잘 작동한다.",
+            h: ["this", "work", "fine", "when", "we", "be", "operate", "in", "the", "area", "of", "what", "we", "know", "or", "have", "experience"],
+            a: [{w:"This", t:"b"}, {w:"works", t:"b"}, {w:"fine", t:"b"}, {w:"when", t:"b"}, {w:"we’re", t:"b"}, {w:"operating", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"area", t:"b"}, {w:"of", t:"f"}, {w:"what", t:"b"}, {w:"we", t:"b"}, {w:"know", t:"b"}, {w:"or", t:"b"}, {w:"have", t:"b"}, {w:"experienced.", t:"b"}]
+        },
+        {
+            k: "그러나 우리가 새로운 정보와 아이디어를 다뤄야 할 때 선형적 사고로는 흔히 충분하지 않을 것이다.",
+            h: ["however", "when", "we", "need", "to", "deal", "with", "new", "information", "idea", "and", "viewpoint", "linear", "think", "will", "often", "come", "up", "short"],
+            a: [{w:"However,", t:"b"}, {w:"when", t:"b"}, {w:"we", t:"b"}, {w:"need", t:"b"}, {w:"to", t:"f"}, {w:"deal", t:"b"}, {w:"with", t:"f"}, {w:"new", t:"b"}, {w:"information,", t:"b"}, {w:"ideas,", t:"b"}, {w:"and", t:"b"}, {w:"viewpoints,", t:"b"}, {w:"linear", t:"b"}, {w:"thinking", t:"b"}, {w:"will", t:"b"}, {w:"often", t:"b"}, {w:"come", t:"b"}, {w:"up", t:"f"}, {w:"short.", t:"b"}]
+        },
+        {
+            k: "반면 창의성은 기존 문제에 대한 새로운 정보의 적용과 새로운 관점의 구상을 포함한다.",
+            h: ["on", "the", "other", "hand", "creativity", "by", "definition", "involve", "the", "application", "of", "new", "information", "to", "old", "problem", "and", "the", "conception", "of", "new", "viewpoint", "and", "idea"],
+            a: [{w:"On", t:"f"}, {w:"the", t:"b"}, {w:"other", t:"b"}, {w:"hand,", t:"b"}, {w:"creativity", t:"b"}, {w:"by", t:"f"}, {w:"definition", t:"b"}, {w:"involves", t:"b"}, {w:"the", t:"b"}, {w:"application", t:"b"}, {w:"of", t:"f"}, {w:"new", t:"b"}, {w:"information", t:"b"}, {w:"to", t:"f"}, {w:"old", t:"b"}, {w:"problems", t:"b"}, {w:"and", t:"b"}, {w:"the", t:"b"}, {w:"conception", t:"b"}, {w:"of", t:"f"}, {w:"new", t:"b"}, {w:"viewpoints", t:"b"}, {w:"and", t:"b"}, {w:"ideas.", t:"b"}]
+        },
+        {
+            k: "이를 위해 비선형적 방식, 즉 창의적인 뇌를 사용하는 법을 배운다면 여러분은 효과적이 될 것이다.",
+            h: ["for", "this", "you", "will", "be", "most", "effective", "if", "you", "learn", "to", "operate", "in", "a", "nonlinear", "manner", "that", "be", "use", "your", "creative", "brain"],
+            a: [{w:"For", t:"f"}, {w:"this", t:"b"}, {w:"you", t:"b"}, {w:"will", t:"b"}, {w:"be", t:"b"}, {w:"most", t:"b"}, {w:"effective", t:"b"}, {w:"if", t:"b"}, {w:"you", t:"b"}, {w:"learn", t:"b"}, {w:"to", t:"f"}, {w:"operate", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"nonlinear", t:"b"}, {w:"manner;", t:"b"}, {w:"that", t:"b"}, {w:"is,", t:"b"}, {w:"use", t:"b"}, {w:"your", t:"b"}, {w:"creative", t:"b"}, {w:"brain.", t:"b"}]
+        },
+        {
+            k: "여러분이 선형적인 방식으로 사고하면 보수적으로 되고 이미 알려진 기술을 계속 떠올릴 것이다.",
+            h: ["state", "differently", "if", "you", "think", "in", "a", "linear", "manner", "you", "will", "tend", "to", "be", "conservative", "and", "keep", "come", "up", "with", "technique", "which", "be", "already", "know"],
+            a: [{w:"Stated", t:"b"}, {w:"differently,", t:"b"}, {w:"if", t:"b"}, {w:"you", t:"b"}, {w:"think", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"linear", t:"b"}, {w:"manner,", t:"b"}, {w:"you’ll", t:"b"}, {w:"tend", t:"b"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"conservative", t:"b"}, {w:"and", t:"b"}, {w:"keep", t:"b"}, {w:"coming", t:"b"}, {w:"up", t:"f"}, {w:"with", t:"f"}, {w:"techniques", t:"b"}, {w:"which", t:"b"}, {w:"are", t:"b"}, {w:"already", t:"b"}, {w:"known.", t:"b"}]
+        },
+        {
+            k: "이것이 물론 여러분이 원하지 않는 바로 그것이다.",
+            h: ["this", "of", "course", "be", "just", "what", "you", "do", "not", "want"],
+            a: [{w:"This,", t:"b"}, {w:"of", t:"f"}, {w:"course,", t:"b"}, {w:"is", t:"b"}, {w:"just", t:"b"}, {w:"what", t:"b"}, {w:"you", t:"b"}, {w:"don’t", t:"b"}, {w:"want.", t:"b"}]
+        },
+        {
+            k: "논리적 사고는 익숙한 문제에 잘 작동하지만 혁신적 해결책을 내는 창의적 사고에는 불충분하다.",
+            h: ["logical", "think", "work", "well", "with", "familiar", "problem", "but", "fall", "short", "in", "deal", "with", "new", "idea", "for", "which", "creative", "think", "be", "need", "to", "come", "up", "with", "innovative", "solution"],
+            a: [{w:"Logical", t:"b"}, {w:"thinking", t:"b"}, {w:"works", t:"b"}, {w:"well", t:"b"}, {w:"with", t:"f"}, {w:"familiar", t:"b"}, {w:"problems", t:"b"}, {w:"but", t:"b"}, {w:"falls", t:"b"}, {w:"short", t:"b"}, {w:"in", t:"f"}, {w:"dealing", t:"b"}, {w:"with", t:"f"}, {w:"new", t:"b"}, {w:"ideas,", t:"b"}, {w:"for", t:"f"}, {w:"which", t:"b"}, {w:"creative", t:"b"}, {w:"thinking", t:"b"}, {w:"is", t:"b"}, {w:"needed", t:"b"}, {w:"to", t:"f"}, {w:"come", t:"b"}, {w:"up", t:"f"}, {w:"with", t:"f"}, {w:"innovative", t:"b"}, {w:"solutions.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

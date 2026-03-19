@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Plant Communication (Fixed)</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 13</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "우리가 하는 방식과 같지는 않을지라도, 식물은 의사소통을 할 수 있다.",
+            h: ["plant", "can", "communicate", "although", "not", "in", "the", "same", "way", "we", "do"],
+            a: [{w:"Plants", t:"b"}, {w:"can", t:"b"}, {w:"communicate,", t:"b"}, {w:"although", t:"b"}, {w:"not", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"same", t:"b"}, {w:"way", t:"b"}, {w:"we", t:"b"}, {w:"do.", t:"b"}]
+        },
+        {
+            k: "몇몇은 냄새를 통해 자신들의 불만을 표현한다.",
+            h: ["some", "express", "their", "discontent", "through", "scents"],
+            a: [{w:"Some", t:"b"}, {w:"express", t:"b"}, {w:"their", t:"b"}, {w:"discontent", t:"b"}, {w:"through", t:"f"}, {w:"scents.", t:"b"}]
+        },
+        {
+            k: "잔디를 깎고 난 후 공기 중에 감도는 냄새를 알고 있는가?",
+            h: ["you", "know", "that", "smell", "that", "hang", "in", "the", "air", "after", "you", "have", "mow", "the", "lawn"],
+            a: [{w:"You", t:"b"}, {w:"know", t:"b"}, {w:"that", t:"b"}, {w:"smell", t:"b"}, {w:"that", t:"b"}, {w:"hangs", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"air", t:"b"}, {w:"after", t:"f"}, {w:"you’ve", t:"b"}, {w:"mowed", t:"b"}, {w:"the", t:"b"}, {w:"lawn?", t:"b"}]
+        },
+        {
+            k: "그것은 사실 일종의 SOS 신호다.",
+            h: ["yeah", "that", "be", "actually", "an", "SOS"],
+            a: [{w:"Yeah,", t:"b"}, {w:"that’s", t:"b"}, {w:"actually", t:"b"}, {w:"an", t:"b"}, {w:"SOS.", t:"b"}]
+        },
+        {
+            k: "어떤 식물은 소리를 사용한다.",
+            h: ["some", "plant", "use", "sound"],
+            a: [{w:"Some", t:"b"}, {w:"plants", t:"b"}, {w:"use", t:"b"}, {w:"sound.", t:"b"}]
+        },
+        {
+            k: "우리는 들을 수 없는 주파수에 있지만, 소리다.",
+            h: ["yes", "sound", "though", "at", "a", "frequency", "that", "we", "can", "not", "hear"],
+            a: [{w:"Yes,", t:"b"}, {w:"sound,", t:"b"}, {w:"though", t:"b"}, {w:"at", t:"f"}, {w:"a", t:"b"}, {w:"frequency", t:"b"}, {w:"that", t:"b"}, {w:"we", t:"b"}, {w:"can’t", t:"b"}, {w:"hear.", t:"b"}]
+        },
+        {
+            k: "연구자는 식물이 곤경에 처했음을 알리는 소리를 녹음할 수 있는지 알아보기 위해 실험했다.",
+            h: ["researcher", "experiment", "with", "plant", "and", "microphone", "to", "see", "if", "they", "can", "record", "any", "trouble", "call"],
+            a: [{w:"Researchers", t:"b"}, {w:"experimented", t:"b"}, {w:"with", t:"f"}, {w:"plants", t:"b"}, {w:"and", t:"b"}, {w:"microphones", t:"b"}, {w:"to", t:"f"}, {w:"see", t:"b"}, {w:"if", t:"b"}, {w:"they", t:"b"}, {w:"could", t:"b"}, {w:"record", t:"b"}, {w:"any", t:"b"}, {w:"trouble", t:"b"}, {w:"calls.", t:"b"}]
+        },
+        {
+            k: "그들은 식물이 스트레스를 받을 때 고주파의 딸깍 소리를 내며 스트레스 요인에 따라 다른 소리를 낼 수 있음을 알아냈다.",
+            h: ["they", "find", "that", "plant", "produce", "a", "high-frequency", "click", "noise", "when", "stress", "and", "can", "make", "different", "sound", "for", "different", "stressor"],
+            a: [{w:"They", t:"b"}, {w:"found", t:"b"}, {w:"that", t:"b"}, {w:"plants", t:"b"}, {w:"produce", t:"b"}, {w:"a", t:"b"}, {w:"high-frequency", t:"b"}, {w:"clicking", t:"b"}, {w:"noise", t:"b"}, {w:"when", t:"b"}, {w:"stressed", t:"b"}, {w:"and", t:"b"}, {w:"can", t:"b"}, {w:"make", t:"b"}, {w:"different", t:"b"}, {w:"sounds", t:"b"}, {w:"for", t:"f"}, {w:"different", t:"b"}, {w:"stressors.", t:"b"}]
+        },
+        {
+            k: "물을 받지 못할 때 내는 소리와 잎이 잘릴 때 낼 소리가 다르다.",
+            h: ["the", "sound", "a", "plant", "make", "when", "it", "be", "not", "get", "water", "differ", "from", "the", "one", "it", "will", "make", "when", "a", "leaf", "be", "cut"],
+            a: [{w:"The", t:"b"}, {w:"sound", t:"b"}, {w:"a", t:"b"}, {w:"plant", t:"b"}, {w:"makes", t:"b"}, {w:"when", t:"b"}, {w:"it’s", t:"b"}, {w:"not", t:"b"}, {w:"getting", t:"b"}, {w:"watered", t:"b"}, {w:"differs", t:"b"}, {w:"from", t:"f"}, {w:"the", t:"b"}, {w:"one", t:"b"}, {w:"it’ll", t:"b"}, {w:"make", t:"b"}, {w:"when", t:"b"}, {w:"a", t:"b"}, {w:"leaf", t:"b"}, {w:"is", t:"b"}, {w:"cut.", t:"b"}]
+        },
+        {
+            k: "하지만 전문가가 식물이 고통으로 울부짖고 있다고 보지는 않는다는 것에 주목할 가치가 있다.",
+            h: ["however", "it", "be", "worth", "note", "that", "expert", "do", "not", "think", "plant", "be", "cry", "out", "in", "pain"],
+            a: [{w:"However,", t:"b"}, {w:"it’s", t:"b"}, {w:"worth", t:"b"}, {w:"noting", t:"b"}, {w:"that", t:"b"}, {w:"experts", t:"b"}, {w:"don’t", t:"b"}, {w:"think", t:"b"}, {w:"plants", t:"b"}, {w:"are", t:"b"}, {w:"crying", t:"b"}, {w:"out", t:"b"}, {w:"in", t:"f"}, {w:"pain.", t:"b"}]
+        },
+        {
+            k: "이러한 반응은 살아남기 위한 자동적인 행위일 가능성이 더 크다.",
+            h: ["it", "be", "more", "likely", "that", "this", "reaction", "be", "knee-jerk", "survival", "action"],
+            a: [{w:"It’s", t:"b"}, {w:"more", t:"b"}, {w:"likely", t:"b"}, {w:"that", t:"b"}, {w:"these", t:"b"}, {w:"reactions", t:"b"}, {w:"are", t:"b"}, {w:"knee-jerk", t:"b"}, {w:"survival", t:"b"}, {w:"actions.", t:"b"}]
+        },
+        {
+            k: "식물은 살아 있는 유기체이며, 그들의 주요 목표는 살아남는 것이다.",
+            h: ["plant", "be", "live", "organism", "and", "their", "main", "objective", "be", "to", "survive"],
+            a: [{w:"Plants", t:"b"}, {w:"are", t:"b"}, {w:"living", t:"b"}, {w:"organisms,", t:"b"}, {w:"and", t:"b"}, {w:"their", t:"b"}, {w:"main", t:"b"}, {w:"objective", t:"b"}, {w:"is", t:"b"}, {w:"to", t:"f"}, {w:"survive.", t:"b"}]
+        },
+        {
+            k: "냄새와 소리는 해를 끼칠 수도 있는 것에게서 지키기 위한 그들의 도구이다.",
+            h: ["scent", "and", "sound", "be", "their", "tool", "for", "defend", "against", "thing", "that", "might", "harm", "them"],
+            a: [{w:"Scents", t:"b"}, {w:"and", t:"b"}, {w:"sounds", t:"b"}, {w:"are", t:"b"}, {w:"their", t:"b"}, {w:"tools", t:"b"}, {w:"for", t:"f"}, {w:"defending", t:"b"}, {w:"against", t:"f"}, {w:"things", t:"b"}, {w:"that", t:"b"}, {w:"might", t:"b"}, {w:"harm", t:"b"}, {w:"them.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

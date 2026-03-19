@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Relatedness & Motivation</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 6</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "부모, 교사, 상사, 그리고 코치가 관여되어 있고 배려한다고 여겨질 때, 사람들은 더 행복하고 더 동기가 부여된다는 수많은 증거가 있다.",
+            h: ["there", "be", "a", "wealth", "of", "evidence", "that", "when", "parent", "teacher", "supervisor", "and", "coach", "be", "perceive", "as", "involve", "and", "care", "people", "feel", "happy", "and", "more", "motivate"],
+            a: [{w:"There", t:"b"}, {w:"is", t:"b"}, {w:"a", t:"b"}, {w:"wealth", t:"b"}, {w:"of", t:"f"}, {w:"evidence", t:"b"}, {w:"that", t:"b"}, {w:"when", t:"b"}, {w:"parents,", t:"b"}, {w:"teachers,", t:"b"}, {w:"supervisors,", t:"b"}, {w:"and", t:"b"}, {w:"coaches", t:"b"}, {w:"are", t:"b"}, {w:"perceived", t:"b"}, {w:"as", t:"f"}, {w:"involved", t:"b"}, {w:"and", t:"b"}, {w:"caring,", t:"b"}, {w:"people", t:"b"}, {w:"feel", t:"b"}, {w:"happier", t:"b"}, {w:"and", t:"b"}, {w:"more", t:"b"}, {w:"motivated.", t:"b"}]
+        },
+        {
+            k: "단지 권력을 가진 사람들만은 아닌데, 즉 우리는 또래와 직장 동료들에게서도 소중히 여겨지고 존중받는다는 느낌을 받을 필요가 있다.",
+            h: ["and", "it", "be", "not", "just", "those", "people", "with", "power", "we", "need", "to", "feel", "value", "and", "respect", "by", "peer", "and", "coworker"],
+            a: [{w:"And", t:"b"}, {w:"it", t:"b"}, {w:"is", t:"b"}, {w:"not", t:"b"}, {w:"just", t:"b"}, {w:"those", t:"b"}, {w:"people", t:"b"}, {w:"with", t:"f"}, {w:"power—we", t:"b"}, {w:"need", t:"b"}, {w:"to", t:"f"}, {w:"feel", t:"b"}, {w:"valued", t:"b"}, {w:"and", t:"b"}, {w:"respected", t:"b"}, {w:"by", t:"f"}, {w:"peers", t:"b"}, {w:"and", t:"b"}, {w:"coworkers.", t:"b"}]
+        },
+        {
+            k: "관계성에 대한 욕구가 충족될 때, 자율성과 유능함에 대한 지원 또한 제공된다면 동기와 내면화는 자극된다.",
+            h: ["thus", "when", "the", "need", "for", "relatedness", "be", "meet", "motivation", "and", "internalization", "be", "fuel", "provide", "that", "support", "for", "autonomy", "and", "competence", "be", "also", "there"],
+            a: [{w:"Thus,", t:"b"}, {w:"when", t:"b"}, {w:"the", t:"b"}, {w:"need", t:"b"}, {w:"for", t:"f"}, {w:"relatedness", t:"b"}, {w:"is", t:"b"}, {w:"met,", t:"b"}, {w:"motivation", t:"b"}, {w:"and", t:"b"}, {w:"internalization", t:"b"}, {w:"are", t:"b"}, {w:"fueled,", t:"b"}, {w:"provided", t:"b"}, {w:"that", t:"b"}, {w:"support", t:"b"}, {w:"for", t:"f"}, {w:"autonomy", t:"b"}, {w:"and", t:"b"}, {w:"competence", t:"b"}, {w:"are", t:"b"}, {w:"also", t:"b"}, {w:"there.", t:"b"}]
+        },
+        {
+            k: "만약 우리가 다른 사람들에게 동기를 부여하려고 한다면, 배려하는 관계는 그곳에서 시작할 수 있는 중요한 기반이 된다.",
+            h: ["if", "we", "be", "try", "to", "motivate", "other", "a", "care", "relationship", "be", "a", "crucial", "basis", "from", "which", "to", "begin"],
+            a: [{w:"If", t:"b"}, {w:"we", t:"b"}, {w:"are", t:"b"}, {w:"trying", t:"b"}, {w:"to", t:"f"}, {w:"motivate", t:"b"}, {w:"others,", t:"b"}, {w:"a", t:"b"}, {w:"caring", t:"b"}, {w:"relationship", t:"b"}, {w:"is", t:"b"}, {w:"a", t:"b"}, {w:"crucial", t:"b"}, {w:"basis", t:"b"}, {w:"from", t:"f"}, {w:"which", t:"b"}, {w:"to", t:"f"}, {w:"begin.", t:"b"}]
+        },
+        {
+            k: "스스로 동기를 부여하려고 할 때, 타인과의 유대감을 강화하기 위한 일을 하는 것은 장기적인 지속에 중요할 수 있다.",
+            h: ["and", "when", "we", "be", "try", "to", "motivate", "ourselves", "do", "thing", "to", "enhance", "a", "sense", "of", "connectedness", "to", "other", "can", "be", "crucial", "to", "long-term", "persistence"],
+            a: [{w:"And", t:"b"}, {w:"when", t:"b"}, {w:"we", t:"b"}, {w:"are", t:"b"}, {w:"trying", t:"b"}, {w:"to", t:"f"}, {w:"motivate", t:"b"}, {w:"ourselves,", t:"b"}, {w:"doing", t:"b"}, {w:"things", t:"b"}, {w:"to", t:"f"}, {w:"enhance", t:"b"}, {w:"a", t:"b"}, {w:"sense", t:"b"}, {w:"of", t:"f"}, {w:"connectedness", t:"b"}, {w:"to", t:"f"}, {w:"others", t:"b"}, {w:"can", t:"b"}, {w:"be", t:"b"}, {w:"crucial", t:"b"}, {w:"to", t:"f"}, {w:"long-term", t:"b"}, {w:"persistence.", t:"b"}]
+        },
+        {
+            k: "친구와 함께 운동하라, 어려운 결정을 내려야 할 때 누군가에게 전화하라, 그리고 다른 사람들이 도전에 맞설 때 버팀목으로 그곳에 있어라.",
+            h: ["so", "exercise", "with", "a", "friend", "call", "someone", "when", "you", "have", "a", "difficult", "decision", "to", "make", "and", "be", "there", "as", "a", "support", "for", "other", "as", "they", "take", "on", "challenge"],
+            a: [{w:"So", t:"b"}, {w:"exercise", t:"b"}, {w:"with", t:"f"}, {w:"a", t:"b"}, {w:"friend,", t:"b"}, {w:"call", t:"b"}, {w:"someone", t:"b"}, {w:"when", t:"b"}, {w:"you", t:"b"}, {w:"have", t:"b"}, {w:"a", t:"b"}, {w:"difficult", t:"b"}, {w:"decision", t:"b"}, {w:"to", t:"f"}, {w:"make,", t:"b"}, {w:"and", t:"b"}, {w:"be", t:"b"}, {w:"there", t:"b"}, {w:"as", t:"f"}, {w:"a", t:"b"}, {w:"support", t:"b"}, {w:"for", t:"f"}, {w:"others", t:"b"}, {w:"as", t:"f"}, {w:"they", t:"b"}, {w:"take", t:"b"}, {w:"on", t:"f"}, {w:"challenges.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

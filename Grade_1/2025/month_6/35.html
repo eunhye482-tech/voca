@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Memory Reconstruction</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 6</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "Bartlett 경은 사람들에게 다른 나라의 민설화를 듣고 나중에 이야기들을 기억해 내도록 요청했다.",
+            h: ["sir", "frederic", "bartlett", "ask", "people", "to", "listen", "to", "folktale", "from", "other", "country", "and", "then", "recall", "these", "story", "at", "a", "late", "date"],
+            a: [{w:"Sir", t:"b"}, {w:"Frederic", t:"b"}, {w:"Bartlett", t:"b"}, {w:"asked", t:"b"}, {w:"people", t:"b"}, {w:"to", t:"f"}, {w:"listen", t:"b"}, {w:"to", t:"f"}, {w:"folktales", t:"b"}, {w:"from", t:"f"}, {w:"other", t:"b"}, {w:"countries", t:"b"}, {w:"and", t:"b"}, {w:"then", t:"b"}, {w:"recall", t:"b"}, {w:"these", t:"b"}, {w:"stories", t:"b"}, {w:"at", t:"f"}, {w:"a", t:"b"}, {w:"later", t:"b"}, {w:"date.", t:"b"}]
+        },
+        {
+            k: "추측할 수 있듯이, 낯선 이야기는 익숙한 이야기만큼 잘 기억되지 않았다.",
+            h: ["as", "you", "might", "guess", "unfamiliar", "story", "be", "not", "remember", "as", "well", "as", "familiar", "story"],
+            a: [{w:"As", t:"f"}, {w:"you", t:"b"}, {w:"might", t:"b"}, {w:"guess,", t:"b"}, {w:"unfamiliar", t:"b"}, {w:"stories", t:"b"}, {w:"were", t:"b"}, {w:"not", t:"b"}, {w:"remembered", t:"b"}, {w:"as", t:"b"}, {w:"well", t:"b"}, {w:"as", t:"b"}, {w:"familiar", t:"b"}, {w:"stories.", t:"b"}]
+        },
+        {
+            k: "놀랍게도, 그러나 기억의 오류들은 무작위적인 것이 아니었다.",
+            h: ["surprisingly", "however", "error", "in", "memory", "be", "not", "random"],
+            a: [{w:"Surprisingly,", t:"b"}, {w:"however,", t:"b"}, {w:"errors", t:"b"}, {w:"in", t:"f"}, {w:"memory", t:"b"}, {w:"were", t:"b"}, {w:"not", t:"b"}, {w:"random.", t:"b"}]
+        },
+        {
+            k: "오히려 피험자들은 이야기의 비슷한 부분, 특히 이해가 되지 않는 부분을 종종 다시 썼다.",
+            h: ["rather", "subject", "often", "rewrite", "similar", "part", "of", "the", "story", "in", "their", "own", "mind", "particularly", "the", "part", "that", "make", "the", "least", "sense", "to", "them"],
+            a: [{w:"Rather,", t:"b"}, {w:"subjects", t:"b"}, {w:"often", t:"b"}, {w:"rewrote", t:"b"}, {w:"similar", t:"b"}, {w:"parts", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"stories", t:"b"}, {w:"in", t:"f"}, {w:"their", t:"b"}, {w:"own", t:"b"}, {w:"minds—particularly", t:"b"}, {w:"the", t:"b"}, {w:"parts", t:"b"}, {w:"that", t:"b"}, {w:"made", t:"b"}, {w:"the", t:"b"}, {w:"least", t:"b"}, {w:"sense", t:"b"}, {w:"to", t:"f"}, {w:"them.", t:"b"}]
+        },
+        {
+            k: "Bartlett은 인간은 기억의 사소한 틈을 메우기 위해 뇌에 저장된 지식의 선반인 정신적 스키마타를 활용한다고 결론지었다.",
+            h: ["bartlett", "conclude", "that", "when", "face", "problem", "human", "draw", "upon", "mental", "schemata", "or", "shelf", "of", "store", "knowledge", "in", "our", "brain", "to", "fill", "in", "any", "minor", "gap", "in", "our", "memory"],
+            a: [{w:"Bartlett", t:"b"}, {w:"concluded", t:"b"}, {w:"that", t:"b"}, {w:"when", t:"b"}, {w:"facing", t:"b"}, {w:"problems,", t:"b"}, {w:"humans", t:"b"}, {w:"draw", t:"b"}, {w:"upon", t:"f"}, {w:"mental", t:"b"}, {w:"schemata,", t:"b"}, {w:"or", t:"b"}, {w:"shelves", t:"b"}, {w:"of", t:"f"}, {w:"stored", t:"b"}, {w:"knowledge", t:"b"}, {w:"in", t:"f"}, {w:"our", t:"b"}, {w:"brains,", t:"b"}, {w:"to", t:"f"}, {w:"fill", t:"b"}, {w:"in", t:"f"}, {w:"any", t:"b"}, {w:"minor", t:"b"}, {w:"gaps", t:"b"}, {w:"in", t:"f"}, {w:"our", t:"b"}, {w:"memories.", t:"b"}]
+        },
+        {
+            k: "따라서, 기억하는 것은 과거의 경험을 기반으로 구축하는 것을 포함하는 상상의 과정이다.",
+            h: ["therefore", "remember", "be", "an", "imaginative", "process", "that", "involve", "build", "upon", "past", "experience"],
+            a: [{w:"Therefore,", t:"b"}, {w:"remembering", t:"b"}, {w:"is", t:"b"}, {w:"an", t:"b"}, {w:"imaginative", t:"b"}, {w:"process", t:"b"}, {w:"that", t:"b"}, {w:"involves", t:"b"}, {w:"building", t:"b"}, {w:"upon", t:"f"}, {w:"past", t:"b"}, {w:"experiences.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

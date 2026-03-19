@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Diving Reflex</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 7</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "우리는 다른 해양 포유류처럼 ‘잠수 반사’를 가지고 있다.",
+            h: ["we", "have", "a", "dive", "reflex", "like", "other", "marine", "mammal"],
+            a: [{w:"We", t:"b"}, {w:"have", t:"b"}, {w:"a", t:"b"}, {w:"‘diving", t:"b"}, {w:"reflex’,", t:"b"}, {w:"like", t:"f"}, {w:"other", t:"b"}, {w:"marine", t:"b"}, {w:"mammals.", t:"b"}]
+        },
+        {
+            k: "이것은 얼굴의 특수 신경 말단이 얼굴이 물 아래에 들어갈 때만 이 반사를 유발함을 의미한다.",
+            h: ["this", "mean", "that", "special", "nerve", "end", "on", "our", "face", "around", "the", "mouth", "and", "nose", "trigger", "this", "reflex", "only", "when", "the", "facial", "region", "go", "under", "water"],
+            a: [{w:"This", t:"b"}, {w:"means", t:"b"}, {w:"that", t:"b"}, {w:"special", t:"b"}, {w:"nerve", t:"b"}, {w:"endings", t:"b"}, {w:"on", t:"f"}, {w:"our", t:"b"}, {w:"faces,", t:"b"}, {w:"around", t:"f"}, {w:"the", t:"b"}, {w:"mouth", t:"b"}, {w:"and", t:"b"}, {w:"nose,", t:"b"}, {w:"trigger", t:"b"}, {w:"this", t:"b"}, {w:"reflex", t:"b"}, {w:"only", t:"b"}, {w:"when", t:"b"}, {w:"the", t:"b"}, {w:"facial", t:"b"}, {w:"region", t:"b"}, {w:"goes", t:"b"}, {w:"under", t:"f"}, {w:"water.", t:"b"}]
+        },
+        {
+            k: "우리가 물속에 있어도 머리가 공기 중에 있으면 잠수 반사는 없다.",
+            h: ["if", "we", "be", "in", "the", "water", "with", "our", "head", "out", "in", "the", "air", "there", "be", "no", "dive", "reflex"],
+            a: [{w:"If", t:"b"}, {w:"we", t:"b"}, {w:"are", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"water,", t:"b"}, {w:"with", t:"f"}, {w:"our", t:"b"}, {w:"head", t:"b"}, {w:"out", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"air,", t:"b"}, {w:"there", t:"b"}, {w:"is", t:"b"}, {w:"no", t:"b"}, {w:"diving", t:"b"}, {w:"reflex.", t:"b"}]
+        },
+        {
+            k: "그릇의 물에 얼굴만 담그고 나머지 몸은 공기 중에 있어도 잠수 반사가 유발된다.",
+            h: ["but", "if", "we", "sink", "just", "our", "face", "in", "a", "bowl", "of", "water", "while", "the", "whole", "of", "the", "rest", "of", "our", "body", "be", "in", "the", "dry", "air", "the", "dive", "reflex", "be", "trigger"],
+            a: [{w:"But", t:"b"}, {w:"if", t:"b"}, {w:"we", t:"b"}, {w:"sink", t:"b"}, {w:"just", t:"b"}, {w:"our", t:"b"}, {w:"face", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"bowl", t:"b"}, {w:"of", t:"f"}, {w:"water,", t:"b"}, {w:"while", t:"b"}, {w:"the", t:"b"}, {w:"whole", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"rest", t:"b"}, {w:"of", t:"f"}, {w:"our", t:"b"}, {w:"body", t:"b"}, {w:"is", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"dry", t:"b"}, {w:"air,", t:"b"}, {w:"the", t:"b"}, {w:"diving", t:"b"}, {w:"reflex", t:"b"}, {w:"is", t:"b"}, {w:"triggered.", t:"b"}]
+        },
+        {
+            k: "이것은 기도를 자동으로 닫아 위험을 줄이고 폐 속의 작은 공기 통로를 좁힌다.",
+            h: ["it", "automatically", "close", "down", "the", "airway", "reduce", "the", "risk", "of", "swallow", "water", "and", "it", "narrow", "the", "small", "air-passage", "in", "the", "lung"],
+            a: [{w:"It", t:"b"}, {w:"automatically", t:"b"}, {w:"closes", t:"b"}, {w:"down", t:"f"}, {w:"the", t:"b"}, {w:"airway,", t:"b"}, {w:"reducing", t:"b"}, {w:"the", t:"b"}, {w:"risk", t:"b"}, {w:"of", t:"f"}, {w:"swallowing", t:"b"}, {w:"water,", t:"b"}, {w:"and", t:"b"}, {w:"it", t:"b"}, {w:"narrows", t:"b"}, {w:"the", t:"b"}, {w:"small", t:"b"}, {w:"air-passages", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"lungs.", t:"b"}]
+        },
+        {
+            k: "동시에 심박수가 절반으로 느려지고 혈액이 중요 장기로 보내져 그것들을 보호한다.",
+            h: ["at", "the", "same", "time", "the", "heart", "rate", "be", "slow", "down", "to", "half", "speed", "and", "blood", "be", "shunt", "to", "the", "vital", "organ", "protect", "them", "from", "the", "effect", "of", "the", "brief", "stop", "in", "breath"],
+            a: [{w:"At", t:"f"}, {w:"the", t:"b"}, {w:"same", t:"b"}, {w:"time", t:"b"}, {w:"the", t:"b"}, {w:"heart", t:"b"}, {w:"rate", t:"b"}, {w:"is", t:"b"}, {w:"slowed", t:"b"}, {w:"down", t:"f"}, {w:"to", t:"f"}, {w:"half", t:"b"}, {w:"speed", t:"b"}, {w:"and", t:"b"}, {w:"blood", t:"b"}, {w:"is", t:"b"}, {w:"shunted", t:"b"}, {w:"to", t:"f"}, {w:"the", t:"b"}, {w:"vital", t:"b"}, {w:"organs,", t:"b"}, {w:"protecting", t:"b"}, {w:"them", t:"b"}, {w:"from", t:"f"}, {w:"the", t:"b"}, {w:"effects", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"brief", t:"b"}, {w:"stop", t:"b"}, {w:"in", t:"f"}, {w:"breathing.", t:"b"}]
+        },
+        {
+            k: "반면 침팬지나 고릴라는 얼굴이 물 아래에 있으면 당황하여 심장이 빨리 뛰고 금방 익사할 것이다.",
+            h: ["by", "contrast", "if", "a", "chimpanzee", "or", "a", "gorilla", "find", "itself", "in", "water", "with", "its", "face", "below", "the", "surface", "it", "would", "panic", "its", "heart", "would", "race", "and", "it", "would", "quickly", "drown"],
+            a: [{w:"By", t:"f"}, {w:"contrast,", t:"b"}, {w:"if", t:"b"}, {w:"a", t:"b"}, {w:"chimpanzee", t:"b"}, {w:"or", t:"b"}, {w:"a", t:"b"}, {w:"gorilla", t:"b"}, {w:"found", t:"b"}, {w:"itself", t:"b"}, {w:"in", t:"f"}, {w:"water", t:"b"}, {w:"with", t:"f"}, {w:"its", t:"b"}, {w:"face", t:"b"}, {w:"below", t:"f"}, {w:"the", t:"b"}, {w:"surface,", t:"b"}, {w:"it", t:"b"}, {w:"would", t:"b"}, {w:"panic,", t:"b"}, {w:"its", t:"b"}, {w:"heart", t:"b"}, {w:"would", t:"b"}, {w:"race", t:"b"}, {w:"and", t:"b"}, {w:"it", t:"b"}, {w:"would", t:"b"}, {w:"quickly", t:"b"}, {w:"drown.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

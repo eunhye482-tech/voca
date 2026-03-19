@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Nature of Expertise</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 7</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "전문가 연구는 깊고 유연한 이해를 가지는 것이 무엇을 의미하는지에 대한 통찰을 제공한다.",
+            h: ["study", "of", "expert", "provide", "insight", "into", "what", "it", "mean", "to", "have", "deep", "and", "flexible", "understand"],
+            a: [{w:"Studies", t:"b"}, {w:"of", t:"f"}, {w:"experts", t:"b"}, {w:"provide", t:"b"}, {w:"insight", t:"b"}, {w:"into", t:"f"}, {w:"what", t:"b"}, {w:"it", t:"b"}, {w:"means", t:"b"}, {w:"to", t:"f"}, {w:"have", t:"b"}, {w:"deep", t:"b"}, {w:"and", t:"b"}, {w:"flexible", t:"b"}, {w:"understanding.", t:"b"}]
+        },
+        {
+            k: "특정 분야 전문가는 세상에 대해 깊고 풍부하게 상호 연결된 생각을 가진 사람들이다.",
+            h: ["expert", "in", "a", "particular", "domain", "be", "people", "who", "have", "deep", "richly", "interconnect", "idea", "about", "the", "world"],
+            a: [{w:"Experts", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"particular", t:"b"}, {w:"domain", t:"b"}, {w:"are", t:"b"}, {w:"people", t:"b"}, {w:"who", t:"b"}, {w:"have", t:"b"}, {w:"deep,", t:"b"}, {w:"richly", t:"b"}, {w:"interconnected", t:"b"}, {w:"ideas", t:"b"}, {w:"about", t:"f"}, {w:"the", t:"b"}, {w:"world.", t:"b"}]
+        },
+        {
+            k: "그들은 단순히 생각을 잘 하거나 유난히 똑똑한 사람이 아니다.",
+            h: ["they", "be", "not", "just", "good", "thinker", "or", "people", "who", "be", "exceptionally", "smart"],
+            a: [{w:"They", t:"b"}, {w:"are", t:"b"}, {w:"not", t:"b"}, {w:"just", t:"b"}, {w:"good", t:"b"}, {w:"thinkers", t:"b"}, {w:"or", t:"b"}, {w:"people", t:"b"}, {w:"who", t:"b"}, {w:"are", t:"b"}, {w:"exceptionally", t:"b"}, {w:"smart.", t:"b"}]
+        },
+        {
+            k: "오히려 전문가는 체스나 화학 같은 특정 분야 지식을 가지며 다방면 지식인이 아니다.",
+            h: ["rather", "expert", "have", "knowledge", "in", "a", "specific", "domain", "such", "as", "chess", "chemistry", "or", "tennis", "and", "be", "not", "generalist"],
+            a: [{w:"Rather,", t:"b"}, {w:"experts", t:"b"}, {w:"have", t:"b"}, {w:"knowledge", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"specific", t:"b"}, {w:"domain—such", t:"b"}, {w:"as", t:"f"}, {w:"chess,", t:"b"}, {w:"chemistry,", t:"b"}, {w:"or", t:"b"}, {w:"tennis—and", t:"b"}, {w:"are", t:"b"}, {w:"not", t:"b"}, {w:"generalists.", t:"b"}]
+        },
+        {
+            k: "하지만 전문가는 단순히 “많은 사실”을 아는 것이 아니다.",
+            h: ["however", "expert", "do", "not", "just", "know", "a", "bunch", "of", "fact"],
+            a: [{w:"However,", t:"b"}, {w:"experts", t:"b"}, {w:"do", t:"b"}, {w:"not", t:"b"}, {w:"just", t:"b"}, {w:"know", t:"b"}, {w:"“a", t:"b"}, {w:"bunch", t:"b"}, {w:"of", t:"f"}, {w:"facts.”", t:"b"}]
+        },
+        {
+            k: "전문성이 있다는 것은 지식이 일관된 틀로 조직화되어 상호 관계를 이해함을 의미한다.",
+            h: ["in", "fact", "have", "expertise", "in", "a", "topic", "mean", "that", "knowledge", "be", "organize", "into", "coherent", "framework", "and", "the", "expert", "understand", "the", "inter-relationship", "between", "fact", "and", "can", "distinguish", "which", "idea", "be", "most", "central"],
+            a: [{w:"In", t:"f"}, {w:"fact,", t:"b"}, {w:"having", t:"b"}, {w:"expertise", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"topic", t:"b"}, {w:"means", t:"b"}, {w:"that", t:"b"}, {w:"knowledge", t:"b"}, {w:"is", t:"b"}, {w:"organized", t:"b"}, {w:"into", t:"f"}, {w:"coherent", t:"b"}, {w:"frameworks,", t:"b"}, {w:"and", t:"b"}, {w:"the", t:"b"}, {w:"expert", t:"b"}, {w:"understands", t:"b"}, {w:"the", t:"b"}, {w:"inter-relationship", t:"b"}, {w:"between", t:"f"}, {w:"facts", t:"b"}, {w:"and", t:"b"}, {w:"can", t:"b"}, {w:"distinguish", t:"b"}, {w:"which", t:"b"}, {w:"ideas", t:"b"}, {w:"are", t:"b"}, {w:"most", t:"b"}, {w:"central.", t:"b"}]
+        },
+        {
+            k: "이러한 깊고 조직화된 이해는 학습 유연성을 높이고 다양한 맥락에 적용을 촉진한다.",
+            h: ["this", "kind", "of", "deep", "but", "organize", "understand", "allow", "for", "great", "flexibility", "in", "learn", "and", "facilitate", "application", "across", "multiple", "context"],
+            a: [{w:"This", t:"b"}, {w:"kind", t:"b"}, {w:"of", t:"f"}, {w:"deep", t:"b"}, {w:"but", t:"b"}, {w:"organized", t:"b"}, {w:"understanding", t:"b"}, {w:"allows", t:"b"}, {w:"for", t:"f"}, {w:"greater", t:"b"}, {w:"flexibility", t:"b"}, {w:"in", t:"f"}, {w:"learning", t:"b"}, {w:"and", t:"b"}, {w:"facilitates", t:"b"}, {w:"application", t:"b"}, {w:"across", t:"f"}, {w:"multiple", t:"b"}, {w:"contexts.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

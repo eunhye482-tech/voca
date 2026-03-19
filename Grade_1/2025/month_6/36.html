@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - History and Archaeology</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 9</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "역사는, 사람들이 종종 말하길, 그 자체를 반복한다.",
+            h: ["history", "people", "often", "say", "repeat", "itself"],
+            a: [{w:"History,", t:"b"}, {w:"people", t:"b"}, {w:"often", t:"b"}, {w:"say,", t:"b"}, {w:"repeats", t:"b"}, {w:"itself.", t:"b"}]
+        },
+        {
+            k: "고대 문명의 역사 기록을 보면 몇 가지 일들이 반복해서 일어나는 것처럼 보인다.",
+            h: ["and", "look", "at", "the", "historical", "record", "of", "the", "ancient", "civilization", "some", "thing", "do", "seem", "to", "happen", "again", "and", "again"],
+            a: [{w:"And", t:"b"}, {w:"looking", t:"b"}, {w:"at", t:"f"}, {w:"the", t:"b"}, {w:"historical", t:"b"}, {w:"records", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"ancient", t:"b"}, {w:"civilizations,", t:"b"}, {w:"some", t:"b"}, {w:"things", t:"b"}, {w:"do", t:"b"}, {w:"seem", t:"b"}, {w:"to", t:"f"}, {w:"happen", t:"b"}, {w:"again", t:"b"}, {w:"and", t:"b"}, {w:"again.", t:"b"}]
+        },
+        {
+            k: "문명은 로마와 대영제국의 사례처럼 확장하고, 과도하게 확장되다가 붕괴한다.",
+            h: ["civilization", "expand", "get", "overextend", "and", "then", "collapse", "as", "in", "the", "case", "of", "rome", "which", "go", "under", "in", "476", "ad", "and", "the", "british", "empire", "which", "fall", "apart", "more", "than", "a", "thousand", "year", "late", "in", "the", "post-world", "war", "ii", "era"],
+            a: [{w:"Civilizations", t:"b"}, {w:"expand,", t:"b"}, {w:"get", t:"b"}, {w:"overextended,", t:"b"}, {w:"and", t:"b"}, {w:"then", t:"b"}, {w:"collapse", t:"b"}, {w:"as", t:"f"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"cases", t:"b"}, {w:"of", t:"f"}, {w:"Rome,", t:"b"}, {w:"which", t:"b"}, {w:"went", t:"b"}, {w:"under", t:"b"}, {w:"in", t:"f"}, {w:"476", t:"b"}, {w:"AD,", t:"b"}, {w:"and", t:"b"}, {w:"the", t:"b"}, {w:"British", t:"b"}, {w:"Empire,", t:"b"}, {w:"which", t:"b"}, {w:"fell", t:"b"}, {w:"apart", t:"b"}, {w:"more", t:"b"}, {w:"than", t:"b"}, {w:"a", t:"b"}, {w:"thousand", t:"b"}, {w:"years", t:"b"}, {w:"later", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"post‑World", t:"b"}, {w:"War", t:"b"}, {w:"II", t:"b"}, {w:"era.", t:"b"}]
+        },
+        {
+            k: "하지만 이것이 항상 그런가?",
+            h: ["but", "be", "this", "always", "the", "case"],
+            a: [{w:"But", t:"b"}, {w:"is", t:"b"}, {w:"this", t:"b"}, {w:"always", t:"b"}, {w:"the", t:"b"}, {w:"case?", t:"b"}]
+        },
+        {
+            k: "만약 그렇다면 고고학은 꽤 지루할 것이다; 한 가지 일이 반복해서 일어날 테니 말이다.",
+            h: ["if", "so", "archaeology", "would", "be", "pretty", "boring", "one", "thing", "would", "happen", "again", "and", "again"],
+            a: [{w:"If", t:"b"}, {w:"so,", t:"b"}, {w:"archaeology", t:"b"}, {w:"would", t:"b"}, {w:"be", t:"b"}, {w:"pretty", t:"b"}, {w:"boring;", t:"b"}, {w:"one", t:"b"}, {w:"thing", t:"b"}, {w:"would", t:"b"}, {w:"happen", t:"b"}, {w:"again", t:"b"}, {w:"and", t:"b"}, {w:"again.", t:"b"}]
+        },
+        {
+            k: "하지만 그것은 고고학자들이 보는 것이 아니다.",
+            h: ["but", "that", "be", "not", "what", "archaeologist", "see"],
+            a: [{w:"But", t:"b"}, {w:"that’s", t:"b"}, {w:"not", t:"b"}, {w:"what", t:"b"}, {w:"archaeologists", t:"b"}, {w:"see.", t:"b"}]
+        },
+        {
+            k: "Aztec과 Inca처럼 침략자들에 의해 정복되어 갑작스럽게 끝나는 문명들도 있다.",
+            h: ["some", "civilization", "end", "suddenly", "like", "the", "aztec", "and", "inca", "conquer", "by", "invader", "in", "the", "1520s", "ad"],
+            a: [{w:"Some", t:"b"}, {w:"civilizations", t:"b"}, {w:"end", t:"b"}, {w:"suddenly,", t:"b"}, {w:"like", t:"f"}, {w:"the", t:"b"}, {w:"Aztec", t:"b"}, {w:"and", t:"b"}, {w:"Inca,", t:"b"}, {w:"conquered", t:"b"}, {w:"by", t:"f"}, {w:"invaders", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"1520s", t:"b"}, {w:"AD.", t:"b"}]
+        },
+        {
+            k: "그러한 제국들은 과도한 확장의 결과로 붕괴할 기회조차 없었다.",
+            h: ["those", "empire", "never", "have", "the", "chance", "to", "collapse", "as", "a", "result", "of", "overexpansion"],
+            a: [{w:"Those", t:"b"}, {w:"empires", t:"b"}, {w:"never", t:"b"}, {w:"had", t:"b"}, {w:"the", t:"b"}, {w:"chance", t:"b"}, {w:"to", t:"f"}, {w:"collapse", t:"b"}, {w:"as", t:"f"}, {w:"a", t:"f"}, {w:"result", t:"b"}, {w:"of", t:"f"}, {w:"overexpansion.", t:"b"}]
+        },
+        {
+            k: "그래서 문명의 경우에, “역사는 반복된다”라는 말은 지나친 단순화로 보인다.",
+            h: ["so", "in", "the", "case", "of", "civilization", "history", "repeat", "itself", "seem", "to", "be", "an", "oversimplification"],
+            a: [{w:"So", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"case", t:"b"}, {w:"of", t:"f"}, {w:"civilizations,", t:"b"}, {w:"“history", t:"b"}, {w:"repeats", t:"b"}, {w:"itself”", t:"b"}, {w:"seems", t:"b"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"an", t:"b"}, {w:"oversimplification.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

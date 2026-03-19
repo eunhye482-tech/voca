@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Reproductive Strategies</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 7</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "인간은 더 많은 에너지를 투자해 천천히 번식하는 전략을 진화시킨 소수의 종 중 하나이다.",
+            h: ["in", "most", "respect", "human", "be", "one", "of", "a", "relatively", "small", "number", "of", "species", "that", "evolve", "a", "very", "different", "strategy", "of", "invest", "more", "energy", "to", "reproduce", "more", "slowly"],
+            a: [{w:"In", t:"f"}, {w:"most", t:"b"}, {w:"respects,", t:"b"}, {w:"humans", t:"b"}, {w:"are", t:"b"}, {w:"one", t:"b"}, {w:"of", t:"f"}, {w:"a", t:"b"}, {w:"relatively", t:"b"}, {w:"small", t:"b"}, {w:"number", t:"b"}, {w:"of", t:"f"}, {w:"species", t:"b"}, {w:"that", t:"b"}, {w:"evolved", t:"b"}, {w:"a", t:"b"}, {w:"very", t:"b"}, {w:"different", t:"b"}, {w:"strategy", t:"b"}, {w:"of", t:"f"}, {w:"investing", t:"b"}, {w:"more", t:"b"}, {w:"energy", t:"b"}, {w:"to", t:"f"}, {w:"reproduce", t:"b"}, {w:"more", t:"b"}, {w:"slowly.", t:"b"}]
+        },
+        {
+            k: "우리는 천천히 성숙하고 큰 몸을 키우며 새끼를 적게 낳지만 잘 키우는 데 시간과 에너지를 투자한다.",
+            h: ["like", "ape", "and", "elephant", "we", "mature", "at", "a", "leisurely", "pace", "grow", "large", "body", "and", "have", "few", "baby", "but", "devote", "much", "time", "and", "energy", "to", "raise", "them", "well"],
+            a: [{w:"Like", t:"b"}, {w:"apes", t:"b"}, {w:"and", t:"b"}, {w:"elephants,", t:"b"}, {w:"we", t:"b"}, {w:"mature", t:"b"}, {w:"at", t:"f"}, {w:"a", t:"b"}, {w:"leisurely", t:"b"}, {w:"pace,", t:"b"}, {w:"grow", t:"b"}, {w:"large", t:"b"}, {w:"bodies,", t:"b"}, {w:"and", t:"b"}, {w:"have", t:"b"}, {w:"few", t:"b"}, {w:"babies", t:"b"}, {w:"but", t:"b"}, {w:"devote", t:"b"}, {w:"much", t:"b"}, {w:"time", t:"b"}, {w:"and", t:"b"}, {w:"energy", t:"b"}, {w:"to", t:"f"}, {w:"raising", t:"b"}, {w:"them", t:"b"}, {w:"well.", t:"b"}]
+        },
+        {
+            k: "새끼 중 높은 비율이 살아남아 번식하기 때문에 이 특이한 전략은 성공한다.",
+            h: ["this", "unusual", "strategy", "succeed", "because", "while", "ape", "and", "elephant", "produce", "few", "baby", "than", "mouse", "a", "large", "percentage", "of", "their", "offspring", "survive", "to", "then", "reproduce"],
+            a: [{w:"This", t:"b"}, {w:"unusual", t:"b"}, {w:"strategy", t:"b"}, {w:"succeeds", t:"b"}, {w:"because", t:"b"}, {w:"while", t:"b"}, {w:"apes", t:"b"}, {w:"and", t:"b"}, {w:"elephants", t:"b"}, {w:"produce", t:"b"}, {w:"fewer", t:"b"}, {w:"babies", t:"b"}, {w:"than", t:"b"}, {w:"mice,", t:"b"}, {w:"a", t:"b"}, {w:"larger", t:"b"}, {w:"percentage", t:"b"}, {w:"of", t:"f"}, {w:"their", t:"b"}, {w:"offspring", t:"b"}, {w:"survive", t:"b"}, {w:"to", t:"f"}, {w:"then", t:"b"}, {w:"reproduce.", t:"b"}]
+        },
+        {
+            k: "생쥐는 5주 만에 어미가 되고 2개월마다 4~10마리의 새끼를 낳을 수 있다.",
+            h: ["a", "house", "mouse", "can", "become", "a", "mother", "when", "she", "be", "just", "five", "week", "old", "have", "four", "to", "ten", "pup", "per", "litter", "and", "can", "have", "a", "new", "litter", "every", "two", "month", "over", "the", "course", "of", "her", "approximately", "twelve-month", "life"],
+            a: [{w:"A", t:"b"}, {w:"house", t:"b"}, {w:"mouse", t:"b"}, {w:"can", t:"b"}, {w:"become", t:"b"}, {w:"a", t:"b"}, {w:"mother", t:"b"}, {w:"when", t:"b"}, {w:"she", t:"b"}, {w:"is", t:"b"}, {w:"just", t:"b"}, {w:"five", t:"b"}, {w:"weeks", t:"b"}, {w:"old,", t:"b"}, {w:"has", t:"b"}, {w:"four", t:"b"}, {w:"to", t:"f"}, {w:"ten", t:"b"}, {w:"pups", t:"b"}, {w:"per", t:"b"}, {w:"litter,", t:"b"}, {w:"and", t:"b"}, {w:"can", t:"b"}, {w:"have", t:"b"}, {w:"a", t:"b"}, {w:"new", t:"b"}, {w:"litter", t:"b"}, {w:"every", t:"b"}, {w:"two", t:"b"}, {w:"months", t:"b"}, {w:"over", t:"f"}, {w:"the", t:"b"}, {w:"course", t:"b"}, {w:"of", t:"f"}, {w:"her", t:"b"}, {w:"approximately", t:"b"}, {w:"twelve-month", t:"b"}, {w:"life.", t:"b"}]
+        },
+        {
+            k: "그러나 새끼 대부분은 어릴 때 죽는다.",
+            h: ["however", "the", "vast", "majority", "of", "her", "pup", "die", "young"],
+            a: [{w:"However,", t:"b"}, {w:"the", t:"b"}, {w:"vast", t:"b"}, {w:"majority", t:"b"}, {w:"of", t:"f"}, {w:"her", t:"b"}, {w:"pups", t:"b"}, {w:"die", t:"b"}, {w:"young.", t:"b"}]
+        },
+        {
+            k: "반면 침팬지나 코끼리 어미는 12살 이후부터 5~6년마다 단 한 마리만 낳는다.",
+            h: ["in", "contrast", "a", "chimp", "or", "elephant", "mother", "do", "not", "reproduce", "until", "she", "be", "at", "least", "twelve", "year", "old", "and", "she", "give", "birth", "to", "only", "one", "infant", "every", "five", "or", "six", "year", "over", "the", "next", "thirty", "or", "so", "year"],
+            a: [{w:"In", t:"f"}, {w:"contrast,", t:"b"}, {w:"a", t:"b"}, {w:"chimp", t:"b"}, {w:"or", t:"b"}, {w:"elephant", t:"b"}, {w:"mother", t:"b"}, {w:"does", t:"b"}, {w:"not", t:"b"}, {w:"reproduce", t:"b"}, {w:"until", t:"b"}, {w:"she", t:"b"}, {w:"is", t:"b"}, {w:"at", t:"f"}, {w:"least", t:"b"}, {w:"twelve", t:"b"}, {w:"years", t:"b"}, {w:"old,", t:"b"}, {w:"and", t:"b"}, {w:"she", t:"b"}, {w:"gives", t:"b"}, {w:"birth", t:"b"}, {w:"to", t:"f"}, {w:"only", t:"b"}, {w:"one", t:"b"}, {w:"infant", t:"b"}, {w:"every", t:"b"}, {w:"five", t:"b"}, {w:"or", t:"b"}, {w:"six", t:"b"}, {w:"years", t:"b"}, {w:"over", t:"f"}, {w:"the", t:"b"}, {w:"next", t:"b"}, {w:"thirty", t:"b"}, {w:"or", t:"b"}, {w:"so", t:"b"}, {w:"years.", t:"b"}]
+        },
+        {
+            k: "이러한 새끼 중 절반 정도가 부모가 되는 데 성공한다.",
+            h: ["about", "half", "of", "these", "offspring", "make", "it", "to", "become", "parent"],
+            a: [{w:"About", t:"b"}, {w:"half", t:"b"}, {w:"of", t:"f"}, {w:"these", t:"b"}, {w:"offspring", t:"b"}, {w:"make", t:"b"}, {w:"it", t:"b"}, {w:"to", t:"f"}, {w:"becoming", t:"b"}, {w:"parents.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

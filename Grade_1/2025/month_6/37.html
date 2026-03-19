@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Growth Mindset</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 6</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "Carol Dweck 박사는 지속적으로 성장하고 인내할 수 있는 방법인 “성장 사고방식” 개념의 선구자이다.",
+            h: ["carol", "dweck", "be", "the", "internationally", "recognize", "pioneer", "of", "the", "concept", "of", "growth", "mindset", "as", "a", "way", "to", "continually", "grow", "learn", "and", "persevere", "in", "our", "effort"],
+            a: [{w:"Carol", t:"b"}, {w:"Dweck", t:"b"}, {w:"is", t:"b"}, {w:"the", t:"b"}, {w:"internationally", t:"b"}, {w:"recognized", t:"b"}, {w:"pioneer", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"concept", t:"b"}, {w:"of", t:"f"}, {w:"“growth", t:"b"}, {w:"mindset”", t:"b"}, {w:"as", t:"f"}, {w:"a", t:"b"}, {w:"way", t:"b"}, {w:"to", t:"f"}, {w:"continually", t:"b"}, {w:"grow,", t:"b"}, {w:"learn,", t:"b"}, {w:"and", t:"b"}, {w:"persevere", t:"b"}, {w:"in", t:"f"}, {w:"our", t:"b"}, {w:"efforts.", t:"b"}]
+        },
+        {
+            k: "“똑똑하다”는 말을 듣는 아이들은 증거를 피하기 위해 쉬운 과제를 선택하여 기대에 못 미치는 성과를 내는데, 이를 “고정 사고방식”이라 부른다.",
+            h: ["dweck", "find", "that", "kid", "who", "be", "tell", "they", "be", "smart", "actually", "underperform", "in", "future", "task", "by", "choose", "easy", "task", "to", "avoid", "evidence", "that", "they", "be", "not", "smart", "which", "dweck", "call", "have", "a", "fixed", "mindset"],
+            a: [{w:"Dweck", t:"b"}, {w:"found", t:"b"}, {w:"that", t:"b"}, {w:"kids", t:"b"}, {w:"who", t:"b"}, {w:"are", t:"b"}, {w:"told", t:"b"}, {w:"they’re", t:"b"}, {w:"“smart”", t:"b"}, {w:"actually", t:"b"}, {w:"underperform", t:"b"}, {w:"in", t:"f"}, {w:"future", t:"b"}, {w:"tasks,", t:"b"}, {w:"by", t:"f"}, {w:"choosing", t:"b"}, {w:"easier", t:"b"}, {w:"tasks", t:"b"}, {w:"to", t:"f"}, {w:"avoid", t:"b"}, {w:"evidence", t:"b"}, {w:"that", t:"b"}, {w:"they", t:"b"}, {w:"are", t:"b"}, {w:"not", t:"b"}, {w:"smart,", t:"b"}, {w:"which", t:"b"}, {w:"Dweck", t:"b"}, {w:"calls", t:"b"}, {w:"having", t:"b"}, {w:"a", t:"b"}, {w:"“fixed", t:"b"}, {w:"mindset.”", t:"b"}]
+        },
+        {
+            k: "반대로, 똑똑함이 아닌 노력에 대해 칭찬받는 아이들은 “성장 사고방식”이라 부르는 것을 발달시킨다.",
+            h: ["in", "contrast", "dweck", "find", "kid", "who", "be", "praise", "not", "for", "their", "smart", "but", "for", "their", "effort", "develop", "what", "dweck", "call", "a", "growth", "mindset"],
+            a: [{w:"In", t:"f"}, {w:"contrast,", t:"b"}, {w:"Dweck", t:"b"}, {w:"found,", t:"b"}, {w:"kids", t:"b"}, {w:"who", t:"b"}, {w:"are", t:"b"}, {w:"praised", t:"b"}, {w:"not", t:"b"}, {w:"for", t:"f"}, {w:"their", t:"b"}, {w:"smarts", t:"b"}, {w:"but", t:"b"}, {w:"for", t:"f"}, {w:"their", t:"b"}, {w:"effort", t:"b"}, {w:"develop", t:"b"}, {w:"what", t:"b"}, {w:"Dweck", t:"b"}, {w:"calls", t:"b"}, {w:"a", t:"b"}, {w:"“growth", t:"b"}, {w:"mindset.”", t:"b"}]
+        },
+        {
+            k: "그들은 노력이 성공을 이끌었음을 배우고, 계속 노력한다면 시간이 지나면서 발전하고 더 많은 것을 성취할 것이다.",
+            h: ["they", "learn", "that", "their", "effort", "be", "what", "lead", "to", "their", "success", "and", "if", "they", "continue", "to", "try", "over", "time", "they", "will", "improve", "and", "achieve", "more", "thing"],
+            a: [{w:"They", t:"b"}, {w:"learn", t:"b"}, {w:"that", t:"b"}, {w:"their", t:"b"}, {w:"effort", t:"b"}, {w:"is", t:"b"}, {w:"what", t:"b"}, {w:"led", t:"b"}, {w:"to", t:"f"}, {w:"their", t:"b"}, {w:"success,", t:"b"}, {w:"and", t:"b"}, {w:"if", t:"b"}, {w:"they", t:"b"}, {w:"continue", t:"b"}, {w:"to", t:"f"}, {w:"try,", t:"b"}, {w:"over", t:"f"}, {w:"time", t:"b"}, {w:"they’ll", t:"b"}, {w:"improve", t:"b"}, {w:"and", t:"b"}, {w:"achieve", t:"b"}, {w:"more", t:"b"}, {w:"things.", t:"b"}]
+        },
+        {
+            k: "이 아이들은 결국 더 힘든 일을 받아들이고, 스스로에 대해 더 좋은 느낌을 갖게 된다.",
+            h: ["these", "kid", "end", "up", "take", "on", "tough", "thing", "and", "feel", "well", "about", "themselves"],
+            a: [{w:"These", t:"b"}, {w:"kids", t:"b"}, {w:"end", t:"b"}, {w:"up", t:"f"}, {w:"taking", t:"b"}, {w:"on", t:"f"}, {w:"tougher", t:"b"}, {w:"things,", t:"b"}, {w:"and", t:"b"}, {w:"feel", t:"b"}, {w:"better", t:"b"}, {w:"about", t:"f"}, {w:"themselves.", t:"b"}]
+        },
+        {
+            k: "“노력을 강조하는 것은 아이에게 그들이 통제할 수 있는 변수를 제공한다.”라고 Dweck은 설명했다.",
+            h: ["emphasize", "effort", "give", "a", "child", "a", "variable", "that", "they", "can", "control", "dweck", "have", "explain"],
+            a: [{w:"“Emphasizing", t:"b"}, {w:"effort", t:"b"}, {w:"gives", t:"b"}, {w:"a", t:"b"}, {w:"child", t:"b"}, {w:"a", t:"b"}, {w:"variable", t:"b"}, {w:"that", t:"b"}, {w:"they", t:"b"}, {w:"can", t:"b"}, {w:"control,”", t:"b"}, {w:"Dweck", t:"b"}, {w:"has", t:"b"}, {w:"explained.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

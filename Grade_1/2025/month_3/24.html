@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Reading Aloud</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 5</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?()—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "fMRI(기능적 자기 공명 영상)와 같은 현대의 뇌 스캐닝 기법은 소리 내어 읽는 것이 두뇌의 여러 영역을 밝힌다는 것을 드러냈다.",
+            h: ["modern", "brain-scanning", "technique", "such", "as", "fMRI", "functional", "magnetic", "resonance", "imaging", "have", "reveal", "that", "read", "aloud", "light", "up", "many", "area", "of", "the", "brain"],
+            a: [{w:"Modern", t:"b"}, {w:"brain-scanning", t:"b"}, {w:"techniques", t:"b"}, {w:"such", t:"f"}, {w:"as", t:"f"}, {w:"fMRI", t:"b"}, {w:"(functional", t:"b"}, {w:"Magnetic", t:"b"}, {w:"Resonance", t:"b"}, {w:"Imaging)", t:"b"}, {w:"have", t:"b"}, {w:"revealed", t:"b"}, {w:"that", t:"b"}, {w:"reading", t:"b"}, {w:"aloud", t:"b"}, {w:"lights", t:"b"}, {w:"up", t:"f"}, {w:"many", t:"b"}, {w:"areas", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"brain.", t:"b"}]
+        },
+        {
+            k: "발음과 발화된 반응의 소리를 듣는 것과 연관된 영역에서 강렬한 활동이 있으며, 이는 뇌세포의 결합 구조를 강화시킨다.",
+            h: ["there", "be", "intense", "activity", "in", "area", "associate", "with", "pronunciation", "and", "hear", "the", "sound", "of", "the", "speak", "response", "which", "strengthen", "the", "connective", "structure", "of", "your", "brain", "cell", "for", "more", "brainpower"],
+            a: [{w:"There", t:"b"}, {w:"is", t:"b"}, {w:"intense", t:"b"}, {w:"activity", t:"b"}, {w:"in", t:"f"}, {w:"areas", t:"b"}, {w:"associated", t:"b"}, {w:"with", t:"f"}, {w:"pronunciation", t:"b"}, {w:"and", t:"b"}, {w:"hearing", t:"b"}, {w:"the", t:"b"}, {w:"sound", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"spoken", t:"b"}, {w:"response,", t:"b"}, {w:"which", t:"b"}, {w:"strengthens", t:"b"}, {w:"the", t:"b"}, {w:"connective", t:"b"}, {w:"structures", t:"b"}, {w:"of", t:"f"}, {w:"your", t:"b"}, {w:"brain", t:"b"}, {w:"cells", t:"b"}, {w:"for", t:"f"}, {w:"more", t:"b"}, {w:"brainpower.", t:"b"}]
+        },
+        {
+            k: "이것은 전반적인 집중력 향상으로 이어진다.",
+            h: ["this", "lead", "to", "an", "overall", "improvement", "in", "concentration"],
+            a: [{w:"This", t:"b"}, {w:"leads", t:"b"}, {w:"to", t:"f"}, {w:"an", t:"b"}, {w:"overall", t:"b"}, {w:"improvement", t:"b"}, {w:"in", t:"f"}, {w:"concentration.", t:"b"}]
+        },
+        {
+            k: "소리 내어 읽는 것은 대중 말하기 능력을 발전시키는 좋은 방법인데, 왜냐하면 그것은 여러분이 하나도 빠짐없이 단어를 읽게 하기 때문이다.",
+            h: ["reading", "aloud", "be", "also", "a", "good", "way", "to", "develop", "your", "public", "speak", "skill", "because", "it", "force", "you", "to", "read", "each", "and", "every", "word", "something", "people", "do", "not", "often", "do", "when", "read", "quickly", "or", "read", "in", "silence"],
+            a: [{w:"Reading", t:"b"}, {w:"aloud", t:"b"}, {w:"is", t:"b"}, {w:"also", t:"b"}, {w:"a", t:"b"}, {w:"good", t:"b"}, {w:"way", t:"b"}, {w:"to", t:"f"}, {w:"develop", t:"b"}, {w:"your", t:"b"}, {w:"public", t:"b"}, {w:"speaking", t:"b"}, {w:"skills", t:"b"}, {w:"because", t:"b"}, {w:"it", t:"b"}, {w:"forces", t:"b"}, {w:"you", t:"b"}, {w:"to", t:"f"}, {w:"read", t:"b"}, {w:"each", t:"b"}, {w:"and", t:"b"}, {w:"every", t:"b"}, {w:"word—something", t:"b"}, {w:"people", t:"b"}, {w:"don’t", t:"b"}, {w:"often", t:"b"}, {w:"do", t:"b"}, {w:"when", t:"b"}, {w:"reading", t:"b"}, {w:"quickly,", t:"b"}, {w:"or", t:"b"}, {w:"reading", t:"b"}, {w:"in", t:"f"}, {w:"silence.", t:"b"}]
+        },
+        {
+            k: "특히 어린이는 뇌가 노래 부르기, 만지기, 소리 내어 읽기와 같은 긍정적인 자극에 의한 결합을 통해 학습하도록 연결되어 있기 때문에 권장되어야 한다.",
+            h: ["child", "in", "particular", "should", "be", "encourage", "to", "read", "aloud", "because", "the", "brain", "be", "wire", "for", "learn", "through", "connection", "that", "be", "create", "by", "positive", "stimulation", "such", "as", "sing", "touch", "and", "read", "aloud"],
+            a: [{w:"Children,", t:"b"}, {w:"in", t:"f"}, {w:"particular,", t:"b"}, {w:"should", t:"b"}, {w:"be", t:"b"}, {w:"encouraged", t:"b"}, {w:"to", t:"f"}, {w:"read", t:"b"}, {w:"aloud", t:"b"}, {w:"because", t:"b"}, {w:"the", t:"b"}, {w:"brain", t:"b"}, {w:"is", t:"b"}, {w:"wired", t:"b"}, {w:"for", t:"f"}, {w:"learning", t:"b"}, {w:"through", t:"f"}, {w:"connections", t:"b"}, {w:"that", t:"b"}, {w:"are", t:"b"}, {w:"created", t:"b"}, {w:"by", t:"f"}, {w:"positive", t:"b"}, {w:"stimulation,", t:"b"}, {w:"such", t:"f"}, {w:"as", t:"f"}, {w:"singing,", t:"b"}, {w:"touching,", t:"b"}, {w:"and", t:"b"}, {w:"reading", t:"b"}, {w:"aloud.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

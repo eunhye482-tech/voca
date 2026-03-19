@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Gene Editing</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 5</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    // [초고속 TTS 시스템 사전 설정]
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "인간 유전자 편집이 안전하고 효과적이라고 입증된다고 가정한다면, 해로운 유전자가 심각한 문제를 일으키기 ‘전에’ 질병을 유발하는 돌연변이를 교정하는 것이 합리적이고 바람직해 보일 수도 있다.",
+            h: ["assume", "gene", "edit", "in", "human", "prove", "to", "be", "safe", "and", "effective", "it", "might", "seem", "logical", "even", "preferable", "to", "correct", "disease-causing", "mutation", "at", "the", "early", "possible", "stage", "of", "life", "before", "harmful", "gene", "begin", "cause", "serious", "problem"],
+            a: [{w:"Assuming", t:"b"}, {w:"gene", t:"b"}, {w:"editing", t:"b"}, {w:"in", t:"f"}, {w:"humans", t:"b"}, {w:"proves", t:"b"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"safe", t:"b"}, {w:"and", t:"b"}, {w:"effective,", t:"b"}, {w:"it", t:"b"}, {w:"might", t:"b"}, {w:"seem", t:"b"}, {w:"logical,", t:"b"}, {w:"even", t:"b"}, {w:"preferable,", t:"b"}, {w:"to", t:"f"}, {w:"correct", t:"b"}, {w:"disease-causing", t:"b"}, {w:"mutations", t:"b"}, {w:"at", t:"f"}, {w:"the", t:"b"}, {w:"earliest", t:"b"}, {w:"possible", t:"b"}, {w:"stage", t:"b"}, {w:"of", t:"f"}, {w:"life,", t:"b"}, {w:"before", t:"f"}, {w:"harmful", t:"b"}, {w:"genes", t:"b"}, {w:"begin", t:"b"}, {w:"causing", t:"b"}, {w:"serious", t:"b"}, {w:"problems.", t:"b"}]
+        },
+        {
+            k: "하지만 일단 배아의 돌연변이가 된 유전자를 ‘정상적인’ 유전자로 변형하는 것이 가능해지면, 정상적인 유전자를 더 우수한 버전으로 업그레이드하려는 유혹이 분명히 있을 것이다.",
+            h: ["yet", "once", "it", "become", "possible", "to", "transform", "an", "embryo's", "mutated", "gene", "into", "normal", "one", "there", "will", "certainly", "be", "temptation", "to", "upgrade", "normal", "gene", "to", "superior", "version"],
+            a: [{w:"Yet", t:"b"}, {w:"once", t:"b"}, {w:"it", t:"b"}, {w:"becomes", t:"b"}, {w:"possible", t:"b"}, {w:"to", t:"f"}, {w:"transform", t:"b"}, {w:"an", t:"b"}, {w:"embryo's", t:"b"}, {w:"mutated", t:"b"}, {w:"genes", t:"b"}, {w:"into", t:"f"}, {w:"“normal”", t:"b"}, {w:"ones,", t:"b"}, {w:"there", t:"b"}, {w:"will", t:"b"}, {w:"certainly", t:"b"}, {w:"be", t:"b"}, {w:"temptations", t:"b"}, {w:"to", t:"f"}, {w:"upgrade", t:"b"}, {w:"normal", t:"b"}, {w:"genes", t:"b"}, {w:"to", t:"f"}, {w:"superior", t:"b"}, {w:"versions.", t:"b"}]
+        },
+        {
+            k: "우리가 심장병이나 암과 같은 질병에 대한 평생 위험을 낮추기 위해 태어나지 않은 아이들의 유전자를 편집하는 것을 시작해야 할까?",
+            h: ["should", "we", "begin", "edit", "gene", "in", "unborn", "child", "to", "lower", "their", "lifetime", "risk", "of", "heart", "disease", "or", "cancer"],
+            a: [{w:"Should", t:"b"}, {w:"we", t:"b"}, {w:"begin", t:"b"}, {w:"editing", t:"b"}, {w:"genes", t:"b"}, {w:"in", t:"f"}, {w:"unborn", t:"b"}, {w:"children", t:"b"}, {w:"to", t:"f"}, {w:"lower", t:"b"}, {w:"their", t:"b"}, {w:"lifetime", t:"b"}, {w:"risk", t:"b"}, {w:"of", t:"f"}, {w:"heart", t:"b"}, {w:"disease", t:"b"}, {w:"or", t:"b"}, {w:"cancer?", t:"b"}]
+        },
+        {
+            k: "더 강한 체력이나 향상된 인지 능력 같은 유익한 특성을 부여하거나 눈이나 머리카락 색 같은 신체적 특징을 바꾸는 것은 어떨까?",
+            h: ["what", "about", "give", "unborn", "child", "beneficial", "feature", "like", "great", "strength", "and", "increase", "mental", "ability", "or", "change", "physical", "characteristic", "like", "eye", "and", "hair", "color"],
+            a: [{w:"What", t:"b"}, {w:"about", t:"f"}, {w:"giving", t:"b"}, {w:"unborn", t:"b"}, {w:"children", t:"b"}, {w:"beneficial", t:"b"}, {w:"features,", t:"b"}, {w:"like", t:"f"}, {w:"greater", t:"b"}, {w:"strength", t:"b"}, {w:"and", t:"b"}, {w:"increased", t:"b"}, {w:"mental", t:"b"}, {w:"abilities,", t:"b"}, {w:"or", t:"b"}, {w:"changing", t:"b"}, {w:"physical", t:"b"}, {w:"characteristics,", t:"b"}, {w:"like", t:"f"}, {w:"eye", t:"b"}, {w:"and", t:"b"}, {w:"hair", t:"b"}, {w:"color?", t:"b"}]
+        },
+        {
+            k: "완벽에 대한 추구는 인간 본성에 거의 자연스러워 보이지만, 이 미끄러운 경사 길을 내려가기 시작한다면, 우리는 결국 놓일 곳이 마음에 들지 않을 수도 있다.",
+            h: ["the", "pursuit", "for", "perfection", "seem", "almost", "natural", "to", "human", "nature", "but", "if", "we", "start", "down", "this", "slippery", "slope", "we", "may", "not", "like", "where", "we", "end", "up"],
+            a: [{w:"The", t:"b"}, {w:"pursuit", t:"b"}, {w:"for", t:"f"}, {w:"perfection", t:"b"}, {w:"seems", t:"b"}, {w:"almost", t:"b"}, {w:"natural", t:"b"}, {w:"to", t:"f"}, {w:"human", t:"b"}, {w:"nature,", t:"b"}, {w:"but", t:"b"}, {w:"if", t:"b"}, {w:"we", t:"b"}, {w:"start", t:"b"}, {w:"down", t:"f"}, {w:"this", t:"b"}, {w:"slippery", t:"b"}, {w:"slope,", t:"b"}, {w:"we", t:"b"}, {w:"may", t:"b"}, {w:"not", t:"b"}, {w:"like", t:"b"}, {w:"where", t:"b"}, {w:"we", t:"b"}, {w:"end", t:"b"}, {w:"up.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

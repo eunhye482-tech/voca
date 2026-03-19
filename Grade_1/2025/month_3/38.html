@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Piaget's Morality</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 7</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "Piaget는 똑같은 양의 물을 키가 크고 좁은 유리잔과 넓은 유리잔에 넣고 아이들에게 비교하라고 요청했다.",
+            h: ["piaget", "put", "the", "same", "amount", "of", "water", "into", "two", "different", "glass", "a", "tall", "narrow", "glass", "and", "a", "wide", "glass", "then", "ask", "kid", "to", "compare", "two", "glass"],
+            a: [{w:"Piaget", t:"b"}, {w:"put", t:"b"}, {w:"the", t:"b"}, {w:"same", t:"b"}, {w:"amount", t:"b"}, {w:"of", t:"f"}, {w:"water", t:"b"}, {w:"into", t:"f"}, {w:"two", t:"b"}, {w:"different", t:"b"}, {w:"glasses:", t:"b"}, {w:"a", t:"b"}, {w:"tall", t:"b"}, {w:"narrow", t:"b"}, {w:"glass", t:"b"}, {w:"and", t:"b"}, {w:"a", t:"b"}, {w:"wide", t:"b"}, {w:"glass,", t:"b"}, {w:"then", t:"b"}, {w:"asked", t:"b"}, {w:"kids", t:"b"}, {w:"to", t:"f"}, {w:"compare", t:"b"}, {w:"two", t:"b"}, {w:"glasses.", t:"b"}]
+        },
+        {
+            k: "6, 7세보다 어린 아이들은 키가 크고 좁은 유리잔에 물이 더 많다고 말하는데 수위가 더 높기 때문이다.",
+            h: ["kid", "young", "than", "six", "or", "seven", "usually", "say", "that", "the", "tall", "narrow", "glass", "now", "hold", "more", "water", "because", "the", "level", "be", "high"],
+            a: [{w:"Kids", t:"b"}, {w:"younger", t:"b"}, {w:"than", t:"b"}, {w:"six", t:"b"}, {w:"or", t:"b"}, {w:"seven", t:"b"}, {w:"usually", t:"b"}, {w:"say", t:"b"}, {w:"that", t:"b"}, {w:"the", t:"b"}, {w:"tall", t:"b"}, {w:"narrow", t:"b"}, {w:"glass", t:"b"}, {w:"now", t:"b"}, {w:"holds", t:"b"}, {w:"more", t:"b"}, {w:"water,", t:"b"}, {w:"because", t:"b"}, {w:"the", t:"b"}, {w:"level", t:"b"}, {w:"is", t:"b"}, {w:"higher.", t:"b"}]
+        },
+        {
+            k: "아이들은 준비가 되었을 때, 물 컵을 가지고 놂으로써 부피의 보존을 스스로 알아낸다.",
+            h: ["and", "when", "they", "be", "ready", "they", "figure", "out", "the", "conservation", "of", "volume", "for", "themselves", "just", "by", "play", "with", "cup", "of", "water"],
+            a: [{w:"And", t:"b"}, {w:"when", t:"b"}, {w:"they", t:"b"}, {w:"are", t:"b"}, {w:"ready,", t:"b"}, {w:"they", t:"b"}, {w:"figure", t:"b"}, {w:"out", t:"f"}, {w:"the", t:"b"}, {w:"conservation", t:"b"}, {w:"of", t:"f"}, {w:"volume", t:"b"}, {w:"for", t:"f"}, {w:"themselves", t:"b"}, {w:"just", t:"b"}, {w:"by", t:"f"}, {w:"playing", t:"b"}, {w:"with", t:"f"}, {w:"cups", t:"b"}, {w:"of", t:"f"}, {w:"water.", t:"b"}]
+        },
+        {
+            k: "Piaget는 아이들의 도덕성 이해는 타고났다거나 어른에게서 직접 배운다고 말할 수 없다고 주장했다.",
+            h: ["piaget", "argue", "that", "children’s", "understand", "of", "morality", "be", "like", "their", "understand", "of", "those", "water", "glass", "we", "can", "not", "say", "that", "it", "be", "innate", "or", "kid", "learn", "it", "directly", "from", "adult"],
+            a: [{w:"Piaget", t:"b"}, {w:"argued", t:"b"}, {w:"that", t:"b"}, {w:"children’s", t:"b"}, {w:"understanding", t:"b"}, {w:"of", t:"f"}, {w:"morality", t:"b"}, {w:"is", t:"b"}, {w:"like", t:"f"}, {w:"their", t:"b"}, {w:"understanding", t:"b"}, {w:"of", t:"f"}, {w:"those", t:"b"}, {w:"water", t:"b"}, {w:"glasses:", t:"b"}, {w:"we", t:"b"}, {w:"can’t", t:"b"}, {w:"say", t:"b"}, {w:"that", t:"b"}, {w:"it", t:"b"}, {w:"is", t:"b"}, {w:"innate", t:"b"}, {w:"or", t:"b"}, {w:"kids", t:"b"}, {w:"learn", t:"b"}, {w:"it", t:"b"}, {w:"directly", t:"b"}, {w:"from", t:"f"}, {w:"adults.", t:"b"}]
+        },
+        {
+            k: "오히려 도덕성은 아이들이 다른 아이들과 놀면서 스스로 구성해 낸 것이다.",
+            h: ["rather", "it", "be", "self-construct", "as", "kid", "play", "with", "other", "kid"],
+            a: [{w:"Rather,", t:"b"}, {w:"it", t:"b"}, {w:"is", t:"b"}, {w:"self‑constructed", t:"b"}, {w:"as", t:"f"}, {w:"kids", t:"b"}, {w:"play", t:"b"}, {w:"with", t:"f"}, {w:"other", t:"b"}, {w:"kids.", t:"b"}]
+        },
+        {
+            k: "게임을 순서대로 돌아가며 하는 것은 물잔 사이를 왔다 갔다 하며 물을 붓는 것과 같다.",
+            h: ["take", "turn", "in", "a", "game", "be", "like", "pour", "water", "back", "and", "forth", "between", "glass"],
+            a: [{w:"Taking", t:"b"}, {w:"turns", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"game", t:"b"}, {w:"is", t:"b"}, {w:"like", t:"f"}, {w:"pouring", t:"b"}, {w:"water", t:"b"}, {w:"back", t:"b"}, {w:"and", t:"b"}, {w:"forth", t:"b"}, {w:"between", t:"f"}, {w:"glasses.", t:"b"}]
+        },
+        {
+            k: "일단 5, 6세에 이르면 함께 게임을 하고 문제를 해결하는 것이 어른의 가르침보다 공평함을 배우는 데 효과적이다.",
+            h: ["once", "kid", "have", "reach", "the", "age", "of", "five", "or", "six", "then", "play", "game", "and", "work", "thing", "out", "together", "will", "help", "them", "learn", "about", "fairness", "far", "more", "effectively", "than", "any", "teach", "from", "adult"],
+            a: [{w:"Once", t:"b"}, {w:"kids", t:"b"}, {w:"have", t:"b"}, {w:"reached", t:"b"}, {w:"the", t:"b"}, {w:"age", t:"b"}, {w:"of", t:"f"}, {w:"five", t:"b"}, {w:"or", t:"b"}, {w:"six,", t:"b"}, {w:"then", t:"b"}, {w:"playing", t:"b"}, {w:"games", t:"b"}, {w:"and", t:"b"}, {w:"working", t:"b"}, {w:"things", t:"b"}, {w:"out", t:"f"}, {w:"together", t:"b"}, {w:"will", t:"b"}, {w:"help", t:"b"}, {w:"them", t:"b"}, {w:"learn", t:"b"}, {w:"about", t:"f"}, {w:"fairness", t:"b"}, {w:"far", t:"b"}, {w:"more", t:"b"}, {w:"effectively", t:"b"}, {w:"than", t:"b"}, {w:"any", t:"b"}, {w:"teaching", t:"b"}, {w:"from", t:"f"}, {w:"adults.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

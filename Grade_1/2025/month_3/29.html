@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Athletes' Routines</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 6</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "루틴은 운동선수가 경기 조건을 평가할 수 있도록 해 준다.",
+            h: ["routine", "enable", "athlete", "to", "evaluate", "competition", "condition"],
+            a: [{w:"Routines", t:"b"}, {w:"enable", t:"b"}, {w:"athletes", t:"b"}, {w:"to", t:"f"}, {w:"evaluate", t:"b"}, {w:"competition", t:"b"}, {w:"conditions.", t:"b"}]
+        },
+        {
+            k: "예를 들어, 배구 서브 루틴에서 공을 튕기는 것은 서브를 하는 선수에게 공, 바닥, 그리고 자신의 근육 상태에 대한 정보를 제공한다.",
+            h: ["for", "example", "bounce", "a", "ball", "in", "a", "volleyball", "service", "routine", "supply", "the", "server", "with", "information", "about", "the", "ball", "the", "floor", "and", "the", "state", "of", "her", "muscle"],
+            a: [{w:"For", t:"f"}, {w:"example,", t:"b"}, {w:"bouncing", t:"b"}, {w:"a", t:"b"}, {w:"ball", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"volleyball", t:"b"}, {w:"service", t:"b"}, {w:"routine", t:"b"}, {w:"supplies", t:"b"}, {w:"the", t:"b"}, {w:"server", t:"b"}, {w:"with", t:"f"}, {w:"information", t:"b"}, {w:"about", t:"f"}, {w:"the", t:"b"}, {w:"ball,", t:"b"}, {w:"the", t:"b"}, {w:"floor,", t:"b"}, {w:"and", t:"b"}, {w:"the", t:"b"}, {w:"state", t:"b"}, {w:"of", t:"f"}, {w:"her", t:"b"}, {w:"muscles.", t:"b"}]
+        },
+        {
+            k: "그다음 이 정보는 자신의 서브를 적절히 준비하기 위해 사용될 수 있다.",
+            h: ["this", "information", "can", "then", "be", "use", "to", "properly", "prepare", "for", "her", "serve"],
+            a: [{w:"This", t:"b"}, {w:"information", t:"b"}, {w:"can", t:"b"}, {w:"then", t:"b"}, {w:"be", t:"b"}, {w:"used", t:"b"}, {w:"to", t:"f"}, {w:"properly", t:"b"}, {w:"prepare", t:"b"}, {w:"for", t:"f"}, {w:"her", t:"serve", t:"b"}, {w:"serve.", t:"b"}]
+        },
+        {
+            k: "루틴은 또한 선수가 그러한 평가에 기반하거나 특정 경쟁 목표를 추구하여 준비 상태를 조절하고 미세하게 조정할 수 있게 해 준다.",
+            h: ["routine", "also", "enable", "athlete", "to", "adjust", "and", "fine-tune", "their", "preparation", "base", "upon", "those", "evaluation", "or", "in", "pursuit", "of", "a", "particular", "competitive", "goal"],
+            a: [{w:"Routines", t:"b"}, {w:"also", t:"b"}, {w:"enable", t:"b"}, {w:"athletes", t:"b"}, {w:"to", t:"f"}, {w:"adjust", t:"b"}, {w:"and", t:"b"}, {w:"fine-tune", t:"b"}, {w:"their", t:"b"}, {w:"preparations", t:"b"}, {w:"based", t:"b"}, {w:"upon", t:"f"}, {w:"those", t:"b"}, {w:"evaluations", t:"b"}, {w:"or", t:"b"}, {w:"in", t:"f"}, {w:"pursuit", t:"b"}, {w:"of", t:"f"}, {w:"a", t:"b"}, {w:"particular", t:"b"}, {w:"competitive", t:"b"}, {w:"goal.", t:"b"}]
+        },
+        {
+            k: "이러한 적응은 수행에 영향을 미칠 수 있는 조건, 경쟁 상대, 경기 상황, 또는 내적 영향에 대한 조정을 포함할 수 있다.",
+            h: ["this", "adaptation", "can", "involve", "adjustment", "to", "the", "condition", "rival", "competitive", "situation", "or", "internal", "influence", "that", "can", "affect", "performance"],
+            a: [{w:"This", t:"b"}, {w:"adaptation", t:"b"}, {w:"can", t:"b"}, {w:"involve", t:"b"}, {w:"adjustment", t:"b"}, {w:"to", t:"f"}, {w:"the", t:"b"}, {w:"conditions,", t:"b"}, {w:"rivals,", t:"b"}, {w:"competitive", t:"b"}, {w:"situation,", t:"b"}, {w:"or", t:"b"}, {w:"internal", t:"b"}, {w:"influences", t:"b"}, {w:"that", t:"b"}, {w:"can", t:"b"}, {w:"affect", t:"b"}, {w:"performance.", t:"b"}]
+        },
+        {
+            k: "경주용 자동차 엔진을 조건에 맞게 조정하는 것과 마찬가지로, 루틴은 적절한 수행을 위해 경기의 모든 구성 요소를 조정한다.",
+            h: ["just", "like", "adjust", "a", "race-car", "engine", "to", "the", "condition", "of", "the", "track", "air", "temperature", "and", "weather", "routine", "adjust", "all", "competitive", "component", "to", "achieve", "proper", "performance"],
+            a: [{w:"Just", t:"b"}, {w:"like", t:"f"}, {w:"adjusting", t:"b"}, {w:"a", t:"b"}, {w:"race-car", t:"b"}, {w:"engine", t:"b"}, {w:"to", t:"f"}, {w:"the", t:"b"}, {w:"conditions", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"track,", t:"b"}, {w:"air", t:"b"}, {w:"temperature,", t:"b"}, {w:"and", t:"b"}, {w:"weather,", t:"b"}, {w:"routines", t:"b"}, {w:"adjust", t:"b"}, {w:"all", t:"b"}, {w:"competitive", t:"b"}, {w:"components", t:"b"}, {w:"to", t:"f"}, {w:"achieve", t:"b"}, {w:"proper", t:"b"}, {w:"performance.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

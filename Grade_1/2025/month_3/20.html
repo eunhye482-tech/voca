@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Gestural Communication</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 10</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "몸짓을 사용하는 의사소통을 개선하는 것은 단순히 고개를 끄덕이거나 악수를 해야 할 때를 아는 것 이상을 포함한다.",
+            h: ["improve", "your", "gestural", "communication", "involve", "more", "than", "just", "know", "when", "to", "nod", "or", "shake", "hand"],
+            a: [{w:"Improving", t:"b"}, {w:"your", t:"b"}, {w:"gestural", t:"b"}, {w:"communication", t:"b"}, {w:"involves", t:"b"}, {w:"more", t:"b"}, {w:"than", t:"b"}, {w:"just", t:"b"}, {w:"knowing", t:"b"}, {w:"when", t:"b"}, {w:"to", t:"f"}, {w:"nod", t:"b"}, {w:"or", t:"b"}, {w:"shake", t:"b"}, {w:"hands.", t:"b"}]
+        },
+        {
+            k: "이는 여러분의 말로 전하는 메시지를 보완하기 위해 여러분의 말에 여러 겹의 의미를 더하면서 몸짓을 사용하는 것에 대한 것이다.",
+            h: ["it", "be", "about", "use", "gesture", "to", "complement", "your", "spoken", "message", "add", "layer", "of", "meaning", "to", "your", "word"],
+            a: [{w:"It", t:"b"}, {w:"is", t:"b"}, {w:"about", t:"f"}, {w:"using", t:"b"}, {w:"gestures", t:"b"}, {w:"to", t:"f"}, {w:"complement", t:"b"}, {w:"your", t:"b"}, {w:"spoken", t:"b"}, {w:"messages,", t:"b"}, {w:"adding", t:"b"}, {w:"layers", t:"b"}, {w:"of", t:"f"}, {w:"meaning", t:"b"}, {w:"to", t:"f"}, {w:"your", t:"b"}, {w:"words.", t:"b"}]
+        },
+        {
+            k: "예를 들어 손바닥을 보이는 동작은 정직함을 나타내어 신뢰의 분위기를 만든다.",
+            h: ["open-handed", "gesture", "for", "example", "can", "indicate", "honesty", "create", "an", "atmosphere", "of", "trust"],
+            a: [{w:"Open-handed", t:"b"}, {w:"gestures,", t:"b"}, {w:"for", t:"f"}, {w:"example,", t:"b"}, {w:"can", t:"b"}, {w:"indicate", t:"b"}, {w:"honesty,", t:"b"}, {w:"creating", t:"b"}, {w:"an", t:"b"}, {w:"atmosphere", t:"b"}, {w:"of", t:"f"}, {w:"trust.", t:"b"}]
+        },
+        {
+            k: "손바닥을 위로 향한 채로 이야기할 때 여러분은 개방성과 협력을 끌어낸다.",
+            h: ["you", "invite", "openness", "and", "collaboration", "when", "you", "speak", "with", "your", "palm", "face", "up"],
+            a: [{w:"You", t:"b"}, {w:"invite", t:"b"}, {w:"openness", t:"b"}, {w:"and", t:"b"}, {w:"collaboration", t:"b"}, {w:"when", t:"b"}, {w:"you", t:"b"}, {w:"speak", t:"b"}, {w:"with", t:"f"}, {w:"your", t:"b"}, {w:"palms", t:"b"}, {w:"facing", t:"b"}, {w:"up.", t:"b"}]
+        },
+        {
+            k: "이 간단하지만 강력한 몸짓은 상대방이 더 편안함을 느끼고 대화에 더 기꺼이 참여하고 싶도록 만들 수 있다.",
+            h: ["this", "simple", "yet", "powerful", "gesture", "can", "make", "other", "feel", "more", "comfortable", "and", "willing", "to", "engage", "in", "conversation"],
+            a: [{w:"This", t:"b"}, {w:"simple", t:"b"}, {w:"yet", t:"b"}, {w:"powerful", t:"b"}, {w:"gesture", t:"b"}, {w:"can", t:"b"}, {w:"make", t:"b"}, {w:"others", t:"b"}, {w:"feel", t:"b"}, {w:"more", t:"b"}, {w:"comfortable", t:"b"}, {w:"and", t:"b"}, {w:"willing", t:"b"}, {w:"to", t:"f"}, {w:"engage", t:"b"}, {w:"in", t:"f"}, {w:"conversation.", t:"b"}]
+        },
+        {
+            k: "하지만 과도한 몸짓의 함정에 주의하라.",
+            h: ["but", "be", "careful", "of", "the", "trap", "of", "over-gesturing"],
+            a: [{w:"But", t:"b"}, {w:"be", t:"b"}, {w:"careful", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"trap", t:"b"}, {w:"of", t:"f"}, {w:"over-gesturing.", t:"b"}]
+        },
+        {
+            k: "너무 많은 손동작은 여러분의 말로부터 (사람들의) 관심을 돌리게 해서 (그들을) 여러분의 메시지에 집중이 안 되게 한다.",
+            h: ["too", "many", "hand", "movement", "can", "distract", "from", "your", "message", "draw", "attention", "away", "from", "your", "word"],
+            a: [{w:"Too", t:"b"}, {w:"many", t:"b"}, {w:"hand", t:"b"}, {w:"movements", t:"b"}, {w:"can", t:"b"}, {w:"distract", t:"b"}, {w:"from", t:"f"}, {w:"your", t:"b"}, {w:"message,", t:"b"}, {w:"drawing", t:"b"}, {w:"attention", t:"b"}, {w:"away", t:"b"}, {w:"from", t:"f"}, {w:"your", t:"b"}, {w:"words.", t:"b"}]
+        },
+        {
+            k: "손이 마치 새처럼 빠르게 움직여서 자신의 메시지가 몸짓의 혼돈 속에 사라져 버린 발표자를 상상해 보라.",
+            h: ["imagine", "a", "speaker", "whose", "hand", "move", "quickly", "like", "bird", "their", "message", "lose", "in", "the", "chaos", "of", "their", "gesture"],
+            a: [{w:"Imagine", t:"b"}, {w:"a", t:"b"}, {w:"speaker", t:"b"}, {w:"whose", t:"b"}, {w:"hands", t:"b"}, {w:"move", t:"b"}, {w:"quickly", t:"b"}, {w:"like", t:"b"}, {w:"birds,", t:"b"}, {w:"their", t:"b"}, {w:"message", t:"b"}, {w:"lost", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"chaos", t:"b"}, {w:"of", t:"f"}, {w:"their", t:"b"}, {w:"gestures.", t:"b"}]
+        },
+        {
+            k: "균형이 핵심이다.",
+            h: ["balance", "be", "key"],
+            a: [{w:"Balance", t:"b"}, {w:"is", t:"b"}, {w:"key.", t:"b"}]
+        },
+        {
+            k: "여러분의 몸짓은 여러분의 말을 강조해야지, 말을 가려서는 안 된다.",
+            h: ["your", "gesture", "should", "highlight", "your", "word", "not", "overshadow", "them"],
+            a: [{w:"Your", t:"b"}, {w:"gestures", t:"b"}, {w:"should", t:"b"}, {w:"highlight", t:"b"}, {w:"your", t:"b"}, {w:"words,", t:"b"}, {w:"not", t:"b"}, {w:"overshadow", t:"b"}, {w:"them.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

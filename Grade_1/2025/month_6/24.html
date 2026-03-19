@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Subjective Reality</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 10</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "우리는 우리가 논리적이고 합리적이며, 그러므로 분석과 결정에 있어 정확하다고 생각한다.",
+            h: ["we", "think", "we", "be", "be", "logical", "objective", "and", "rational", "and", "therefore", "accurate", "in", "our", "analysis", "judgment", "and", "decision"],
+            a: [{w:"We", t:"b"}, {w:"think", t:"b"}, {w:"we’re", t:"b"}, {w:"being", t:"b"}, {w:"logical,", t:"b"}, {w:"objective,", t:"b"}, {w:"and", t:"b"}, {w:"rational—and", t:"b"}, {w:"therefore", t:"b"}, {w:"accurate", t:"b"}, {w:"in", t:"f"}, {w:"our", t:"b"}, {w:"analysis,", t:"b"}, {w:"judgment,", t:"b"}, {w:"and", t:"b"}, {w:"decisions.", t:"b"}]
+        },
+        {
+            k: "따라서 다른 사람들이 합리적이라면 그들이 우리에게 동의하고 우리가 보는 것을 볼 것이라고 생각한다.",
+            h: ["so", "we", "think", "that", "if", "other", "people", "be", "logical", "objective", "and", "rational", "they", "will", "agree", "with", "us", "and", "see", "what", "we", "see"],
+            a: [{w:"So", t:"b"}, {w:"we", t:"b"}, {w:"think", t:"b"}, {w:"that", t:"b"}, {w:"if", t:"b"}, {w:"other", t:"b"}, {w:"people", t:"b"}, {w:"are", t:"b"}, {w:"logical,", t:"b"}, {w:"objective,", t:"b"}, {w:"and", t:"b"}, {w:"rational,", t:"b"}, {w:"they", t:"b"}, {w:"will", t:"b"}, {w:"agree", t:"b"}, {w:"with", t:"f"}, {w:"us", t:"b"}, {w:"and", t:"b"}, {w:"see", t:"b"}, {w:"what", t:"b"}, {w:"we", t:"b"}, {w:"see.", t:"b"}]
+        },
+        {
+            k: "하지만 그 반대가 사실이다.",
+            h: ["but", "the", "opposite", "be", "the", "case"],
+            a: [{w:"But", t:"b"}, {w:"the", t:"b"}, {w:"opposite", t:"b"}, {w:"is", t:"b"}, {w:"the", t:"b"}, {w:"case.", t:"b"}]
+        },
+        {
+            k: "모든 사람의 뇌는 다르다.",
+            h: ["every", "human", "brain", "be", "different"],
+            a: [{w:"Every", t:"b"}, {w:"human", t:"b"}, {w:"brain", t:"b"}, {w:"is", t:"b"}, {w:"different.", t:"b"}]
+        },
+        {
+            k: "모두의 인생 경험은 다르다.",
+            h: ["everyone's", "life", "experience", "be", "different"],
+            a: [{w:"Everyone’s", t:"b"}, {w:"life", t:"b"}, {w:"experience", t:"b"}, {w:"is", t:"b"}, {w:"different.", t:"b"}]
+        },
+        {
+            k: "모두의 욕망과 지식은 다르다.",
+            h: ["everyone's", "desire", "and", "knowledge", "be", "different"],
+            a: [{w:"Everyone’s", t:"b"}, {w:"desires", t:"b"}, {w:"and", t:"b"}, {w:"knowledge", t:"b"}, {w:"are", t:"b"}, {w:"different.", t:"b"}]
+        },
+        {
+            k: "당신의 생각이 현실과 일치한다고 생각할 수 있지만 그것은 불가능하다.",
+            h: ["you", "might", "think", "you", "be", "be", "realistic", "that", "be", "that", "your", "idea", "match", "reality", "but", "that", "be", "impossible"],
+            a: [{w:"You", t:"b"}, {w:"might", t:"b"}, {w:"think", t:"b"}, {w:"you’re", t:"b"}, {w:"being", t:"b"}, {w:"realistic—that", t:"b"}, {w:"is,", t:"f"}, {w:"that", t:"b"}, {w:"your", t:"b"}, {w:"ideas", t:"b"}, {w:"match", t:"b"}, {w:"reality,", t:"b"}, {w:"but", t:"b"}, {w:"that’s", t:"b"}, {w:"impossible.", t:"b"}]
+        },
+        {
+            k: "그것은 현실에 대한 당신의 해석일 뿐이며, 다른 사람의 것과 항상 다를 것이다.",
+            h: ["it", "be", "only", "your", "interpretation", "of", "reality", "which", "will", "always", "be", "different", "from", "someone", "else's"],
+            a: [{w:"It’s", t:"b"}, {w:"only", t:"b"}, {w:"your", t:"b"}, {w:"interpretation", t:"b"}, {w:"of", t:"f"}, {w:"reality,", t:"b"}, {w:"which", t:"b"}, {w:"will", t:"b"}, {w:"always", t:"b"}, {w:"be", t:"b"}, {w:"different", t:"b"}, {w:"from", t:"f"}, {w:"someone", t:"b"}, {w:"else’s.", t:"b"}]
+        },
+        {
+            k: "월드컵 경기에서 각 나라 팬들은 상대 팀이 저지르는 반칙을 놓친 것에 대해 심판을 비난한다.",
+            h: ["when", "two", "nation", "play", "each", "other", "in", "the", "world", "cup", "the", "fan", "of", "each", "country", "criticize", "the", "referee", "for", "miss", "all", "the", "infraction", "that", "the", "other", "team", "commit"],
+            a: [{w:"When", t:"b"}, {w:"two", t:"b"}, {w:"nations", t:"b"}, {w:"play", t:"b"}, {w:"each", t:"b"}, {w:"other", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"World", t:"b"}, {w:"Cup,", t:"b"}, {w:"the", t:"b"}, {w:"fans", t:"b"}, {w:"of", t:"f"}, {w:"each", t:"b"}, {w:"country", t:"b"}, {w:"criticize", t:"b"}, {w:"the", t:"b"}, {w:"referees", t:"b"}, {w:"for", t:"f"}, {w:"missing", t:"b"}, {w:"all", t:"b"}, {w:"the", t:"b"}, {w:"infractions", t:"b"}, {w:"that", t:"b"}, {w:"the", t:"b"}, {w:"other", t:"b"}, {w:"team", t:"b"}, {w:"commits.", t:"b"}]
+        },
+        {
+            k: "어김없이 각 팬층은 심판이 자기 팀에 불리하게 편파적이라고 믿는다.",
+            h: ["without", "fail", "each", "fan", "base", "believe", "that", "the", "referee", "be", "bias", "against", "their", "team"],
+            a: [{w:"Without", t:"f"}, {w:"fail,", t:"b"}, {w:"each", t:"b"}, {w:"fan", t:"b"}, {w:"base", t:"b"}, {w:"believes", t:"b"}, {w:"that", t:"b"}, {w:"the", t:"b"}, {w:"referees", t:"b"}, {w:"are", t:"b"}, {w:"biased", t:"b"}, {w:"against", t:"f"}, {w:"their", t:"b"}, {w:"team.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

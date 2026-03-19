@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Process of Science</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 4</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    // [초고속 TTS 시스템 사전 설정]
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "우리가 초등학교에서 배우는 과학은 자연계에 대한 확실함의 모음인데, 즉 지구는 태양 주위를 돌고, DNA는 유기체의 정보를 담고 있다는 것 등이다.",
+            h: ["the", "science", "we", "learn", "in", "grade", "school", "be", "a", "collection", "of", "certainty", "about", "the", "natural", "world", "the", "earth", "go", "around", "the", "sun", "DNA", "carry", "the", "information", "of", "an", "organism", "and", "so", "on"],
+            a: [{w:"The", t:"b"}, {w:"science", t:"b"}, {w:"we", t:"b"}, {w:"learn", t:"b"}, {w:"in", t:"f"}, {w:"grade", t:"b"}, {w:"school", t:"b"}, {w:"is", t:"b"}, {w:"a", t:"b"}, {w:"collection", t:"b"}, {w:"of", t:"f"}, {w:"certainties", t:"b"}, {w:"about", t:"f"}, {w:"the", t:"b"}, {w:"natural", t:"b"}, {w:"world—the", t:"b"}, {w:"earth", t:"b"}, {w:"goes", t:"b"}, {w:"around", t:"f"}, {w:"the", t:"b"}, {w:"sun,", t:"b"}, {w:"DNA", t:"b"}, {w:"carries", t:"b"}, {w:"the", t:"b"}, {w:"information", t:"b"}, {w:"of", t:"f"}, {w:"an", t:"b"}, {w:"organism,", t:"b"}, {w:"and", t:"b"}, {w:"so", t:"b"}, {w:"on.", t:"b"}]
+        },
+        {
+            k: "여러분이 과학의 실제를 배우기 시작할 때만, 이러한 ‘사실’이 관찰이나 실험을 바탕으로 한 연속적인 논리적 추론을 통해 얻어졌다고 깨닫게 된다.",
+            h: ["only", "when", "you", "start", "to", "learn", "the", "practice", "of", "science", "do", "you", "realize", "that", "each", "of", "this", "fact", "be", "hard", "win", "through", "a", "succession", "of", "logical", "inference", "base", "upon", "many", "observation", "or", "experiment"],
+            a: [{w:"Only", t:"b"}, {w:"when", t:"b"}, {w:"you", t:"b"}, {w:"start", t:"b"}, {w:"to", t:"f"}, {w:"learn", t:"b"}, {w:"the", t:"b"}, {w:"practice", t:"b"}, {w:"of", t:"f"}, {w:"science", t:"b"}, {w:"do", t:"b"}, {w:"you", t:"b"}, {w:"realize", t:"b"}, {w:"that", t:"b"}, {w:"each", t:"b"}, {w:"of", t:"f"}, {w:"these", t:"b"}, {w:"“facts”", t:"b"}, {w:"was", t:"b"}, {w:"hard", t:"b"}, {w:"won", t:"b"}, {w:"through", t:"f"}, {w:"a", t:"b"}, {w:"succession", t:"b"}, {w:"of", t:"f"}, {w:"logical", t:"b"}, {w:"inferences", t:"b"}, {w:"based", t:"b"}, {w:"upon", t:"f"}, {w:"many", t:"b"}, {w:"observations", t:"b"}, {w:"or", t:"b"}, {w:"experiments.", t:"b"}]
+        },
+        {
+            k: "과학의 과정은 지식의 조각을 모으는 것보다는 우리가 알고 있는 것에서 불확실함을 줄이는 것에 대한 것이다.",
+            h: ["the", "process", "of", "science", "be", "less", "about", "collect", "piece", "of", "knowledge", "than", "it", "be", "about", "reduce", "the", "uncertainty", "in", "what", "we", "know"],
+            a: [{w:"The", t:"b"}, {w:"process", t:"b"}, {w:"of", t:"f"}, {w:"science", t:"b"}, {w:"is", t:"b"}, {w:"less", t:"b"}, {w:"about", t:"f"}, {w:"collecting", t:"b"}, {w:"pieces", t:"b"}, {w:"of", t:"f"}, {w:"knowledge", t:"b"}, {w:"than", t:"b"}, {w:"it", t:"b"}, {w:"is", t:"b"}, {w:"about", t:"f"}, {w:"reducing", t:"b"}, {w:"the", t:"b"}, {w:"uncertainties", t:"b"}, {w:"in", t:"f"}, {w:"what", t:"b"}, {w:"we", t:"b"}, {w:"know.", t:"b"}]
+        },
+        {
+            k: "사과가 어떻게 떨어질지 꽤 확신하지만, 난류 유동에 대한 우리의 이해는 한 세기가 넘는 노력 후에도 여전히 진행 중인 연구로 남아 있다.",
+            h: ["today", "we", "be", "quite", "certain", "of", "how", "an", "apple", "will", "fall", "from", "a", "tree", "but", "our", "understand", "of", "the", "turbulent", "fluid", "flow", "remain", "a", "work", "in", "progress", "after", "more", "than", "a", "century", "of", "effort"],
+            a: [{w:"Today", t:"b"}, {w:"we", t:"b"}, {w:"are", t:"b"}, {w:"quite", t:"b"}, {w:"certain", t:"b"}, {w:"of", t:"f"}, {w:"how", t:"b"}, {w:"an", t:"b"}, {w:"apple", t:"b"}, {w:"will", t:"b"}, {w:"fall", t:"b"}, {w:"from", t:"f"}, {w:"a", t:"b"}, {w:"tree,", t:"b"}, {w:"but", t:"b"}, {w:"our", t:"b"}, {w:"understanding", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"turbulent", t:"b"}, {w:"fluid", t:"b"}, {w:"flow", t:"b"}, {w:"remains", t:"b"}, {w:"a", t:"b"}, {w:"work", t:"b"}, {w:"in", t:"f"}, {w:"progress", t:"b"}, {w:"after", t:"f"}, {w:"more", t:"b"}, {w:"than", t:"b"}, {w:"a", t:"b"}, {w:"century", t:"b"}, {w:"of", t:"f"}, {w:"effort.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

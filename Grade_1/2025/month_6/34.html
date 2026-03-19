@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Science Interdependence</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 6</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "과학자들은 새로운 발견을 할 때, 정보를 혼자만 간직하여 혼자서만 의미를 고려하고 추가 이론을 도출하지 않는다.",
+            h: ["when", "scientist", "make", "an", "important", "new", "discovery", "or", "experimentally", "prove", "some", "hypothesis", "they", "do", "not", "in", "general", "keep", "that", "information", "to", "themselves", "so", "that", "they", "alone", "can", "consider", "its", "meaning", "and", "derive", "additional", "theory", "from", "it"],
+            a: [{w:"When", t:"b"}, {w:"scientists", t:"b"}, {w:"make", t:"b"}, {w:"an", t:"b"}, {w:"important", t:"b"}, {w:"new", t:"b"}, {w:"discovery", t:"b"}, {w:"or", t:"b"}, {w:"experimentally", t:"b"}, {w:"prove", t:"b"}, {w:"some", t:"b"}, {w:"hypothesis,", t:"b"}, {w:"they", t:"b"}, {w:"do", t:"b"}, {w:"not,", t:"b"}, {w:"in", t:"f"}, {w:"general,", t:"b"}, {w:"keep", t:"b"}, {w:"that", t:"b"}, {w:"information", t:"b"}, {w:"to", t:"f"}, {w:"themselves", t:"b"}, {w:"so", t:"b"}, {w:"that", t:"b"}, {w:"they", t:"b"}, {w:"alone", t:"b"}, {w:"can", t:"b"}, {w:"consider", t:"b"}, {w:"its", t:"b"}, {w:"meaning", t:"b"}, {w:"and", t:"b"}, {w:"derive", t:"b"}, {w:"additional", t:"b"}, {w:"theories", t:"b"}, {w:"from", t:"f"}, {w:"it.", t:"b"}]
+        },
+        {
+            k: "대신에, 그들은 자신의 결과를 발표하고 그들의 데이터가 점검 가능하도록 한다.",
+            h: ["instead", "they", "publish", "their", "result", "and", "make", "their", "data", "available", "for", "inspection"],
+            a: [{w:"Instead,", t:"b"}, {w:"they", t:"b"}, {w:"publish", t:"b"}, {w:"their", t:"b"}, {w:"results", t:"b"}, {w:"and", t:"b"}, {w:"make", t:"b"}, {w:"their", t:"b"}, {w:"data", t:"b"}, {w:"available", t:"b"}, {w:"for", t:"f"}, {w:"inspection.", t:"b"}]
+        },
+        {
+            k: "이것은 다른 과학자들이 그들의 데이터를 재고하고 결론을 반박하는 것을 가능하게 한다.",
+            h: ["this", "make", "it", "possible", "for", "other", "scientist", "to", "reconsider", "their", "data", "and", "possibly", "refute", "their", "conclusion"],
+            a: [{w:"This", t:"b"}, {w:"makes", t:"b"}, {w:"it", t:"b"}, {w:"possible", t:"b"}, {w:"for", t:"f"}, {w:"other", t:"b"}, {w:"scientists", t:"b"}, {w:"to", t:"f"}, {w:"reconsider", t:"b"}, {w:"their", t:"b"}, {w:"data", t:"b"}, {w:"and", t:"b"}, {w:"possibly", t:"b"}, {w:"refute", t:"b"}, {w:"their", t:"conclusions.", t:"b"}]
+        },
+        {
+            k: "더 중요한 것은 이것이 다른 과학자들이 새로운 가설을 세우고 실험을 수행하기 위해 그 데이터를 사용하는 것을 가능하게 한다는 것이다.",
+            h: ["more", "important", "though", "it", "make", "it", "possible", "for", "other", "scientist", "to", "use", "that", "data", "to", "construct", "new", "hypothesis", "and", "perform", "new", "experiment"],
+            a: [{w:"More", t:"b"}, {w:"important,", t:"b"}, {w:"though,", t:"b"}, {w:"it", t:"b"}, {w:"makes", t:"b"}, {w:"it", t:"b"}, {w:"possible", t:"b"}, {w:"for", t:"f"}, {w:"other", t:"b"}, {w:"scientists", t:"b"}, {w:"to", t:"f"}, {w:"use", t:"b"}, {w:"that", t:"b"}, {w:"data", t:"b"}, {w:"to", t:"f"}, {w:"construct", t:"b"}, {w:"new", t:"b"}, {w:"hypotheses", t:"b"}, {w:"and", t:"b"}, {w:"perform", t:"b"}, {w:"new", t:"b"}, {w:"experiments.", t:"b"}]
+        },
+        {
+            k: "가정은 정보가 가능한 한 널리 확산되면 사회 전체가 결국 더 많은 것을 알게 될 것이라는 것이다.",
+            h: ["the", "assumption", "be", "that", "society", "as", "a", "whole", "will", "end", "up", "know", "more", "if", "information", "be", "spread", "as", "wide", "as", "possible", "rather", "than", "be", "limit", "to", "a", "few", "people"],
+            a: [{w:"The", t:"b"}, {w:"assumption", t:"b"}, {w:"is", t:"b"}, {w:"that", t:"b"}, {w:"society", t:"b"}, {w:"as", t:"f"}, {w:"a", t:"f"}, {w:"whole", t:"b"}, {w:"will", t:"b"}, {w:"end", t:"b"}, {w:"up", t:"f"}, {w:"knowing", t:"b"}, {w:"more", t:"b"}, {w:"if", t:"b"}, {w:"information", t:"b"}, {w:"is", t:"b"}, {w:"spread", t:"b"}, {w:"as", t:"f"}, {w:"widely", t:"b"}, {w:"as", t:"f"}, {w:"possible,", t:"b"}, {w:"rather", t:"b"}, {w:"than", t:"b"}, {w:"being", t:"b"}, {w:"limited", t:"b"}, {w:"to", t:"f"}, {w:"a", t:"b"}, {w:"few", t:"b"}, {w:"people.", t:"b"}]
+        },
+        {
+            k: "엄밀한 의미에서, 모든 과학자는 다른 과학자들의 연구에 의존한다.",
+            h: ["in", "a", "strict", "sense", "every", "scientist", "depend", "on", "the", "work", "of", "other", "scientist"],
+            a: [{w:"In", t:"f"}, {w:"a", t:"b"}, {w:"strict", t:"b"}, {w:"sense,", t:"b"}, {w:"every", t:"b"}, {w:"scientist", t:"b"}, {w:"depends", t:"b"}, {w:"on", t:"f"}, {w:"the", t:"b"}, {w:"work", t:"b"}, {w:"of", t:"f"}, {w:"other", t:"b"}, {w:"scientists.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

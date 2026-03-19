@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Architecture of Forgetting</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 9</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "냉방 설비의 부상은 밀폐된 구조물의 건설을 가속화했는데 그곳의 공기 흐름은 냉방 설비의 배관을 통해서만 이루어진다.",
+            h: ["the", "rise", "of", "air-conditioning", "accelerate", "the", "construction", "of", "seal", "box", "where", "the", "building’s", "only", "airflow", "be", "through", "the", "filter", "duct", "of", "the", "air-conditioning", "unit"],
+            a: [{w:"The", t:"b"}, {w:"rise", t:"b"}, {w:"of", t:"f"}, {w:"air-conditioning", t:"b"}, {w:"accelerated", t:"b"}, {w:"the", t:"b"}, {w:"construction", t:"b"}, {w:"of", t:"f"}, {w:"sealed", t:"b"}, {w:"boxes,", t:"b"}, {w:"where", t:"b"}, {w:"the", t:"b"}, {w:"building’s", t:"b"}, {w:"only", t:"b"}, {w:"airflow", t:"b"}, {w:"is", t:"b"}, {w:"through", t:"f"}, {w:"the", t:"b"}, {w:"filtered", t:"b"}, {w:"ducts", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"air-conditioning", t:"b"}, {w:"unit.", t:"b"}]
+        },
+        {
+            k: "그것이 이러한 방식일 필요는 없다.",
+            h: ["it", "do", "not", "have", "to", "be", "this", "way"],
+            a: [{w:"It", t:"b"}, {w:"doesn’t", t:"b"}, {w:"have", t:"b"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"this", t:"b"}, {w:"way.", t:"b"}]
+        },
+        {
+            k: "Sicily에 있든 Marrakesh에 있든 Tehran에 있든 간에 더운 기후에 있는 오래된 아무 건물이나 보아라.",
+            h: ["look", "at", "any", "old", "building", "in", "a", "hot", "climate", "whether", "it", "be", "in", "sicily", "or", "marrakesh", "or", "tehran"],
+            a: [{w:"Look", t:"b"}, {w:"at", t:"f"}, {w:"any", t:"b"}, {w:"old", t:"b"}, {w:"building", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"hot", t:"b"}, {w:"climate,", t:"b"}, {w:"whether", t:"b"}, {w:"it’s", t:"b"}, {w:"in", t:"f"}, {w:"Sicily", t:"b"}, {w:"or", t:"b"}, {w:"Marrakesh", t:"b"}, {w:"or", t:"b"}, {w:"Tehran.", t:"b"}]
+        },
+        {
+            k: "건축가들은 그늘, 공기 흐름, 밝은 색상의 중요성을 이해했다.",
+            h: ["architect", "understand", "the", "importance", "of", "shade", "airflow", "light", "color"],
+            a: [{w:"Architects", t:"b"}, {w:"understood", t:"b"}, {w:"the", t:"b"}, {w:"importance", t:"b"}, {w:"of", t:"f"}, {w:"shade,", t:"b"}, {w:"airflow,", t:"b"}, {w:"light", t:"b"}, {w:"colors.", t:"b"}]
+        },
+        {
+            k: "그들은 시원한 산들바람을 잡아 두고 오후의 가장 혹독한 열기를 막을 수 있도록 건물을 향하게 했다.",
+            h: ["they", "orient", "building", "to", "capture", "cool", "breeze", "and", "block", "the", "worst", "heat", "of", "the", "afternoon"],
+            a: [{w:"They", t:"b"}, {w:"oriented", t:"b"}, {w:"buildings", t:"b"}, {w:"to", t:"f"}, {w:"capture", t:"b"}, {w:"cool", t:"b"}, {w:"breezes", t:"b"}, {w:"and", t:"b"}, {w:"block", t:"b"}, {w:"the", t:"b"}, {w:"worst", t:"b"}, {w:"heat", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"afternoon.", t:"b"}]
+        },
+        {
+            k: "그들은 공기 흐름을 촉진하기 위해 두꺼운 벽과 흰색 지붕과 문 위의 채광창을 가지고 있는 건물을 지었다.",
+            h: ["they", "build", "with", "thick", "wall", "and", "white", "roof", "and", "transom", "over", "door", "to", "encourage", "airflow"],
+            a: [{w:"They", t:"b"}, {w:"built", t:"b"}, {w:"with", t:"f"}, {w:"thick", t:"b"}, {w:"walls", t:"b"}, {w:"and", t:"b"}, {w:"white", t:"b"}, {w:"roofs", t:"b"}, {w:"and", t:"b"}, {w:"transoms", t:"b"}, {w:"over", t:"f"}, {w:"doors", t:"b"}, {w:"to", t:"f"}, {w:"encourage", t:"b"}, {w:"airflow.", t:"b"}]
+        },
+        {
+            k: "진흙 벽돌 집에서 시간을 보내 봤거나 Seville의 좁은 길을 걸어 본 누구나 이 건설 방법이 잘 작동하는지 안다.",
+            h: ["anyone", "who", "have", "ever", "spend", "a", "few", "minute", "in", "a", "mudbrick", "house", "in", "tucson", "or", "walk", "on", "the", "narrow", "street", "of", "old", "seville", "know", "how", "well", "these", "construction", "method", "work"],
+            a: [{w:"Anyone", t:"b"}, {w:"who", t:"b"}, {w:"has", t:"b"}, {w:"ever", t:"b"}, {w:"spent", t:"b"}, {w:"a", t:"b"}, {w:"few", t:"b"}, {w:"minutes", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"mudbrick", t:"b"}, {w:"house", t:"b"}, {w:"in", t:"f"}, {w:"Tucson,", t:"b"}, {w:"or", t:"b"}, {w:"walked", t:"b"}, {w:"on", t:"f"}, {w:"the", t:"b"}, {w:"narrow", t:"b"}, {w:"streets", t:"b"}, {w:"of", t:"f"}, {w:"old", t:"b"}, {w:"Seville,", t:"b"}, {w:"knows", t:"b"}, {w:"how", t:"b"}, {w:"well", t:"b"}, {w:"these", t:"b"}, {w:"construction", t:"b"}, {w:"methods", t:"b"}, {w:"work.", t:"b"}]
+        },
+        {
+            k: "열을 다루는 방법에 대한 수 세기 동안 축적된 이 모든 지혜가 너무 자주 간과된다.",
+            h: ["but", "all", "this", "wisdom", "about", "how", "to", "deal", "with", "heat", "accumulate", "over", "century", "of", "practical", "experience", "be", "all", "too", "often", "ignore"],
+            a: [{w:"But", t:"b"}, {w:"all", t:"this", t:"b"}, {w:"this", t:"b"}, {w:"wisdom", t:"b"}, {w:"about", t:"f"}, {w:"how", t:"b"}, {w:"to", t:"f"}, {w:"deal", t:"b"}, {w:"with", t:"f"}, {w:"heat,", t:"b"}, {w:"accumulated", t:"b"}, {w:"over", t:"f"}, {w:"centuries", t:"b"}, {w:"of", t:"f"}, {w:"practical", t:"b"}, {w:"experience,", t:"b"}, {w:"is", t:"b"}, {w:"all", t:"b"}, {w:"too", t:"b"}, {w:"often", t:"b"}, {w:"ignored.", t:"b"}]
+        },
+        {
+            k: "이러한 의미에서 냉방 설비는 안락의 기술일 뿐만 아니라 망각의 기술이다.",
+            h: ["in", "this", "sense", "air-conditioning", "be", "not", "just", "a", "technology", "of", "personal", "comfort", "it", "be", "also", "a", "technology", "of", "forgetting"],
+            a: [{w:"In", t:"f"}, {w:"this", t:"b"}, {w:"sense,", t:"b"}, {w:"air-conditioning", t:"b"}, {w:"is", t:"b"}, {w:"not", t:"b"}, {w:"just", t:"b"}, {w:"a", t:"b"}, {w:"technology", t:"b"}, {w:"of", t:"f"}, {w:"personal", t:"b"}, {w:"comfort;", t:"b"}, {w:"it", t:"b"}, {w:"is", t:"b"}, {w:"also", t:"b"}, {w:"a", t:"b"}, {w:"technology", t:"b"}, {w:"of", t:"f"}, {w:"forgetting.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

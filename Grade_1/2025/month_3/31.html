@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Plato's Form of Beauty</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 9</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "플라톤은 아름답다는 인상을 주는 무언가를 볼 때, 여러분은 실제로는 진정한 아름다움의 부분적인 반영을 보고 있을 뿐이라고 주장했다.",
+            h: ["Plato", "argue", "that", "when", "you", "see", "something", "that", "strike", "you", "as", "beautiful", "you", "be", "really", "just", "see", "a", "partial", "reflection", "of", "true", "beauty"],
+            a: [{w:"Plato", t:"b"}, {w:"argued", t:"b"}, {w:"that", t:"b"}, {w:"when", t:"b"}, {w:"you", t:"b"}, {w:"see", t:"b"}, {w:"something", t:"b"}, {w:"that", t:"b"}, {w:"strikes", t:"b"}, {w:"you", t:"b"}, {w:"as", t:"f"}, {w:"beautiful,", t:"b"}, {w:"you", t:"b"}, {w:"are", t:"b"}, {w:"really", t:"b"}, {w:"just", t:"b"}, {w:"seeing", t:"b"}, {w:"a", t:"b"}, {w:"partial", t:"b"}, {w:"reflection", t:"b"}, {w:"of", t:"f"}, {w:"true", t:"b"}, {w:"beauty,", t:"b"}]
+        },
+        {
+            k: "마치 그림이나 사진조차 실재하는 것의 일부만을 포착하는 것과 같다.",
+            h: ["just", "as", "a", "painting", "or", "even", "a", "photograph", "only", "capture", "part", "of", "the", "real", "thing"],
+            a: [{w:"just", t:"f"}, {w:"as", t:"f"}, {w:"a", t:"b"}, {w:"painting", t:"b"}, {w:"or", t:"b"}, {w:"even", t:"b"}, {w:"a", t:"b"}, {w:"photograph", t:"b"}, {w:"only", t:"b"}, {w:"captures", t:"b"}, {w:"part", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"real", t:"b"}, {w:"thing.", t:"b"}]
+        },
+        {
+            k: "진정한 아름다움, 즉 플라톤이 미의 형상이라고 부르는 것은 특정한 색상, 모양, 혹은 크기를 갖고 있지 않다.",
+            h: ["true", "beauty", "or", "what", "plato", "call", "the", "form", "of", "beauty", "have", "no", "particular", "color", "shape", "or", "size"],
+            a: [{w:"True", t:"b"}, {w:"beauty,", t:"b"}, {w:"or", t:"b"}, {w:"what", t:"b"}, {w:"Plato", t:"b"}, {w:"calls", t:"b"}, {w:"the", t:"b"}, {w:"Form", t:"b"}, {w:"of", t:"f"}, {w:"Beauty,", t:"b"}, {w:"has", t:"b"}, {w:"no", t:"b"}, {w:"particular", t:"b"}, {w:"color,", t:"b"}, {w:"shape,", t:"b"}, {w:"or", t:"b"}, {w:"size.", t:"b"}]
+        },
+        {
+            k: "오히려 그것은 숫자 5처럼 추상적인 관념이다.",
+            h: ["rather", "it", "be", "an", "abstract", "idea", "like", "the", "number", "five"],
+            a: [{w:"Rather,", t:"b"}, {w:"it", t:"b"}, {w:"is", t:"b"}, {w:"an", t:"b"}, {w:"abstract", t:"b"}, {w:"idea,", t:"b"}, {w:"like", t:"f"}, {w:"the", t:"b"}, {w:"number", t:"b"}, {w:"five.", t:"b"}]
+        },
+        {
+            k: "숫자 5의 그림을 파란색이나 빨간색 잉크로 크거나 작게 만들 수 있지만, 숫자 5 자체는 그런 것들 중 어느 것도 아니다.",
+            h: ["you", "can", "make", "drawing", "of", "the", "number", "five", "in", "blue", "or", "red", "ink", "big", "or", "small", "but", "the", "number", "five", "itself", "be", "none", "of", "those", "thing"],
+            a: [{w:"You", t:"b"}, {w:"can", t:"b"}, {w:"make", t:"b"}, {w:"drawings", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"number", t:"b"}, {w:"five", t:"b"}, {w:"in", t:"f"}, {w:"blue", t:"b"}, {w:"or", t:"b"}, {w:"red", t:"b"}, {w:"ink,", t:"b"}, {w:"big", t:"b"}, {w:"or", t:"b"}, {w:"small,", t:"b"}, {w:"but", t:"b"}, {w:"the", t:"b"}, {w:"number", t:"b"}, {w:"five", t:"b"}, {w:"itself", t:"b"}, {w:"is", t:"b"}, {w:"none", t:"b"}, {w:"of", t:"f"}, {w:"those", t:"b"}, {w:"things.", t:"b"}]
+        },
+        {
+            k: "그것은 구체적인 형태를 가지고 있지 않다.",
+            h: ["it", "have", "no", "physical", "form"],
+            a: [{w:"It", t:"b"}, {w:"has", t:"b"}, {w:"no", t:"b"}, {w:"physical", t:"b"}, {w:"form.", t:"b"}]
+        },
+        {
+            k: "예를 들어, 삼각형이라는 관념을 생각해 보라.",
+            h: ["think", "of", "the", "idea", "of", "a", "triangle", "for", "example"],
+            a: [{w:"Think", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"idea", t:"b"}, {w:"of", t:"f"}, {w:"a", t:"b"}, {w:"triangle,", t:"b"}, {w:"for", t:"f"}, {w:"example.", t:"b"}]
+        },
+        {
+            k: "그것은 특정한 색상이나 크기가 없을지라도 당신이 보는 각각의 모든 삼각형 속에 어떻게든 존재한다.",
+            h: ["although", "it", "have", "no", "particular", "color", "or", "size", "it", "somehow", "lie", "within", "each", "and", "every", "triangle", "you", "see"],
+            a: [{w:"Although", t:"b"}, {w:"it", t:"b"}, {w:"has", t:"b"}, {w:"no", t:"b"}, {w:"particular", t:"b"}, {w:"color", t:"b"}, {w:"or", t:"b"}, {w:"size,", t:"b"}, {w:"it", t:"b"}, {w:"somehow", t:"b"}, {w:"lies", t:"b"}, {w:"within", t:"f"}, {w:"each", t:"b"}, {w:"and", t:"b"}, {w:"every", t:"b"}, {w:"triangle", t:"b"}, {w:"you", t:"b"}, {w:"see.", t:"b"}]
+        },
+        {
+            k: "미의 원형은 당신이 보는 각각의 모든 아름다운 것 속에 어떻게든 존재한다.",
+            h: ["the", "form", "of", "beauty", "somehow", "lie", "within", "each", "and", "every", "beautiful", "thing", "you", "see"],
+            a: [{w:"The", t:"b"}, {w:"Form", t:"b"}, {w:"of", t:"f"}, {w:"Beauty", t:"b"}, {w:"somehow", t:"b"}, {w:"lies", t:"b"}, {w:"within", t:"f"}, {w:"each", t:"b"}, {w:"and", t:"b"}, {w:"every", t:"b"}, {w:"beautiful", t:"b"}, {w:"thing", t:"b"}, {w:"you", t:"b"}, {w:"see.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Selective Attention</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 10</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "일상생활에서 우리는 어디에 집중해야 할지를 예측하기 위해 이전 경험을 사용한다.",
+            h: ["in", "everyday", "life", "we", "use", "previous", "experience", "to", "predict", "where", "we", "should", "pay", "attention"],
+            a: [{w:"In", t:"f"}, {w:"everyday", t:"b"}, {w:"life,", t:"b"}, {w:"we", t:"b"}, {w:"use", t:"b"}, {w:"previous", t:"b"}, {w:"experience", t:"b"}, {w:"to", t:"f"}, {w:"predict", t:"b"}, {w:"where", t:"b"}, {w:"we", t:"b"}, {w:"should", t:"b"}, {w:"pay", t:"b"}, {w:"attention.", t:"b"}]
+        },
+        {
+            k: "다른 환경은 다른 기대를 만든다.",
+            h: ["different", "environment", "create", "different", "expectation"],
+            a: [{w:"Different", t:"b"}, {w:"environments", t:"b"}, {w:"create", t:"b"}, {w:"different", t:"b"}, {w:"expectations.", t:"b"}]
+        },
+        {
+            k: "이것은 Jared Diamond에 의해 그의 저서인 총, 균, 쇠에서 깊이 있게 설명되었다.",
+            h: ["this", "be", "profoundly", "illustrate", "by", "the", "scientist", "jared", "diamond", "in", "his", "book", "guns", "germ", "and", "steel"],
+            a: [{w:"This", t:"b"}, {w:"was", t:"b"}, {w:"profoundly", t:"b"}, {w:"illustrated", t:"b"}, {w:"by", t:"f"}, {w:"the", t:"b"}, {w:"scientist", t:"b"}, {w:"Jared", t:"b"}, {w:"Diamond", t:"b"}, {w:"in", t:"f"}, {w:"his", t:"b"}, {w:"book", t:"b"}, {w:"Guns,", t:"b"}, {w:"Germs,", t:"b"}, {w:"and", t:"b"}, {w:"Steel.", t:"b"}]
+        },
+        {
+            k: "그는 뉴기니 원주민들과 함께 정글을 돌아다닌 모험을 묘사한다.",
+            h: ["he", "describe", "an", "adventure", "wander", "through", "the", "new", "guinea", "jungle", "with", "native", "new", "guinean"],
+            a: [{w:"He", t:"b"}, {w:"describes", t:"b"}, {w:"an", t:"b"}, {w:"adventure", t:"b"}, {w:"wandering", t:"b"}, {w:"through", t:"f"}, {w:"the", t:"b"}, {w:"New", t:"b"}, {w:"Guinea", t:"b"}, {w:"jungle", t:"b"}, {w:"with", t:"f"}, {w:"native", t:"b"}, {w:"New", t:"b"}, {w:"Guineans.", t:"b"}]
+        },
+        {
+            k: "그는 원주민들이 서구인들이 어린 시절부터 훈련받아 온 과업을 잘 수행하지 못한다고 말한다.",
+            h: ["he", "relate", "that", "these", "native", "tend", "to", "perform", "poor", "at", "task", "westerner", "have", "be", "train", "to", "do", "since", "childhood"],
+            a: [{w:"He", t:"b"}, {w:"relates", t:"b"}, {w:"that", t:"b"}, {w:"these", t:"b"}, {w:"natives", t:"b"}, {w:"tend", t:"b"}, {w:"to", t:"f"}, {w:"perform", t:"b"}, {w:"poorly", t:"b"}, {w:"at", t:"f"}, {w:"tasks", t:"b"}, {w:"Westerners", t:"b"}, {w:"have", t:"b"}, {w:"been", t:"b"}, {w:"trained", t:"b"}, {w:"to", t:"f"}, {w:"do", t:"b"}, {w:"since", t:"f"}, {w:"childhood.", t:"b"}]
+        },
+        {
+            k: "하지만 그들이 멍청한 것은 아니다.",
+            h: ["but", "they", "be", "hardly", "stupid"],
+            a: [{w:"But", t:"b"}, {w:"they", t:"b"}, {w:"are", t:"b"}, {w:"hardly", t:"b"}, {w:"stupid.", t:"b"}]
+        },
+        {
+            k: "그들은 정글에서 미묘한 변화를 감지할 수 있는데, 이는 포식자의 흔적을 찾는 데 유용하다.",
+            h: ["they", "can", "detect", "the", "most", "subtle", "change", "in", "the", "jungle", "good", "for", "follow", "the", "track", "of", "a", "predator", "or", "for", "find", "the", "way", "back", "home"],
+            a: [{w:"They", t:"b"}, {w:"can", t:"b"}, {w:"detect", t:"b"}, {w:"the", t:"b"}, {w:"most", t:"b"}, {w:"subtle", t:"b"}, {w:"changes", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"jungle,", t:"b"}, {w:"good", t:"b"}, {w:"for", t:"f"}, {w:"following", t:"b"}, {w:"the", t:"b"}, {w:"tracks", t:"b"}, {w:"of", t:"f"}, {w:"a", t:"b"}, {w:"predator", t:"b"}, {w:"or", t:"b"}, {w:"for", t:"f"}, {w:"finding", t:"b"}, {w:"the", t:"b"}, {w:"way", t:"b"}, {w:"back", t:"b"}, {w:"home.", t:"b"}]
+        },
+        {
+            k: "그들은 어느 곤충을 내버려 두어야 할지 알며, 어디에 음식이 있는지 알고 피난처를 쉽게 만든다.",
+            h: ["they", "know", "which", "insect", "to", "leave", "alone", "know", "where", "food", "exist", "can", "build", "and", "tear", "down", "shelter", "with", "ease"],
+            a: [{w:"They", t:"b"}, {w:"know", t:"b"}, {w:"which", t:"b"}, {w:"insects", t:"b"}, {w:"to", t:"f"}, {w:"leave", t:"b"}, {w:"alone,", t:"b"}, {w:"know", t:"b"}, {w:"where", t:"b"}, {w:"food", t:"b"}, {w:"exists,", t:"b"}, {w:"can", t:"b"}, {w:"build", t:"b"}, {w:"and", t:"b"}, {w:"tear", t:"b"}, {w:"down", t:"f"}, {w:"shelters", t:"b"}, {w:"with", t:"f"}, {w:"ease.", t:"b"}]
+        },
+        {
+            k: "그런 장소에서 시간을 보내본 적이 없는 Diamond는 이러한 것들에 주의를 기울일 능력이 없다.",
+            h: ["diamond", "who", "have", "never", "spend", "time", "in", "such", "place", "have", "no", "ability", "to", "pay", "attention", "to", "these", "thing"],
+            a: [{w:"Diamond,", t:"b"}, {w:"who", t:"b"}, {w:"had", t:"b"}, {w:"never", t:"b"}, {w:"spent", t:"b"}, {w:"time", t:"b"}, {w:"in", t:"f"}, {w:"such", t:"b"}, {w:"places,", t:"b"}, {w:"has", t:"b"}, {w:"no", t:"b"}, {w:"ability", t:"b"}, {w:"to", t:"f"}, {w:"pay", t:"b"}, {w:"attention", t:"b"}, {w:"to", t:"f"}, {w:"these", t:"b"}, {w:"things.", t:"b"}]
+        },
+        {
+            k: "그가 그런 과업들에 대해 시험을 본다면, 그 역시 잘하지 못할 것이다.",
+            h: ["be", "he", "to", "be", "test", "on", "such", "task", "he", "also", "would", "perform", "poor"],
+            a: [{w:"Were", t:"b"}, {w:"he", t:"b"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"tested", t:"b"}, {w:"on", t:"f"}, {w:"such", t:"b"}, {w:"tasks,", t:"b"}, {w:"he", t:"b"}, {w:"also", t:"b"}, {w:"would", t:"b"}, {w:"perform", t:"b"}, {w:"poorly.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

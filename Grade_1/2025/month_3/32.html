@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Communicating with Children</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 9</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "자녀의 말을 들을 때, 질문보다 단순한 관찰 결과를 공유하는 것이 대화에 더 효과적임을 인식해라.",
+            h: ["as", "you", "listen", "to", "your", "child", "in", "an", "emotional", "moment", "be", "aware", "that", "share", "simple", "observation", "usually", "work", "good", "than", "ask", "question", "to", "get", "a", "conversation", "roll"],
+            a: [{w:"As", t:"f"}, {w:"you", t:"b"}, {w:"listen", t:"b"}, {w:"to", t:"f"}, {w:"your", t:"b"}, {w:"child", t:"b"}, {w:"in", t:"f"}, {w:"an", t:"b"}, {w:"emotional", t:"b"}, {w:"moment,", t:"b"}, {w:"be", t:"b"}, {w:"aware", t:"b"}, {w:"that", t:"b"}, {w:"sharing", t:"b"}, {w:"simple", t:"b"}, {w:"observations", t:"b"}, {w:"usually", t:"b"}, {w:"works", t:"b"}, {w:"better", t:"b"}, {w:"than", t:"b"}, {w:"asking", t:"b"}, {w:"questions", t:"b"}, {w:"to", t:"f"}, {w:"get", t:"b"}, {w:"a", t:"b"}, {w:"conversation", t:"b"}, {w:"rolling.", t:"b"}]
+        },
+        {
+            k: "자녀에게 “왜 슬픈 기분이 드니?”라고 물으면 그녀는 전혀 모를 수도 있다.",
+            h: ["you", "may", "ask", "your", "child", "why", "do", "you", "feel", "sad", "and", "she", "may", "not", "have", "a", "clue"],
+            a: [{w:"You", t:"b"}, {w:"may", t:"b"}, {w:"ask", t:"b"}, {w:"your", t:"b"}, {w:"child", t:"b"}, {w:"“Why", t:"b"}, {w:"do", t:"b"}, {w:"you", t:"b"}, {w:"feel", t:"b"}, {w:"sad?”", t:"b"}, {w:"and", t:"b"}, {w:"she", t:"b"}, {w:"may", t:"b"}, {w:"not", t:"b"}, {w:"have", t:"b"}, {w:"a", t:"b"}, {w:"clue.", t:"b"}]
+        },
+        {
+            k: "아이라서, 그녀는 답이 당장 떠오르지 않을지도 모른다.",
+            h: ["as", "a", "child", "she", "may", "not", "have", "an", "answer", "on", "the", "tip", "of", "her", "tongue"],
+            a: [{w:"As", t:"f"}, {w:"a", t:"b"}, {w:"child,", t:"b"}, {w:"she", t:"b"}, {w:"may", t:"b"}, {w:"not", t:"b"}, {w:"have", t:"b"}, {w:"an", t:"b"}, {w:"answer", t:"b"}, {w:"on", t:"f"}, {w:"the", t:"b"}, {w:"tip", t:"b"}, {w:"of", t:"f"}, {w:"her", t:"b"}, {w:"tongue.", t:"b"}]
+        },
+        {
+            k: "부모님의 말다툼에 대해 슬픔을 느끼거나, 극도로 지쳤거나, 피아노 연주회를 걱정할지도 모른다.",
+            h: ["maybe", "she", "be", "feel", "sad", "about", "her", "parent", "argument", "or", "because", "she", "feel", "overtired", "or", "she", "be", "worry", "about", "a", "piano", "recital"],
+            a: [{w:"Maybe", t:"b"}, {w:"she’s", t:"b"}, {w:"feeling", t:"b"}, {w:"sad", t:"b"}, {w:"about", t:"f"}, {w:"her", t:"b"}, {w:"parents’", t:"b"}, {w:"arguments,", t:"b"}, {w:"or", t:"b"}, {w:"because", t:"b"}, {w:"she", t:"b"}, {w:"feels", t:"b"}, {w:"overtired,", t:"b"}, {w:"or", t:"b"}, {w:"she’s", t:"b"}, {w:"worried", t:"b"}, {w:"about", t:"f"}, {w:"a", t:"b"}, {w:"piano", t:"b"}, {w:"recital.", t:"b"}]
+        },
+        {
+            k: "그러나 그녀는 이것에 대해 설명할 수도 있고 설명하지 못할 수도 있다.",
+            h: ["but", "she", "may", "or", "may", "not", "be", "able", "to", "explain", "any", "of", "this"],
+            a: [{w:"But", t:"b"}, {w:"she", t:"b"}, {w:"may", t:"b"}, {w:"or", t:"b"}, {w:"may", t:"b"}, {w:"not", t:"b"}, {w:"be", t:"b"}, {w:"able", t:"b"}, {w:"to", t:"f"}, {w:"explain", t:"b"}, {w:"any", t:"b"}, {w:"of", t:"f"}, {w:"this.", t:"b"}]
+        },
+        {
+            k: "답이 떠오를 때조차도 그 대답이 감정을 정당화하기에 충분하지 않다고 걱정할 수도 있다.",
+            h: ["and", "even", "when", "she", "do", "come", "up", "with", "an", "answer", "she", "might", "be", "worry", "that", "the", "answer", "be", "not", "good", "enough", "to", "justify", "the", "feeling"],
+            a: [{w:"And", t:"b"}, {w:"even", t:"b"}, {w:"when", t:"b"}, {w:"she", t:"b"}, {w:"does", t:"b"}, {w:"come", t:"b"}, {w:"up", t:"b"}, {w:"with", t:"f"}, {w:"an", t:"b"}, {w:"answer,", t:"b"}, {w:"she", t:"b"}, {w:"might", t:"b"}, {w:"be", t:"b"}, {w:"worried", t:"b"}, {w:"that", t:"b"}, {w:"the", t:"b"}, {w:"answer", t:"b"}, {w:"is", t:"b"}, {w:"not", t:"b"}, {w:"good", t:"b"}, {w:"enough", t:"b"}, {w:"to", t:"f"}, {w:"justify", t:"b"}, {w:"the", t:"b"}, {w:"feeling.", t:"b"}]
+        },
+        {
+            k: "이러한 상황에서는 연속된 질문들이 그저 자녀를 침묵하게 만들 수 있다.",
+            h: ["under", "this", "circumstance", "a", "series", "of", "question", "can", "just", "make", "a", "child", "silent"],
+            a: [{w:"Under", t:"f"}, {w:"these", t:"b"}, {w:"circumstances,", t:"b"}, {w:"a", t:"b"}, {w:"series", t:"b"}, {w:"of", t:"f"}, {w:"questions", t:"b"}, {w:"can", t:"b"}, {w:"just", t:"b"}, {w:"make", t:"b"}, {w:"a", t:"b"}, {w:"child", t:"b"}, {w:"silent.", t:"b"}]
+        },
+        {
+            k: "여러분이 인지한 것을 단순히 나타내는 것이 더 낫다.",
+            h: ["it", "be", "good", "to", "simply", "reflect", "what", "you", "notice"],
+            a: [{w:"It’s", t:"b"}, {w:"better", t:"b"}, {w:"to", t:"f"}, {w:"simply", t:"b"}, {w:"reflect", t:"b"}, {w:"what", t:"b"}, {w:"you", t:"b"}, {w:"notice.", t:"b"}]
+        },
+        {
+            k: "“피곤해 보이네” 혹은 “찡그린 것을 알아챘어”라고 말하고 반응을 기다려 볼 수 있다.",
+            h: ["you", "can", "say", "you", "seem", "a", "little", "tired", "today", "or", "i", "notice", "that", "you", "frown", "when", "i", "mention", "the", "recital", "and", "wait", "for", "her", "response"],
+            a: [{w:"You", t:"b"}, {w:"can", t:"b"}, {w:"say,", t:"b"}, {w:"“You", t:"b"}, {w:"seem", t:"b"}, {w:"a", t:"b"}, {w:"little", t:"b"}, {w:"tired", t:"b"}, {w:"today,”", t:"b"}, {w:"or,", t:"b"}, {w:"“I", t:"b"}, {w:"noticed", t:"b"}, {w:"that", t:"b"}, {w:"you", t:"b"}, {w:"frowned", t:"b"}, {w:"when", t:"b"}, {w:"I", t:"b"}, {w:"mentioned", t:"b"}, {w:"the", t:"b"}, {w:"recital,”", t:"b"}, {w:"and", t:"b"}, {w:"wait", t:"b"}, {w:"for", t:"f"}, {w:"her", t:"b"}, {w:"response.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

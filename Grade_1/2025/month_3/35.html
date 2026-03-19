@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Hero vs Villain</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 6</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "등장인물이 악당과 대비되는 영웅이라는 것은 무슨 의미인가?",
+            h: ["what", "do", "it", "mean", "for", "a", "character", "to", "be", "a", "hero", "as", "oppose", "to", "a", "villain"],
+            a: [{w:"What", t:"b"}, {w:"does", t:"b"}, {w:"it", t:"b"}, {w:"mean", t:"b"}, {w:"for", t:"f"}, {w:"a", t:"b"}, {w:"character", t:"b"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"a", t:"b"}, {w:"hero", t:"b"}, {w:"as", t:"f"}, {w:"opposed", t:"b"}, {w:"to", t:"f"}, {w:"a", t:"b"}, {w:"villain?", t:"b"}]
+        },
+        {
+            k: "예술적이고 오락적인 묘사에서 작가가 주인공과 관객 사이에 긍정적인 관계를 수립하는 것이 필수적이다.",
+            h: ["in", "artistic", "and", "entertainment", "description", "it", "be", "essential", "for", "the", "author", "to", "establish", "a", "positive", "relationship", "between", "a", "protagonist", "and", "the", "audience"],
+            a: [{w:"In", t:"f"}, {w:"artistic", t:"b"}, {w:"and", t:"b"}, {w:"entertainment", t:"b"}, {w:"descriptions,", t:"b"}, {w:"it’s", t:"b"}, {w:"essential", t:"b"}, {w:"for", t:"f"}, {w:"the", t:"b"}, {w:"author", t:"b"}, {w:"to", t:"f"}, {w:"establish", t:"b"}, {w:"a", t:"b"}, {w:"positive", t:"b"}, {w:"relationship", t:"b"}, {w:"between", t:"f"}, {w:"a", t:"b"}, {w:"protagonist", t:"b"}, {w:"and", t:"b"}, {w:"the", t:"b"}, {w:"audience.", t:"b"}]
+        },
+        {
+            k: "비극이 감정적 반응을 끌어내기 위해 등장인물은 친구 또는 적 중 하나로 인식될 수 있도록 조정되어야 한다.",
+            h: ["in", "order", "for", "tragedy", "or", "misfortune", "to", "draw", "out", "an", "emotional", "response", "in", "viewer", "the", "character", "must", "be", "adjust", "so", "as", "to", "be", "recognizable", "as", "either", "friend", "or", "enemy"],
+            a: [{w:"In", t:"f"}, {w:"order", t:"b"}, {w:"for", t:"f"}, {w:"tragedy", t:"b"}, {w:"or", t:"b"}, {w:"misfortune", t:"b"}, {w:"to", t:"f"}, {w:"draw", t:"b"}, {w:"out", t:"f"}, {w:"an", t:"b"}, {w:"emotional", t:"b"}, {w:"response", t:"b"}, {w:"in", t:"f"}, {w:"viewers,", t:"b"}, {w:"the", t:"b"}, {w:"character", t:"b"}, {w:"must", t:"b"}, {w:"be", t:"b"}, {w:"adjusted", t:"b"}, {w:"so", t:"b"}, {w:"as", t:"f"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"recognizable", t:"b"}, {w:"as", t:"f"}, {w:"either", t:"b"}, {w:"friend", t:"b"}, {w:"or", t:"b"}, {w:"enemy.", t:"b"}]
+        },
+        {
+            k: "우리는 주인공이 행동이 우리에게 이로움을 주는 누군가이며 가치 있는 동료나 협력자라고 느껴야 한다.",
+            h: ["whether", "the", "portrayal", "be", "fictional", "or", "documentary", "we", "must", "feel", "that", "the", "protagonist", "be", "someone", "whose", "action", "benefit", "us", "the", "protagonist", "be", "or", "would", "be", "a", "worthy", "companion", "or", "valued", "ally"],
+            a: [{w:"Whether", t:"b"}, {w:"the", t:"b"}, {w:"portrayal", t:"b"}, {w:"is", t:"b"}, {w:"fictional", t:"b"}, {w:"or", t:"b"}, {w:"documentary,", t:"b"}, {w:"we", t:"b"}, {w:"must", t:"b"}, {w:"feel", t:"b"}, {w:"that", t:"b"}, {w:"the", t:"b"}, {w:"protagonist", t:"b"}, {w:"is", t:"b"}, {w:"someone", t:"b"}, {w:"whose", t:"b"}, {w:"actions", t:"b"}, {w:"benefit", t:"b"}, {w:"us;", t:"b"}, {w:"the", t:"b"}, {w:"protagonist", t:"b"}, {w:"is,", t:"b"}, {w:"or", t:"b"}, {w:"would", t:"b"}, {w:"be,", t:"b"}, {w:"a", t:"b"}, {w:"worthy", t:"b"}, {w:"companion", t:"b"}, {w:"or", t:"b"}, {w:"valued", t:"b"}, {w:"ally.", t:"b"}]
+        },
+        {
+            k: "폭력 액션 영화는 흔히 관객의 반응을 거의 끌어내지 않는 비중이 적은 등장인물의 많은 죽음으로 가득 차 있다.",
+            h: ["violent", "action", "film", "be", "often", "fill", "with", "dozen", "of", "incidental", "death", "of", "minor", "character", "that", "draw", "out", "little", "response", "in", "the", "audience"],
+            a: [{w:"Violent", t:"b"}, {w:"action", t:"b"}, {w:"films", t:"b"}, {w:"are", t:"b"}, {w:"often", t:"b"}, {w:"filled", t:"b"}, {w:"with", t:"f"}, {w:"dozens", t:"b"}, {w:"of", t:"f"}, {w:"incidental", t:"b"}, {w:"deaths", t:"b"}, {w:"of", t:"f"}, {w:"minor", t:"b"}, {w:"characters", t:"b"}, {w:"that", t:"b"}, {w:"draw", t:"b"}, {w:"out", t:"f"}, {w:"little", t:"b"}, {w:"response", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"audience.", t:"b"}]
+        },
+        {
+            k: "강한 감정을 느끼기 위해 관객은 협력자 또는 적 중 하나로 등장인물에게 감정적으로 연관되어 있어야 한다.",
+            h: ["in", "order", "to", "feel", "strong", "emotion", "the", "audience", "must", "be", "emotionally", "invest", "in", "a", "character", "as", "either", "ally", "or", "enemy"],
+            a: [{w:"In", t:"f"}, {w:"order", t:"b"}, {w:"to", t:"f"}, {w:"feel", t:"b"}, {w:"strong", t:"b"}, {w:"emotions,", t:"b"}, {w:"the", t:"b"}, {w:"audience", t:"b"}, {w:"must", t:"b"}, {w:"be", t:"b"}, {w:"emotionally", t:"b"}, {w:"invested", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"character", t:"b"}, {w:"as", t:"f"}, {w:"either", t:"b"}, {w:"ally", t:"b"}, {w:"or", t:"b"}, {w:"enemy.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Pricing Strategy</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 6</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "대부분의 기업가들은 엄청난 시간과 노력을 들이며 가격을 비싸게 책정하는 실수를 저지른다.",
+            h: ["most", "entrepreneur", "put", "in", "tremendous", "amount", "of", "time", "and", "effort", "in", "create", "and", "launch", "new", "product", "and", "service", "and", "then", "make", "the", "mistake", "of", "overprice", "them"],
+            a: [{w:"Most", t:"b"}, {w:"entrepreneurs", t:"b"}, {w:"put", t:"b"}, {w:"in", t:"f"}, {w:"tremendous", t:"b"}, {w:"amounts", t:"b"}, {w:"of", t:"f"}, {w:"time", t:"b"}, {w:"and", t:"b"}, {w:"effort", t:"b"}, {w:"in", t:"f"}, {w:"creating", t:"b"}, {w:"and", t:"b"}, {w:"launching", t:"b"}, {w:"new", t:"b"}, {w:"products", t:"b"}, {w:"and", t:"b"}, {w:"services", t:"b"}, {w:"and", t:"b"}, {w:"then", t:"b"}, {w:"make", t:"b"}, {w:"the", t:"b"}, {w:"mistake", t:"b"}, {w:"of", t:"f"}, {w:"overpricing", t:"b"}, {w:"them.", t:"b"}]
+        },
+        {
+            k: "소유감이 가치에 대한 인식을 왜곡시켜 제품 가격을 너무 높게 책정하게 만든다.",
+            h: ["they", "have", "create", "something", "they", "care", "deeply", "about", "it", "be", "their", "and", "this", "powerful", "sense", "of", "ownership", "distort", "their", "perception", "of", "value", "which", "cause", "them", "to", "overprice", "their", "product"],
+            a: [{w:"They", t:"b"}, {w:"have", t:"b"}, {w:"created", t:"b"}, {w:"something", t:"b"}, {w:"they", t:"b"}, {w:"care", t:"b"}, {w:"deeply", t:"b"}, {w:"about,", t:"f"}, {w:"it’s", t:"b"}, {w:"theirs,", t:"b"}, {w:"and", t:"b"}, {w:"this", t:"b"}, {w:"powerful", t:"b"}, {w:"sense", t:"b"}, {w:"of", t:"f"}, {w:"ownership", t:"b"}, {w:"distorts", t:"b"}, {w:"their", t:"b"}, {w:"perception", t:"b"}, {w:"of", t:"f"}, {w:"value", t:"b"}, {w:"which", t:"b"}, {w:"causes", t:"b"}, {w:"them", t:"b"}, {w:"to", t:"f"}, {w:"overprice", t:"b"}, {w:"their", t:"b"}, {w:"products.", t:"b"}]
+        },
+        {
+            k: "초기 가격이 너무 높다는 것을 깨닫지만 모두가 가격을 낮추는 것을 내켜하지는 않는다.",
+            h: ["while", "many", "of", "them", "be", "quick", "to", "realize", "that", "their", "initial", "price", "be", "too", "high", "not", "all", "these", "people", "be", "happy", "or", "willing", "to", "drop", "their", "price", "to", "make", "their", "product", "more", "attractive"],
+            a: [{w:"While", t:"b"}, {w:"many", t:"b"}, {w:"of", t:"f"}, {w:"them", t:"b"}, {w:"are", t:"b"}, {w:"quick", t:"b"}, {w:"to", t:"f"}, {w:"realize", t:"b"}, {w:"that", t:"b"}, {w:"their", t:"initial", t:"b"}, {w:"initial", t:"b"}, {w:"prices", t:"b"}, {w:"are", t:"b"}, {w:"too", t:"b"}, {w:"high,", t:"b"}, {w:"not", t:"b"}, {w:"all", t:"b"}, {w:"these", t:"b"}, {w:"people", t:"b"}, {w:"are", t:"b"}, {w:"happy", t:"b"}, {w:"or", t:"b"}, {w:"willing", t:"b"}, {w:"to", t:"f"}, {w:"drop", t:"b"}, {w:"their", t:"b"}, {w:"prices", t:"b"}, {w:"to", t:"f"}, {w:"make", t:"b"}, {w:"their", t:"b"}, {w:"products", t:"b"}, {w:"more", t:"b"}, {w:"attractive.", t:"b"}]
+        },
+        {
+            k: "이것은 새로운 사업의 실패를 초래할 수 있는 손해가 매우 큰 실수가 될 수 있다.",
+            h: ["and", "this", "can", "be", "a", "very", "costly", "mistake", "that", "may", "lead", "to", "the", "failure", "of", "their", "new", "business"],
+            a: [{w:"And", t:"b"}, {w:"this", t:"b"}, {w:"can", t:"b"}, {w:"be", t:"b"}, {w:"a", t:"b"}, {w:"very", t:"b"}, {w:"costly", t:"b"}, {w:"mistake", t:"b"}, {w:"that", t:"b"}, {w:"may", t:"b"}, {w:"lead", t:"b"}, {w:"to", t:"f"}, {w:"the", t:"b"}, {w:"failure", t:"b"}, {w:"of", t:"f"}, {w:"their", t:"b"}, {w:"new", t:"b"}, {w:"business.", t:"b"}]
+        },
+        {
+            k: "우선순위는 시장 점유 확보여야 하며 목표 달성을 위해 초기 수익을 희생할 준비가 되어야 한다.",
+            h: ["when", "you", "launch", "a", "new", "product", "or", "service", "your", "priority", "should", "be", "to", "get", "sufficient", "market", "adoption", "as", "soon", "as", "possible", "and", "you", "should", "be", "ready", "to", "sacrifice", "your", "initial", "price", "and", "profit", "to", "achieve", "this", "aim"],
+            a: [{w:"When", t:"b"}, {w:"you", t:"b"}, {w:"launch", t:"b"}, {w:"a", t:"b"}, {w:"new", t:"b"}, {w:"product", t:"b"}, {w:"or", t:"b"}, {w:"service,", t:"b"}, {w:"your", t:"b"}, {w:"priority", t:"b"}, {w:"should", t:"b"}, {w:"be", t:"b"}, {w:"to", t:"f"}, {w:"get", t:"b"}, {w:"sufficient", t:"b"}, {w:"market", t:"b"}, {w:"adoption", t:"b"}, {w:"as", t:"f"}, {w:"soon", t:"b"}, {w:"as", t:"f"}, {w:"possible", t:"b"}, {w:"and", t:"b"}, {w:"you", t:"b"}, {w:"should", t:"b"}, {w:"be", t:"b"}, {w:"ready", t:"b"}, {w:"to", t:"f"}, {w:"sacrifice", t:"b"}, {w:"your", t:"b"}, {w:"initial", t:"b"}, {w:"prices", t:"b"}, {w:"and", t:"b"}, {w:"profits", t:"b"}, {w:"to", t:"f"}, {w:"achieve", t:"b"}, {w:"this", t:"b"}, {w:"aim.", t:"b"}]
+        },
+        {
+            k: "일단 높은 판매량을 확보하게 되면, 수익 극대화를 위해 가격을 인상할 수 있다.",
+            h: ["once", "you", "have", "strong", "sale", "volume", "you", "can", "increase", "your", "price", "to", "maximize", "your", "profit"],
+            a: [{w:"Once", t:"b"}, {w:"you", t:"b"}, {w:"have", t:"b"}, {w:"strong", t:"b"}, {w:"sales", t:"b"}, {w:"volumes,", t:"b"}, {w:"you", t:"b"}, {w:"can", t:"b"}, {w:"increase", t:"b"}, {w:"your", t:"b"}, {w:"prices", t:"b"}, {w:"to", t:"f"}, {w:"maximize", t:"b"}, {w:"your", t:"b"}, {w:"profits.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

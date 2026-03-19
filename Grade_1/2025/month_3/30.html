@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chalkboard Writing Class - Consumer Psychology</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 8</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "프로모션은 소비자 심리를 다룬다.",
+            h: ["promotion", "deal", "with", "consumer", "psychology"],
+            a: [{w:"Promotion", t:"b"}, {w:"deals", t:"b"}, {w:"with", t:"f"}, {w:"consumer", t:"b"}, {w:"psychology.", t:"b"}]
+        },
+        {
+            k: "우리가 사람들을 강요할 수는 없으며, 현명한 마케터는 프로모션이 명확하고 정직하며 단순한 방식으로 정보를 제공하기 위해 사용된다는 것을 알고 있다.",
+            h: ["we", "force", "people", "to", "think", "one", "way", "or", "another", "and", "the", "clever", "marketer", "know", "that", "promotion", "be", "use", "to", "provide", "information", "in", "the", "most", "clear", "honest", "and", "simple", "fashion", "possible"],
+            a: [{w:"We", t:"b"}, {w:"can’t", t:"b"}, {w:"force", t:"b"}, {w:"people", t:"b"}, {w:"to", t:"f"}, {w:"think", t:"b"}, {w:"one", t:"b"}, {w:"way", t:"b"}, {w:"or", t:"b"}, {w:"another,", t:"b"}, {w:"and", t:"b"}, {w:"the", t:"b"}, {w:"clever", t:"b"}, {w:"marketer", t:"b"}, {w:"knows", t:"b"}, {w:"that", t:"b"}, {w:"promotion", t:"b"}, {w:"is", t:"b"}, {w:"used", t:"b"}, {w:"to", t:"f"}, {w:"provide", t:"b"}, {w:"information", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"most", t:"b"}, {w:"clear,", t:"b"}, {w:"honest,", t:"b"}, {w:"and", t:"b"}, {w:"simple", t:"b"}, {w:"fashion", t:"b"}, {w:"possible.", t:"b"}]
+        },
+        {
+            k: "그렇게 함으로써, 매출 증가의 가능성이 높아진다.",
+            h: ["by", "do", "so", "the", "possibility", "of", "increase", "sale", "go", "up"],
+            a: [{w:"By", t:"f"}, {w:"doing", t:"b"}, {w:"so,", t:"b"}, {w:"the", t:"b"}, {w:"possibility", t:"b"}, {w:"of", t:"f"}, {w:"increasing", t:"b"}, {w:"sales", t:"b"}, {w:"goes", t:"b"}, {w:"up.", t:"b"}]
+        },
+        {
+            k: "무언가를 구매하도록 소비자를 속이기 위해 프로모션이 행해지던 시대는 갔다.",
+            h: ["go", "be", "the", "day", "when", "promotion", "be", "do", "in", "order", "to", "fool", "the", "consumer", "into", "purchase", "something"],
+            a: [{w:"Gone", t:"b"}, {w:"are", t:"b"}, {w:"the", t:"b"}, {w:"days", t:"b"}, {w:"when", t:"b"}, {w:"promotions", t:"b"}, {w:"were", t:"b"}, {w:"done", t:"b"}, {w:"in", t:"f"}, {w:"order", t:"b"}, {w:"to", t:"f"}, {w:"fool", t:"b"}, {w:"the", t:"b"}, {w:"consumer", t:"b"}, {w:"into", t:"f"}, {w:"purchasing", t:"b"}, {w:"something.", t:"b"}]
+        },
+        {
+            k: "소비자가 정말로 원하지 않았거나 필요로 하지 않았던 물건을 구매하도록 하는 것의 장기적인 효과는 좋지 않았다.",
+            h: ["the", "long-term", "effect", "of", "get", "a", "consumer", "to", "buy", "something", "they", "do", "not", "really", "want", "or", "need", "be", "not", "good"],
+            a: [{w:"The", t:"b"}, {w:"long-term", t:"b"}, {w:"effect", t:"b"}, {w:"of", t:"f"}, {w:"getting", t:"b"}, {w:"a", t:"b"}, {w:"consumer", t:"b"}, {w:"to", t:"f"}, {w:"buy", t:"b"}, {w:"something", t:"b"}, {w:"they", t:"b"}, {w:"did", t:"b"}, {w:"not", t:"b"}, {w:"really", t:"b"}, {w:"want", t:"b"}, {w:"or", t:"b"}, {w:"need", t:"b"}, {w:"wasn’t", t:"b"}, {w:"good.", t:"b"}]
+        },
+        {
+            k: "한 번 속은 소비자는 자신의 경험을 다른 사람에게 전하기 때문에 판매에 손해를 끼칠 수 있다.",
+            h: ["in", "fact", "consumer", "fool", "once", "can", "do", "damage", "to", "sale", "as", "they", "relate", "their", "experience", "to", "other"],
+            a: [{w:"In", t:"f"}, {w:"fact,", t:"b"}, {w:"consumers", t:"b"}, {w:"fooled", t:"b"}, {w:"once", t:"b"}, {w:"can", t:"b"}, {w:"do", t:"b"}, {w:"damage", t:"b"}, {w:"to", t:"f"}, {w:"sales", t:"b"}, {w:"as", t:"f"}, {w:"they", t:"b"}, {w:"relate", t:"b"}, {w:"their", t:"b"}, {w:"experience", t:"b"}, {w:"to", t:"f"}, {w:"others.", t:"b"}]
+        },
+        {
+            k: "대신, 마케터들은 진가를 인정할 소비자를 확인하고 가치를 명확하게 하는 방식으로 홍보하는 것이 목표라는 것을 이제 알고 있다.",
+            h: ["instead", "marketer", "now", "know", "that", "their", "goal", "be", "to", "identify", "the", "consumer", "who", "be", "most", "likely", "to", "appreciate", "a", "good", "or", "service", "and", "to", "promote", "that", "good", "or", "service", "in", "a", "way", "that", "make", "the", "value", "clear", "to", "the", "consumer"],
+            a: [{w:"Instead,", t:"b"}, {w:"marketers", t:"b"}, {w:"now", t:"b"}, {w:"know", t:"b"}, {w:"that", t:"b"}, {w:"their", t:"goal", t:"b"}, {w:"goal", t:"b"}, {w:"is", t:"b"}, {w:"to", t:"f"}, {w:"identify", t:"b"}, {w:"the", t:"b"}, {w:"consumers", t:"b"}, {w:"who", t:"b"}, {w:"are", t:"b"}, {w:"most", t:"b"}, {w:"likely", t:"b"}, {w:"to", t:"f"}, {w:"appreciate", t:"b"}, {w:"a", t:"b"}, {w:"good", t:"b"}, {w:"or", t:"b"}, {w:"service,", t:"b"}, {w:"and", t:"b"}, {w:"to", t:"f"}, {w:"promote", t:"b"}, {w:"that", t:"b"}, {w:"good", t:"b"}, {w:"or", t:"b"}, {w:"service", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"way", t:"b"}, {w:"that", t:"b"}, {w:"makes", t:"b"}, {w:"the", t:"b"}, {w:"value", t:"b"}, {w:"clear", t:"b"}, {w:"to", t:"f"}, {w:"the", t:"b"}, {w:"consumer.", t:"b"}]
+        },
+        {
+            k: "그러므로, 마케팅 담당자는 잠재적인 소비자가 어디에 있는지, 어떻게 그들에게 도달해야 하는지 알아야 한다.",
+            h: ["therefore", "marketer", "must", "know", "where", "the", "potential", "consumer", "be", "and", "how", "to", "reach", "them"],
+            a: [{w:"Therefore,", t:"b"}, {w:"marketers", t:"b"}, {w:"must", t:"b"}, {w:"know", t:"b"}, {w:"where", t:"b"}, {w:"the", t:"b"}, {w:"potential", t:"b"}, {w:"consumers", t:"b"}, {w:"are,", t:"b"}, {w:"and", t:"b"}, {w:"how", t:"b"}, {w:"to", t:"f"}, {w:"reach", t:"b"}, {w:"them.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>

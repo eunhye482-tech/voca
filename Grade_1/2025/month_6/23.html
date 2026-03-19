@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Writing Practice - Science and Action</title>
+    <style>
+        :root {
+            --chalkboard: #1e3932; 
+            --chalk-white: #ffffff;
+            --point-yellow: #fde047; 
+            --wood-frame: #451a03; 
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--chalkboard);
+            border: 15px solid var(--wood-frame);
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .korean-sentence {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--point-yellow);
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            word-break: keep-all;
+            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .hint-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 60px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .hint-word {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .writing-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 15px;
+            min-height: 250px;
+        }
+
+        .word-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .blank {
+            width: 100%;
+            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .blank.fixed {
+            border-bottom: none;
+            cursor: default;
+        }
+
+        .word-text {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: var(--chalk-white);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .blank.fixed .word-text,
+        .blank.revealed .word-text {
+            opacity: 1;
+        }
+
+        .blank.revealed {
+            border-bottom-color: var(--point-yellow);
+        }
+
+        .blank.revealed .word-text {
+            color: var(--point-yellow);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            align-items: center;
+        }
+
+        .page-info {
+            color: var(--chalk-white);
+            font-size: 1.2rem;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid var(--point-yellow);
+            background: transparent;
+            color: var(--point-yellow);
+            cursor: pointer;
+        }
+
+        button:disabled {
+            border-color: #4b5563;
+            color: #4b5563;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container">
+    <div id="korean-display" class="korean-sentence"></div>
+    <div id="hint-display" class="hint-container"></div>
+    <div id="writing-display" class="writing-area"></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
+        <div id="page-info" class="page-info">1 / 11</div>
+        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let utter = new SpeechSynthesisUtterance();
+
+    function loadVoice() {
+        const voices = synth.getVoices();
+        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
+        const silent = new SpeechSynthesisUtterance("");
+        silent.volume = 0;
+        synth.speak(silent);
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoice;
+    }
+
+    function speakFast(text) {
+        synth.cancel();
+        const cleanText = text.replace(/[.,“”?—]/g, "");
+        utter.text = cleanText;
+        utter.voice = voice;
+        utter.lang = 'en-US';
+        utter.rate = 1.1;
+        synth.speak(utter);
+    }
+
+    const allQuizzes = [
+        {
+            k: "과학은 물리적 세계에 대한 관찰을 축적하고 이해하는 것과 관련이 있다.",
+            h: ["science", "be", "concern", "with", "accumulate", "and", "understand", "observation", "of", "the", "physical", "world"],
+            a: [{w:"Science", t:"b"}, {w:"is", t:"b"}, {w:"concerned", t:"b"}, {w:"with", t:"f"}, {w:"accumulating", t:"b"}, {w:"and", t:"b"}, {w:"understanding", t:"b"}, {w:"observations", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"physical", t:"b"}, {w:"world.", t:"b"}]
+        },
+        {
+            k: "그 이해 단독으로는 어떠한 문제도 해결하지 않는다.",
+            h: ["that", "understand", "alone", "solve", "no", "problem"],
+            a: [{w:"That", t:"b"}, {w:"understanding", t:"b"}, {w:"alone", t:"b"}, {w:"solves", t:"b"}, {w:"no", t:"b"}, {w:"problems.", t:"b"}]
+        },
+        {
+            k: "개개인은 그것이 문제를 해결하는 것을 돕기 위해 그 이해를 행동으로 옮겨야 한다.",
+            h: ["individual", "people", "have", "to", "act", "on", "that", "understand", "for", "it", "to", "help", "solve", "problem"],
+            a: [{w:"Individual", t:"b"}, {w:"people", t:"b"}, {w:"have", t:"b"}, {w:"to", t:"f"}, {w:"act", t:"b"}, {w:"on", t:"f"}, {w:"that", t:"b"}, {w:"understanding", t:"b"}, {w:"for", t:"f"}, {w:"it", t:"b"}, {w:"to", t:"f"}, {w:"help", t:"b"}, {w:"solve", t:"b"}, {w:"problems.", t:"b"}]
+        },
+        {
+            k: "예를 들어, 과학은 규칙적인 운동이 심장병의 위험을 낮출 수 있다는 것을 발견했다.",
+            h: ["for", "instance", "science", "have", "find", "that", "regular", "exercise", "can", "low", "your", "risk", "of", "heart", "disease"],
+            a: [{w:"For", t:"f"}, {w:"instance,", t:"b"}, {w:"science", t:"b"}, {w:"has", t:"b"}, {w:"found", t:"b"}, {w:"that", t:"b"}, {w:"regular", t:"b"}, {w:"exercise", t:"b"}, {w:"can", t:"b"}, {w:"lower", t:"b"}, {w:"your", t:"b"}, {w:"risk", t:"b"}, {w:"of", t:"f"}, {w:"heart", t:"b"}, {w:"disease.", t:"b"}]
+        },
+        {
+            k: "사실을 아는 것은 흥미롭지만, 실제로 운동하지 않는다면 당신의 개인 건강에 아무런 도움이 되지 않는다.",
+            h: ["know", "this", "fact", "be", "interest", "but", "it", "will", "do", "nothing", "for", "your", "personal", "health", "unless", "you", "act", "on", "it", "and", "actually", "exercise"],
+            a: [{w:"Knowing", t:"b"}, {w:"this", t:"b"}, {w:"fact", t:"b"}, {w:"is", t:"b"}, {w:"interesting,", t:"b"}, {w:"but", t:"b"}, {w:"it", t:"b"}, {w:"will", t:"b"}, {w:"do", t:"b"}, {w:"nothing", t:"b"}, {w:"for", t:"f"}, {w:"your", t:"b"}, {w:"personal", t:"b"}, {w:"health", t:"b"}, {w:"unless", t:"b"}, {w:"you", t:"b"}, {w:"act", t:"b"}, {w:"on", t:"f"}, {w:"it", t:"b"}, {w:"and", t:"b"}, {w:"actually", t:"b"}, {w:"exercise.", t:"b"}]
+        },
+        {
+            k: "그리고 바로 이 점이 어려운 부분이다.",
+            h: ["and", "that", "be", "the", "hard", "part"],
+            a: [{w:"And", t:"b"}, {w:"that’s", t:"b"}, {w:"the", t:"b"}, {w:"hard", t:"b"}, {w:"part.", t:"b"}]
+        },
+        {
+            k: "운동에 대한 기사를 읽는 것은 쉽다.",
+            h: ["read", "an", "article", "about", "exercise", "be", "easy"],
+            a: [{w:"Reading", t:"b"}, {w:"an", t:"b"}, {w:"article", t:"b"}, {w:"about", t:"f"}, {w:"exercise", t:"b"}, {w:"is", t:"b"}, {w:"easy.", t:"b"}]
+        },
+        {
+            k: "규칙적인 운동의 실제적인 루틴을 형성하는 것은 더 어렵다.",
+            h: ["get", "into", "an", "actual", "routine", "of", "regular", "exercise", "be", "hard"],
+            a: [{w:"Getting", t:"b"}, {w:"into", t:"f"}, {w:"an", t:"b"}, {w:"actual", t:"b"}, {w:"routine", t:"b"}, {w:"of", t:"f"}, {w:"regular", t:"b"}, {w:"exercise", t:"b"}, {w:"is", t:"b"}, {w:"harder.", t:"b"}]
+        },
+        {
+            k: "이러한 점에서, 과학은 사실 어떤 문제도 해결하지 않는다.",
+            h: ["in", "this", "sense", "science", "really", "solve", "no", "problem", "at", "all"],
+            a: [{w:"In", t:"f"}, {w:"this", t:"b"}, {w:"sense,", t:"b"}, {w:"science", t:"b"}, {w:"really", t:"b"}, {w:"solves", t:"b"}, {w:"no", t:"b"}, {w:"problems", t:"b"}, {w:"at", t:"f"}, {w:"all.", t:"f"}]
+        },
+        {
+            k: "문제는 사람들이 과학에 의해 제공된 지식을 취하고 그것을 사용할 때만 해결된다.",
+            h: ["problem", "be", "only", "solve", "when", "people", "take", "the", "knowledge", "provide", "by", "science", "and", "use", "it"],
+            a: [{w:"Problems", t:"b"}, {w:"are", t:"b"}, {w:"only", t:"b"}, {w:"solved", t:"b"}, {w:"when", t:"b"}, {w:"people", t:"b"}, {w:"take", t:"b"}, {w:"the", t:"b"}, {w:"knowledge", t:"b"}, {w:"provided", t:"b"}, {w:"by", t:"f"}, {w:"science", t:"b"}, {w:"and", t:"b"}, {w:"use", t:"b"}, {w:"it.", t:"b"}]
+        },
+        {
+            k: "실제로, 인류의 가장 큰 문제들 중 다수는 지식의 부족이 아니라, 행동의 부족에 의해 야기된다.",
+            h: ["in", "fact", "many", "of", "humanity’s", "big", "problem", "be", "cause", "by", "lack", "of", "action", "and", "not", "lack", "of", "knowledge"],
+            a: [{w:"In", t:"f"}, {w:"fact,", t:"b"}, {w:"many", t:"b"}, {w:"of", t:"f"}, {w:"humanity’s", t:"b"}, {w:"biggest", t:"b"}, {w:"problems", t:"b"}, {w:"are", t:"b"}, {w:"caused", t:"b"}, {w:"by", t:"f"}, {w:"lack", t:"b"}, {w:"of", t:"f"}, {w:"action,", t:"b"}, {w:"and", t:"b"}, {w:"not", t:"b"}, {w:"lack", t:"b"}, {w:"of", t:"f"}, {w:"knowledge.", t:"b"}]
+        }
+    ];
+
+    let currentIdx = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        const quiz = allQuizzes[currentIdx];
+        document.getElementById('korean-display').innerText = quiz.k;
+        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
+        
+        const hArea = document.getElementById('hint-display');
+        hArea.innerHTML = '';
+        shuffle([...quiz.h]).forEach(word => {
+            const s = document.createElement('span');
+            s.className = 'hint-word';
+            s.innerText = word;
+            hArea.appendChild(s);
+        });
+
+        const wArea = document.getElementById('writing-display');
+        wArea.innerHTML = '';
+        quiz.a.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'word-box';
+            const blank = document.createElement('div');
+            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+            
+            if(item.t === 'b') {
+                blank.onpointerdown = function(e) { 
+                    if (!this.classList.contains('revealed')) {
+                        speakFast(item.w); 
+                        this.classList.add('revealed');
+                    }
+                };
+            }
+            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
+            box.appendChild(blank);
+            wArea.appendChild(box);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+    }
+
+    function changeQuiz(dir) {
+        currentIdx += dir;
+        render();
+    }
+
+    loadVoice(); 
+    render();
+</script>
+
+</body>
+</html>
