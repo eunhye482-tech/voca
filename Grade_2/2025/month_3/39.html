@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>English Master #39 - 25년 3월 고2</title>
+    <style>
+        :root { 
+            --lavender-light: #F3E5F5; 
+            --purple-pale: #E1BEE7; 
+            --purple-main: #9575CD; 
+            --purple-dark: #673AB7;
+            --pink-soft: #FFF0F6;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        
+        .hidden { display: none !important; }
+        
+        .btn-intro-step { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
+
+        .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; color: #444; }
+        .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
+        .topic-kor { font-weight: bold; color: #D81B60; display: block; margin-bottom: 5px; }
+        .topic-eng { font-size: 0.85rem; color: #888; font-style: italic; }
+
+        .sentence-box { background: var(--lavender-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--purple-dark); margin-bottom: 15px; border: 2px solid var(--purple-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #333; }
+        .voca-item.revealed { background: var(--purple-main); color: white; }
+        
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
+
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; color: #555; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; color: #444; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; gap: 10px; align-items: center; }
+        .btn-prev { background: #EDF2F7; color: #718096; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--purple-main); color: white; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1.5; display: flex; align-items: center; justify-content: center; margin-top: 0; }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master #39</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
+    </div>
+</div>
+
+<script>
+    const prepositions = ["as", "if", "to", "in", "by", "for", "of", "through", "with", "without"];
+    const fullData = [
+        { en: "As a general rule, it’s better if your definition corresponds as closely as possible to the way in which the term is ordinarily used in the kinds of debates to which your claims are pertinent.", ko: "일반적으로, 당신의 정의가 자신의 주장과 관련 있는 논의들에서 사용되는 방식에 가능한 비슷하게 일치하면 더 좋다.", voca: ["corresponds:일치하다", "ordinarily:일반적으로", "pertinent:관련 있는/적절한", "definition:정의", "claims:주장", "debates:논의/토론", "possible:가능한", "🍎", "🍎", "🍎"] },
+        { en: "There will be, however, occasions where it is appropriate, even necessary, to coin special uses through what philosophers call stimulative definition.", ko: "그러나, 철학자들이 ‘자극하는 정의’라고 부르는 것을 통해 특별한 용법을 만드는 것이 적절하고, 심지어 필요한 경우도 있을 것이다.", voca: ["occasions:경우/때", "appropriate:적절한", "coin:만들어 내다/주조하다", "philosophers:철학자들", "stimulative:자극하는/자극적인", "necessary:필요한", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "This would be the case where the current lexicon is not able to make distinctions that you think are philosophically important.", ko: "현재의 어휘로는 당신이 철학적으로 중요하다고 생각하는 구분을 할 수 없는 경우가 이에 해당한다.", voca: ["lexicon:어휘/어휘 목록", "distinctions:구분", "philosophically:철학적으로", "current:현재의", "important:중요한", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For example, we do not have a term in ordinary language that describes a memory that is not necessarily a memory of something the person having it has experienced.", ko: "예를 들어, 그것(기억)을 가진 사람이 경험한 무언가에 대한 기억이, 반드시 (경험한) 기억이 아닐 수도 있다는 것을 설명하는 용어는 일반 언어에 없다.", voca: ["term:용어", "ordinary:일반적인", "describes:설명하다", "necessarily:반드시", "experienced:경험했다", "language:언어", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Such a thing would occur, for example, if I could somehow share your memories: I would have a memory-type experience, but this would not be of something that I had actually experienced.", ko: "예를 들어, 내가 어떻게든 당신의 기억을 공유할 수 있다면 그러한 상황이 생길 수 있다. 즉, 나는 기억 유형의 경험을 갖고 있지만, 이것이 내가 실제로 경험했던 것이 아닐 수도 있다.", voca: ["occur:발생하다", "somehow:어떻게든", "actually:실제로", "memory-type:기억 유형의", "share:공유하다", "experience:경험", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "To call this a memory would be misleading.", ko: "이것을 기억이라고 부르는 것은 오해의 소지가 있다.", voca: ["misleading:오해의 소지가 있는", "call:부르다", "memory:기억", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "For this reason, philosophers have coined the special term ‘quasi-memory’ to refer to these hypothetical memory-like experiences.", ko: "이러한 이유로, 철학자들은 기억과 유사한 이러한 가상의 경험을 지칭하기 위해 ‘유사 기억’이라는 특별한 용어를 만들어 냈다.", voca: ["quasi-memory:유사 기억", "refer to:~을 지칭하다", "hypothetical:가상의/가설의", "coined:만들어 냈다", "reason:이유", "special:특별한", "🍎", "🍎", "🍎", "🍎"] }
+    ];
+
+    let currentMode = 'INTRO';
+    let currentIdx = 0;
+    const synth = window.speechSynthesis;
+
+    function render() {
+        const area = document.getElementById('display-area');
+        const nav = document.getElementById('nav-area');
+        const header = document.getElementById('header-title');
+        area.innerHTML = '';
+
+        if (currentMode === 'INTRO') {
+            header.innerText = "English Master #39";
+            nav.classList.add('hidden');
+            area.innerHTML = `
+                <div class="main-title-card"><h1>Defining the<br>Quasi-memory</h1><p>2025년 3월 고2 39번</p></div>
+                
+                <div class="intro-summary">
+                    <p>• <b>📍 서론:</b> 용어의 정의는 보통 일상적 용법과 일치해야 하지만, 때로는 특별한 정의가 필요할 때가 있음.</p>
+                    <p>• <b>📍 본론:</b> 기존 어휘로 철학적 구분을 할 수 없을 때 '자극적 정의'를 통해 새로운 용어를 만듦.</p>
+                    <p>• <b>📍 결론:</b> 타인의 기억을 공유하는 상황처럼 내가 직접 겪지 않은 기억을 설명하기 위해 철학자들은 '유사 기억'이라는 용어를 고안함.</p>
+                </div>
+                <div class="intro-topic">
+                    <span class="topic-kor">주제: 정밀한 철학적 구분을 위해 필요한 새로운 용어 정의(자극적 정의)의 필요성</span>
+                    <span class="topic-eng">Topic: The necessity of stimulative definition and coining new terms for precise philosophical distinctions</span>
+                </div>
+                <button class="btn-intro-step" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-intro-step" style="background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+            `;
+        } else {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3;
+            header.innerText = `STEP ${stepNum} (${currentIdx + 1}/${fullData.length})`;
+            nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
+            
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인</button><div id="trans-area" class="trans-content">${item.ko}</div>`;
+                fillVoca(item.voca, '🍎', "#FF3B30");
+            } else {
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인</button><div id="trans-area" class="trans-content">${item.en}</div>`;
+                fillBlanks(item.en);
+                fillVoca(item.voca, '🍇', "#9C27B0");
+            }
+        }
+    }
+
+    function fillVoca(vList, emo, col) {
+        const area = document.getElementById('voca-area');
+        for (let i = 0; i < 10; i++) {
+            const div = document.createElement('div');
+            div.className = 'voca-item';
+            if (vList[i] && vList[i].includes(':')) {
+                const [en, ko] = vList[i].split(':');
+                div.innerText = en;
+                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? ko : en; };
+            } else {
+                div.innerText = emo; div.style.color = col; div.style.cursor = "default";
+            }
+            area.appendChild(div);
+        }
+    }
+
+    function fillBlanks(s) {
+        const area = document.getElementById('blank-area');
+        s.split(' ').forEach(w => {
+            const span = document.createElement('span');
+            const cw = w.replace(/[.,'"]/g, "").toLowerCase();
+            if(prepositions.includes(cw)) { span.innerText = w; span.style.margin="0 4px"; span.style.fontWeight="bold"; }
+            else { span.className = 'word-blank'; span.innerText = w; span.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; }
+            area.appendChild(span);
+        });
+    }
+
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; synth.speak(u); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
+</script>
+</body>
+</html>

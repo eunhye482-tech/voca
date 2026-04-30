@@ -3,298 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chalkboard Writing Class - Communicating with Children</title>
+    <title>English Master #32 - Official Version</title>
     <style>
-        :root {
-            --chalkboard: #1e3932; 
-            --chalk-white: #ffffff;
-            --point-yellow: #fde047; 
-            --wood-frame: #451a03; 
+        :root { 
+            --lavender-light: #F3E5F5; 
+            --purple-pale: #E1BEE7; 
+            --purple-main: #9575CD; 
+            --purple-dark: #673AB7;
+            --pink-soft: #FFF0F6;
         }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
+        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        
+        .hidden { display: none !important; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        body {
-            font-family: 'Pretendard', -apple-system, sans-serif;
-            background-color: #0f172a;
-            margin: 0;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
+        .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
+        .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
+        .topic-kor { font-weight: bold; color: #D81B60; display: block; margin-bottom: 5px; }
+        .topic-eng { font-size: 0.85rem; color: #888; font-style: italic; }
 
-        .board-container {
-            width: 100%;
-            max-width: 1200px;
-            background-color: var(--chalkboard);
-            border: 15px solid var(--wood-frame);
-            border-radius: 10px;
-            padding: 50px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
-            position: relative;
-        }
+        .sentence-box { background: var(--lavender-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--purple-dark); margin-bottom: 15px; border: 2px solid var(--purple-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--purple-main); color: white; }
+        
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
 
-        .korean-sentence {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: var(--point-yellow);
-            text-align: center;
-            margin-bottom: 40px;
-            line-height: 1.6;
-            word-break: keep-all;
-            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
-            padding-bottom: 20px;
-        }
-
-        .hint-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 60px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .hint-word {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 5px 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-        }
-
-        .writing-area {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px 15px;
-            min-height: 250px;
-        }
-
-        .word-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 85px;
-        }
-
-        .blank {
-            width: 100%;
-            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
-            height: 65px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        .blank.fixed {
-            border-bottom: none;
-            cursor: default;
-        }
-
-        .word-text {
-            font-size: 1.7rem;
-            font-weight: 500;
-            color: var(--chalk-white);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .blank.fixed .word-text,
-        .blank.revealed .word-text {
-            opacity: 1;
-        }
-
-        .blank.revealed {
-            border-bottom-color: var(--point-yellow);
-        }
-
-        .blank.revealed .word-text {
-            color: var(--point-yellow);
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            align-items: center;
-        }
-
-        .page-info {
-            color: var(--chalk-white);
-            font-size: 1.2rem;
-        }
-
-        button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            border: 2px solid var(--point-yellow);
-            background: transparent;
-            color: var(--point-yellow);
-            cursor: pointer;
-        }
-
-        button:disabled {
-            border-color: #4b5563;
-            color: #4b5563;
-            cursor: not-allowed;
-        }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
     </style>
 </head>
 <body>
-
-<div class="board-container">
-    <div id="korean-display" class="korean-sentence"></div>
-    <div id="hint-display" class="hint-container"></div>
-    <div id="writing-display" class="writing-area"></div>
-
-    <div class="controls">
-        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
-        <div id="page-info" class="page-info">1 / 9</div>
-        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master #32</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
     </div>
 </div>
 
 <script>
-    const synth = window.speechSynthesis;
-    let voice = null;
-    let utter = new SpeechSynthesisUtterance();
-
-    function loadVoice() {
-        const voices = synth.getVoices();
-        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
-        const silent = new SpeechSynthesisUtterance("");
-        silent.volume = 0;
-        synth.speak(silent);
-    }
-
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = loadVoice;
-    }
-
-    function speakFast(text) {
-        synth.cancel();
-        const cleanText = text.replace(/[.,“”?—]/g, "");
-        utter.text = cleanText;
-        utter.voice = voice;
-        utter.lang = 'en-US';
-        utter.rate = 1.1;
-        synth.speak(utter);
-    }
-
-    const allQuizzes = [
-        {
-            k: "자녀의 말을 들을 때, 질문보다 단순한 관찰 결과를 공유하는 것이 대화에 더 효과적임을 인식해라.",
-            h: ["as", "you", "listen", "to", "your", "child", "in", "an", "emotional", "moment", "be", "aware", "that", "share", "simple", "observation", "usually", "work", "good", "than", "ask", "question", "to", "get", "a", "conversation", "roll"],
-            a: [{w:"As", t:"f"}, {w:"you", t:"b"}, {w:"listen", t:"b"}, {w:"to", t:"f"}, {w:"your", t:"b"}, {w:"child", t:"b"}, {w:"in", t:"f"}, {w:"an", t:"b"}, {w:"emotional", t:"b"}, {w:"moment,", t:"b"}, {w:"be", t:"b"}, {w:"aware", t:"b"}, {w:"that", t:"b"}, {w:"sharing", t:"b"}, {w:"simple", t:"b"}, {w:"observations", t:"b"}, {w:"usually", t:"b"}, {w:"works", t:"b"}, {w:"better", t:"b"}, {w:"than", t:"b"}, {w:"asking", t:"b"}, {w:"questions", t:"b"}, {w:"to", t:"f"}, {w:"get", t:"b"}, {w:"a", t:"b"}, {w:"conversation", t:"b"}, {w:"rolling.", t:"b"}]
-        },
-        {
-            k: "자녀에게 “왜 슬픈 기분이 드니?”라고 물으면 그녀는 전혀 모를 수도 있다.",
-            h: ["you", "may", "ask", "your", "child", "why", "do", "you", "feel", "sad", "and", "she", "may", "not", "have", "a", "clue"],
-            a: [{w:"You", t:"b"}, {w:"may", t:"b"}, {w:"ask", t:"b"}, {w:"your", t:"b"}, {w:"child", t:"b"}, {w:"“Why", t:"b"}, {w:"do", t:"b"}, {w:"you", t:"b"}, {w:"feel", t:"b"}, {w:"sad?”", t:"b"}, {w:"and", t:"b"}, {w:"she", t:"b"}, {w:"may", t:"b"}, {w:"not", t:"b"}, {w:"have", t:"b"}, {w:"a", t:"b"}, {w:"clue.", t:"b"}]
-        },
-        {
-            k: "아이라서, 그녀는 답이 당장 떠오르지 않을지도 모른다.",
-            h: ["as", "a", "child", "she", "may", "not", "have", "an", "answer", "on", "the", "tip", "of", "her", "tongue"],
-            a: [{w:"As", t:"f"}, {w:"a", t:"b"}, {w:"child,", t:"b"}, {w:"she", t:"b"}, {w:"may", t:"b"}, {w:"not", t:"b"}, {w:"have", t:"b"}, {w:"an", t:"b"}, {w:"answer", t:"b"}, {w:"on", t:"f"}, {w:"the", t:"b"}, {w:"tip", t:"b"}, {w:"of", t:"f"}, {w:"her", t:"b"}, {w:"tongue.", t:"b"}]
-        },
-        {
-            k: "부모님의 말다툼에 대해 슬픔을 느끼거나, 극도로 지쳤거나, 피아노 연주회를 걱정할지도 모른다.",
-            h: ["maybe", "she", "be", "feel", "sad", "about", "her", "parent", "argument", "or", "because", "she", "feel", "overtired", "or", "she", "be", "worry", "about", "a", "piano", "recital"],
-            a: [{w:"Maybe", t:"b"}, {w:"she’s", t:"b"}, {w:"feeling", t:"b"}, {w:"sad", t:"b"}, {w:"about", t:"f"}, {w:"her", t:"b"}, {w:"parents’", t:"b"}, {w:"arguments,", t:"b"}, {w:"or", t:"b"}, {w:"because", t:"b"}, {w:"she", t:"b"}, {w:"feels", t:"b"}, {w:"overtired,", t:"b"}, {w:"or", t:"b"}, {w:"she’s", t:"b"}, {w:"worried", t:"b"}, {w:"about", t:"f"}, {w:"a", t:"b"}, {w:"piano", t:"b"}, {w:"recital.", t:"b"}]
-        },
-        {
-            k: "그러나 그녀는 이것에 대해 설명할 수도 있고 설명하지 못할 수도 있다.",
-            h: ["but", "she", "may", "or", "may", "not", "be", "able", "to", "explain", "any", "of", "this"],
-            a: [{w:"But", t:"b"}, {w:"she", t:"b"}, {w:"may", t:"b"}, {w:"or", t:"b"}, {w:"may", t:"b"}, {w:"not", t:"b"}, {w:"be", t:"b"}, {w:"able", t:"b"}, {w:"to", t:"f"}, {w:"explain", t:"b"}, {w:"any", t:"b"}, {w:"of", t:"f"}, {w:"this.", t:"b"}]
-        },
-        {
-            k: "답이 떠오를 때조차도 그 대답이 감정을 정당화하기에 충분하지 않다고 걱정할 수도 있다.",
-            h: ["and", "even", "when", "she", "do", "come", "up", "with", "an", "answer", "she", "might", "be", "worry", "that", "the", "answer", "be", "not", "good", "enough", "to", "justify", "the", "feeling"],
-            a: [{w:"And", t:"b"}, {w:"even", t:"b"}, {w:"when", t:"b"}, {w:"she", t:"b"}, {w:"does", t:"b"}, {w:"come", t:"b"}, {w:"up", t:"b"}, {w:"with", t:"f"}, {w:"an", t:"b"}, {w:"answer,", t:"b"}, {w:"she", t:"b"}, {w:"might", t:"b"}, {w:"be", t:"b"}, {w:"worried", t:"b"}, {w:"that", t:"b"}, {w:"the", t:"b"}, {w:"answer", t:"b"}, {w:"is", t:"b"}, {w:"not", t:"b"}, {w:"good", t:"b"}, {w:"enough", t:"b"}, {w:"to", t:"f"}, {w:"justify", t:"b"}, {w:"the", t:"b"}, {w:"feeling.", t:"b"}]
-        },
-        {
-            k: "이러한 상황에서는 연속된 질문들이 그저 자녀를 침묵하게 만들 수 있다.",
-            h: ["under", "this", "circumstance", "a", "series", "of", "question", "can", "just", "make", "a", "child", "silent"],
-            a: [{w:"Under", t:"f"}, {w:"these", t:"b"}, {w:"circumstances,", t:"b"}, {w:"a", t:"b"}, {w:"series", t:"b"}, {w:"of", t:"f"}, {w:"questions", t:"b"}, {w:"can", t:"b"}, {w:"just", t:"b"}, {w:"make", t:"b"}, {w:"a", t:"b"}, {w:"child", t:"b"}, {w:"silent.", t:"b"}]
-        },
-        {
-            k: "여러분이 인지한 것을 단순히 나타내는 것이 더 낫다.",
-            h: ["it", "be", "good", "to", "simply", "reflect", "what", "you", "notice"],
-            a: [{w:"It’s", t:"b"}, {w:"better", t:"b"}, {w:"to", t:"f"}, {w:"simply", t:"b"}, {w:"reflect", t:"b"}, {w:"what", t:"b"}, {w:"you", t:"b"}, {w:"notice.", t:"b"}]
-        },
-        {
-            k: "“피곤해 보이네” 혹은 “찡그린 것을 알아챘어”라고 말하고 반응을 기다려 볼 수 있다.",
-            h: ["you", "can", "say", "you", "seem", "a", "little", "tired", "today", "or", "i", "notice", "that", "you", "frown", "when", "i", "mention", "the", "recital", "and", "wait", "for", "her", "response"],
-            a: [{w:"You", t:"b"}, {w:"can", t:"b"}, {w:"say,", t:"b"}, {w:"“You", t:"b"}, {w:"seem", t:"b"}, {w:"a", t:"b"}, {w:"little", t:"b"}, {w:"tired", t:"b"}, {w:"today,”", t:"b"}, {w:"or,", t:"b"}, {w:"“I", t:"b"}, {w:"noticed", t:"b"}, {w:"that", t:"b"}, {w:"you", t:"b"}, {w:"frowned", t:"b"}, {w:"when", t:"b"}, {w:"I", t:"b"}, {w:"mentioned", t:"b"}, {w:"the", t:"b"}, {w:"recital,”", t:"b"}, {w:"and", t:"b"}, {w:"wait", t:"b"}, {w:"for", t:"f"}, {w:"her", t:"b"}, {w:"response.", t:"b"}]
-        }
+    const fullData = [
+        { en: "As you listen to your child in an emotional moment, be aware that sharing simple observations usually works better than asking questions to get a conversation rolling.", ko: "정서적인 순간에 아이의 말을 들을 때, 질문을 하는 것보다 단순한 관찰을 공유하는 것이 대화를 시작하는 데 대개 더 효과적이라는 것을 알아두십시오.", voca: ["emotional:정서적인", "aware:알고있는", "observations:관찰", "conversation:대화", "rolling:시작하는", "listen:듣다", "simple:단순한", "usually:대개", "better:더나은", "asking:묻는것"] },
+        { en: "You may ask your child “Why do you feel sad?” and she may not have a clue.", ko: "아이에게 “왜 슬프니?”라고 물어볼 수도 있지만, 아이는 전혀 모를 수도 있습니다.", voca: ["clue:단서/실마리", "feel:느끼다", "sad:슬픈", "may:일지도모른다", "child:아이", "ask:묻다", "why:왜", "have no:없다", "🍌", "🍌"] },
+        { en: "As a child, she may not have an answer on the tip of her tongue.", ko: "아이로서, 그녀는 바로 대답할 수 있는 답이 없을 수도 있습니다.", voca: ["tip:끝", "tongue:혀", "answer:대답", "child:아이", "may:일지도모른다", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Maybe she’s feeling sad about her parents’ arguments, or because she feels overtired, or she’s worried about a piano recital.", ko: "아마도 그녀는 부모님의 다툼 때문에 슬프거나, 너무 피곤해서, 혹은 피아노 독주회 때문에 걱정하고 있을지도 모릅니다.", voca: ["arguments:다툼", "overtired:너무피곤한", "worried:걱정하는", "recital:독주회", "feeling:느끼는", "sad:슬픈", "parents:부모님", "maybe:아마도", "piano:피아노", "because:때문에"] },
+        { en: "But she may or may not be able to explain any of this.", ko: "하지만 그녀는 이 중 어떤 것도 설명할 수 있거나 설명하지 못할 수도 있습니다.", voca: ["explain:설명하다", "able to:~할수있는", "any:어떤것", "may:일지도모른다", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "And even when she does come up with an answer, she might be worried that the answer is not good enough to justify the feeling.", ko: "그리고 그녀가 대답을 생각해 낼 때조차도, 그녀는 그 대답이 자신의 감정을 정당화하기에 충분하지 않다고 걱정할지도 모릅니다.", voca: ["come up with:생각해내다", "worried:걱정하는", "justify:정당화하다", "feeling:감정", "enough:충분한", "answer:대답", "good:좋은", "might:할지도모른다", "even:조차도", "when:때"] },
+        { en: "Under these circumstances, a series of questions can just make a child silent.", ko: "이러한 상황에서, 일련의 질문들은 아이를 침묵하게 만들 수 있습니다.", voca: ["circumstances:상황", "series:일련의", "silent:침묵하는", "questions:질문들", "under:~아래에", "make:만들다", "child:아이", "just:단지", "can:할수있다", "series:연속"] },
+        { en: "It’s better to simply reflect what you notice.", ko: "여러분이 알아차린 것을 단순히 반영해 주는 것이 더 좋습니다.", voca: ["better:더나은", "simply:단순히", "reflect:반영하다", "notice:알아차리다", "what:것", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "You can say, “You seem a little tired today,” or, “I noticed that you frowned when I mentioned the recital,” and wait for her response.", ko: "“오늘 조금 피곤해 보이는구나”라고 말하거나, “독주회 얘기를 했을 때 네가 인상을 찌푸리는 걸 봤단다”라고 말하며 그녀의 반응을 기다려 줄 수 있습니다.", voca: ["seem:보이다", "noticed:알아차렸다", "frowned:인상을찌푸렸다", "mentioned:언급했다", "response:반응", "wait:기다리다", "recital:독주회", "little:조금", "tired:피곤한", "today:오늘"] }
     ];
 
+    let currentMode = 'INTRO';
     let currentIdx = 0;
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
+    const synth = window.speechSynthesis;
 
     function render() {
-        const quiz = allQuizzes[currentIdx];
-        document.getElementById('korean-display').innerText = quiz.k;
-        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
-        
-        const hArea = document.getElementById('hint-display');
-        hArea.innerHTML = '';
-        shuffle([...quiz.h]).forEach(word => {
-            const s = document.createElement('span');
-            s.className = 'hint-word';
-            s.innerText = word;
-            hArea.appendChild(s);
-        });
+        const area = document.getElementById('display-area');
+        const nav = document.getElementById('nav-area');
+        const header = document.getElementById('header-title');
+        area.innerHTML = '';
 
-        const wArea = document.getElementById('writing-display');
-        wArea.innerHTML = '';
-        quiz.a.forEach(item => {
-            const box = document.createElement('div');
-            box.className = 'word-box';
-            const blank = document.createElement('div');
-            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+        if (currentMode === 'INTRO') {
+            header.innerText = "English Master #32";
+            nav.classList.add('hidden');
+            area.innerHTML = `
+                <div class="main-title-card"><h1>Conversing with<br>Emotional Children</h1><p>2025년 3월 고1 모의고사 32번</p></div>
+                <div class="intro-summary">
+                    <p>• <b>📍 서론:</b> 아이가 감정적일 때 질문보다 관찰을 공유하는 것이 효과적임.</p>
+                    <p>• <b>📍 본론:</b> 아이는 자신의 감정 원인을 명확히 설명하거나 정당화하기 어려울 수 있음.</p>
+                    <p>• <b>📍 결론:</b> 질문 공세 대신 관찰한 바를 단순히 언급하고 기다려 주는 것이 좋음.</p>
+                </div>
+                <div class="intro-topic">
+                    <span class="topic-kor">주제: 정서적인 아이와 대화할 때 질문보다 관찰 공유의 중요성</span>
+                    <span class="topic-eng">Topic: Importance of Sharing Observations over Asking Questions with Emotional Children</span>
+                </div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+            `;
+        } else if (currentMode === 'STEP2' || currentMode === 'STEP3') {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3;
+            header.innerText = `STEP ${stepNum}. ${stepNum === 2 ? '문장 학습' : '영작 연습'} (${currentIdx + 1}/${fullData.length})`;
+            nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
             
-            if(item.t === 'b') {
-                blank.onpointerdown = function(e) { 
-                    if (!this.classList.contains('revealed')) {
-                        speakFast(item.w); 
-                        this.classList.add('revealed');
-                    }
-                };
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `
+                    <div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.ko}</div>
+                `;
+                fillVoca(item.voca, '🍌', "#FFD600");
+            } else {
+                area.innerHTML = `
+                    <div class="kor-box">${item.ko}</div>
+                    <div class="blank-area" id="blank-area"></div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.en}</div>
+                `;
+                fillBlanks(item.en);
+                fillVoca(item.voca, '🍇', "#9C27B0");
             }
-            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
-            box.appendChild(blank);
-            wArea.appendChild(box);
-        });
-
-        document.getElementById('prev-btn').disabled = currentIdx === 0;
-        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+        }
     }
 
-    function changeQuiz(dir) {
-        currentIdx += dir;
-        render();
+    function fillVoca(vocaList, emoji, emojiColor) {
+        const container = document.getElementById('voca-area');
+        for (let i = 0; i < 10; i++) {
+            const div = document.createElement('div');
+            div.className = 'voca-item';
+            if (vocaList[i]) {
+                const [eng, kor] = vocaList[i].split(':');
+                div.innerText = eng;
+                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? kor : eng; };
+            } else {
+                div.innerText = emoji; div.style.color = emojiColor; div.style.cursor = "default";
+            }
+            container.appendChild(div);
+        }
     }
 
-    loadVoice(); 
-    render();
+  // 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
+
+    function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(text) { synth.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.9; synth.speak(utterance); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
 </script>
-
 </body>
 </html>

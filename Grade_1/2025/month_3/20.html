@@ -3,303 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chalkboard Writing Class - Gestural Communication</title>
+    <title>English Master #20 - Official Version</title>
     <style>
-        :root {
-            --chalkboard: #1e3932; 
-            --chalk-white: #ffffff;
-            --point-yellow: #fde047; 
-            --wood-frame: #451a03; 
+        :root { 
+            --lavender-light: #F3E5F5; 
+            --purple-pale: #E1BEE7; 
+            --purple-main: #9575CD; 
+            --purple-dark: #673AB7;
+            --pink-soft: #FFF0F6;
         }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
+        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        
+        /* 공통 스타일 */
+        .hidden { display: none !important; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        body {
-            font-family: 'Pretendard', -apple-system, sans-serif;
-            background-color: #0f172a;
-            margin: 0;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+        /* STEP 1: 인트로 */
+        .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 10px rgba(149,117,205,0.3); }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
+        .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; }
 
-        .board-container {
-            width: 100%;
-            max-width: 1200px;
-            background-color: var(--chalkboard);
-            border: 15px solid var(--wood-frame);
-            border-radius: 10px;
-            padding: 50px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
-            position: relative;
-        }
+        /* 학습 카드 스타일 */
+        .sentence-box { background: var(--lavender-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--purple-dark); margin-bottom: 15px; border: 2px solid var(--purple-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        
+        /* 단어 그리드 */
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--purple-main); color: white; }
+        
+        /* STEP 3 전용: 빈칸 스타일 */
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
 
-        .korean-sentence {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: var(--point-yellow);
-            text-align: center;
-            margin-bottom: 40px;
-            line-height: 1.6;
-            word-break: keep-all;
-            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
-            padding-bottom: 20px;
-        }
-
-        .hint-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 60px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .hint-word {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 5px 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-        }
-
-        .writing-area {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px 15px;
-            min-height: 250px;
-        }
-
-        .word-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 85px;
-        }
-
-        .blank {
-            width: 100%;
-            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
-            height: 65px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        .blank.fixed {
-            border-bottom: none;
-            cursor: default;
-        }
-
-        .word-text {
-            font-size: 1.7rem;
-            font-weight: 500;
-            color: var(--chalk-white);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .blank.fixed .word-text,
-        .blank.revealed .word-text {
-            opacity: 1;
-        }
-
-        .blank.revealed {
-            border-bottom-color: var(--point-yellow);
-        }
-
-        .blank.revealed .word-text {
-            color: var(--point-yellow);
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            align-items: center;
-        }
-
-        .page-info {
-            color: var(--chalk-white);
-            font-size: 1.2rem;
-        }
-
-        button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            border: 2px solid var(--point-yellow);
-            background: transparent;
-            color: var(--point-yellow);
-            cursor: pointer;
-        }
-
-        button:disabled {
-            border-color: #4b5563;
-            color: #4b5563;
-            cursor: not-allowed;
-        }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
     </style>
 </head>
 <body>
-
-<div class="board-container">
-    <div id="korean-display" class="korean-sentence"></div>
-    <div id="hint-display" class="hint-container"></div>
-    <div id="writing-display" class="writing-area"></div>
-
-    <div class="controls">
-        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
-        <div id="page-info" class="page-info">1 / 10</div>
-        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master #20</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
     </div>
 </div>
 
 <script>
-    const synth = window.speechSynthesis;
-    let voice = null;
-    let utter = new SpeechSynthesisUtterance();
-
-    function loadVoice() {
-        const voices = synth.getVoices();
-        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
-        const silent = new SpeechSynthesisUtterance("");
-        silent.volume = 0;
-        synth.speak(silent);
-    }
-
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = loadVoice;
-    }
-
-    function speakFast(text) {
-        synth.cancel();
-        const cleanText = text.replace(/[.,“”?]/g, "");
-        utter.text = cleanText;
-        utter.voice = voice;
-        utter.lang = 'en-US';
-        utter.rate = 1.1;
-        synth.speak(utter);
-    }
-
-    const allQuizzes = [
-        {
-            k: "몸짓을 사용하는 의사소통을 개선하는 것은 단순히 고개를 끄덕이거나 악수를 해야 할 때를 아는 것 이상을 포함한다.",
-            h: ["improve", "your", "gestural", "communication", "involve", "more", "than", "just", "know", "when", "to", "nod", "or", "shake", "hand"],
-            a: [{w:"Improving", t:"b"}, {w:"your", t:"b"}, {w:"gestural", t:"b"}, {w:"communication", t:"b"}, {w:"involves", t:"b"}, {w:"more", t:"b"}, {w:"than", t:"b"}, {w:"just", t:"b"}, {w:"knowing", t:"b"}, {w:"when", t:"b"}, {w:"to", t:"f"}, {w:"nod", t:"b"}, {w:"or", t:"b"}, {w:"shake", t:"b"}, {w:"hands.", t:"b"}]
-        },
-        {
-            k: "이는 여러분의 말로 전하는 메시지를 보완하기 위해 여러분의 말에 여러 겹의 의미를 더하면서 몸짓을 사용하는 것에 대한 것이다.",
-            h: ["it", "be", "about", "use", "gesture", "to", "complement", "your", "spoken", "message", "add", "layer", "of", "meaning", "to", "your", "word"],
-            a: [{w:"It", t:"b"}, {w:"is", t:"b"}, {w:"about", t:"f"}, {w:"using", t:"b"}, {w:"gestures", t:"b"}, {w:"to", t:"f"}, {w:"complement", t:"b"}, {w:"your", t:"b"}, {w:"spoken", t:"b"}, {w:"messages,", t:"b"}, {w:"adding", t:"b"}, {w:"layers", t:"b"}, {w:"of", t:"f"}, {w:"meaning", t:"b"}, {w:"to", t:"f"}, {w:"your", t:"b"}, {w:"words.", t:"b"}]
-        },
-        {
-            k: "예를 들어 손바닥을 보이는 동작은 정직함을 나타내어 신뢰의 분위기를 만든다.",
-            h: ["open-handed", "gesture", "for", "example", "can", "indicate", "honesty", "create", "an", "atmosphere", "of", "trust"],
-            a: [{w:"Open-handed", t:"b"}, {w:"gestures,", t:"b"}, {w:"for", t:"f"}, {w:"example,", t:"b"}, {w:"can", t:"b"}, {w:"indicate", t:"b"}, {w:"honesty,", t:"b"}, {w:"creating", t:"b"}, {w:"an", t:"b"}, {w:"atmosphere", t:"b"}, {w:"of", t:"f"}, {w:"trust.", t:"b"}]
-        },
-        {
-            k: "손바닥을 위로 향한 채로 이야기할 때 여러분은 개방성과 협력을 끌어낸다.",
-            h: ["you", "invite", "openness", "and", "collaboration", "when", "you", "speak", "with", "your", "palm", "face", "up"],
-            a: [{w:"You", t:"b"}, {w:"invite", t:"b"}, {w:"openness", t:"b"}, {w:"and", t:"b"}, {w:"collaboration", t:"b"}, {w:"when", t:"b"}, {w:"you", t:"b"}, {w:"speak", t:"b"}, {w:"with", t:"f"}, {w:"your", t:"b"}, {w:"palms", t:"b"}, {w:"facing", t:"b"}, {w:"up.", t:"b"}]
-        },
-        {
-            k: "이 간단하지만 강력한 몸짓은 상대방이 더 편안함을 느끼고 대화에 더 기꺼이 참여하고 싶도록 만들 수 있다.",
-            h: ["this", "simple", "yet", "powerful", "gesture", "can", "make", "other", "feel", "more", "comfortable", "and", "willing", "to", "engage", "in", "conversation"],
-            a: [{w:"This", t:"b"}, {w:"simple", t:"b"}, {w:"yet", t:"b"}, {w:"powerful", t:"b"}, {w:"gesture", t:"b"}, {w:"can", t:"b"}, {w:"make", t:"b"}, {w:"others", t:"b"}, {w:"feel", t:"b"}, {w:"more", t:"b"}, {w:"comfortable", t:"b"}, {w:"and", t:"b"}, {w:"willing", t:"b"}, {w:"to", t:"f"}, {w:"engage", t:"b"}, {w:"in", t:"f"}, {w:"conversation.", t:"b"}]
-        },
-        {
-            k: "하지만 과도한 몸짓의 함정에 주의하라.",
-            h: ["but", "be", "careful", "of", "the", "trap", "of", "over-gesturing"],
-            a: [{w:"But", t:"b"}, {w:"be", t:"b"}, {w:"careful", t:"b"}, {w:"of", t:"f"}, {w:"the", t:"b"}, {w:"trap", t:"b"}, {w:"of", t:"f"}, {w:"over-gesturing.", t:"b"}]
-        },
-        {
-            k: "너무 많은 손동작은 여러분의 말로부터 (사람들의) 관심을 돌리게 해서 (그들을) 여러분의 메시지에 집중이 안 되게 한다.",
-            h: ["too", "many", "hand", "movement", "can", "distract", "from", "your", "message", "draw", "attention", "away", "from", "your", "word"],
-            a: [{w:"Too", t:"b"}, {w:"many", t:"b"}, {w:"hand", t:"b"}, {w:"movements", t:"b"}, {w:"can", t:"b"}, {w:"distract", t:"b"}, {w:"from", t:"f"}, {w:"your", t:"b"}, {w:"message,", t:"b"}, {w:"drawing", t:"b"}, {w:"attention", t:"b"}, {w:"away", t:"b"}, {w:"from", t:"f"}, {w:"your", t:"b"}, {w:"words.", t:"b"}]
-        },
-        {
-            k: "손이 마치 새처럼 빠르게 움직여서 자신의 메시지가 몸짓의 혼돈 속에 사라져 버린 발표자를 상상해 보라.",
-            h: ["imagine", "a", "speaker", "whose", "hand", "move", "quickly", "like", "bird", "their", "message", "lose", "in", "the", "chaos", "of", "their", "gesture"],
-            a: [{w:"Imagine", t:"b"}, {w:"a", t:"b"}, {w:"speaker", t:"b"}, {w:"whose", t:"b"}, {w:"hands", t:"b"}, {w:"move", t:"b"}, {w:"quickly", t:"b"}, {w:"like", t:"b"}, {w:"birds,", t:"b"}, {w:"their", t:"b"}, {w:"message", t:"b"}, {w:"lost", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"chaos", t:"b"}, {w:"of", t:"f"}, {w:"their", t:"b"}, {w:"gestures.", t:"b"}]
-        },
-        {
-            k: "균형이 핵심이다.",
-            h: ["balance", "be", "key"],
-            a: [{w:"Balance", t:"b"}, {w:"is", t:"b"}, {w:"key.", t:"b"}]
-        },
-        {
-            k: "여러분의 몸짓은 여러분의 말을 강조해야지, 말을 가려서는 안 된다.",
-            h: ["your", "gesture", "should", "highlight", "your", "word", "not", "overshadow", "them"],
-            a: [{w:"Your", t:"b"}, {w:"gestures", t:"b"}, {w:"should", t:"b"}, {w:"highlight", t:"b"}, {w:"your", t:"b"}, {w:"words,", t:"b"}, {w:"not", t:"b"}, {w:"overshadow", t:"b"}, {w:"them.", t:"b"}]
-        }
+    //
+    const fullData = [
+        { en: "Improving your gestural communication involves more than just knowing when to nod or shake hands.", ko: "몸짓을 사용하는 의사소통을 개선하는 것은 단순히 고개를 끄덕이거나 악수를 해야 할 때를 아는 것 이상을 포함한다.", voca: ["Improving:개선하는 것", "gestural:몸짓의", "communication:의사소통", "involves:포함하다", "more than:~이상", "just:단순히", "knowing:아는 것", "nod:끄덕이다", "shake hands:악수하다"] },
+        { en: "It’s about using gestures to complement your spoken messages, adding layers of meaning to your words.", ko: "이는 여러분의 말로 전하는 메시지를 보완하기 위해 여러분의 말에 여러 겹의 의미를 더하면서 몸짓을 사용하는 것에 대한 것이다.", voca: ["complement:보완하다", "layers:여러 겹", "gestures:몸짓", "spoken:말로 전하는", "meaning:의미", "adding:더하면서", "words:말", "using:사용하는"] },
+        { en: "Open-handed gestures, for example, can indicate honesty, creating an atmosphere of trust.", ko: "예를 들어 손바닥을 보이는 동작은 정직함을 나타내어 신뢰의 분위기를 만든다.", voca: ["Open-handed:손바닥을보이는", "indicate:나타내다", "honesty:정직함", "atmosphere:분위기", "trust:신뢰", "example:예시", "creating:만드는"] },
+        { en: "You invite openness and collaboration when you speak with your palms facing up.", ko: "손바닥을 위로 향한 채로 이야기할 때 여러분은 개방성과 협력을 끌어낸다.", voca: ["invite:끌어내다", "openness:개방성", "collaboration:협력", "palms:손바닥", "facing up:위로향한", "speak:말하다"] },
+        { en: "This simple yet powerful gesture can make others feel more comfortable and willing to engage in conversation.", ko: "이 간단하지만 강력한 몸짓은 상대방이 더 편안함을 느끼고 대화에 더 기꺼이 참여하고 싶도록 만들 수 있다.", voca: ["powerful:강력한", "comfortable:편안한", "willing to:기꺼이~하는", "engage in:참여하다", "conversation:대화"] },
+        { en: "But be careful of the trap of over-gesturing.", ko: "하지만 과도한 몸짓의 함정에 주의하라.", voca: ["careful:주의하는", "trap:함정", "over-gesturing:과도한몸짓"] },
+        { en: "Too many hand movements can distract from your message, drawing attention away from your words.", ko: "너무 많은 손동작은 여러분의 말로부터 관심을 돌리게 해서 여러분의 메시지에 집중이 안 되게 한다.", voca: ["movements:동작", "distract from:~을산만하게하다", "attention:주의", "away from:~로부터멀리", "drawing:끄는"] },
+        { en: "Imagine a speaker whose hands move quickly like birds, their message lost in the chaos of their gestures.", ko: "손이 마치 새처럼 빠르게 움직여서 자신의 메시지가 몸짓의 혼돈 속에 사라져 버린 발표자를 상상해 보라.", voca: ["Imagine:상상하다", "whose:그의", "quickly:빠르게", "chaos:혼돈", "lost:사라진", "speaker:발표자"] },
+        { en: "Balance is key.", ko: "균형이 핵심이다.", voca: ["Balance:균형", "key:핵심"] },
+        { en: "Your gestures should highlight your words, not overshadow them.", ko: "여러분의 몸짓은 여러분의 말을 강조해야지, 말을 가려서는 안 된다.", voca: ["highlight:강조하다", "overshadow:무색하게하다", "should:~해야한다"] }
     ];
 
+    let currentMode = 'INTRO';
     let currentIdx = 0;
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
+    const synth = window.speechSynthesis;
 
     function render() {
-        const quiz = allQuizzes[currentIdx];
-        document.getElementById('korean-display').innerText = quiz.k;
-        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
-        
-        const hArea = document.getElementById('hint-display');
-        hArea.innerHTML = '';
-        shuffle([...quiz.h]).forEach(word => {
-            const s = document.createElement('span');
-            s.className = 'hint-word';
-            s.innerText = word;
-            hArea.appendChild(s);
-        });
+        const area = document.getElementById('display-area');
+        const nav = document.getElementById('nav-area');
+        const header = document.getElementById('header-title');
+        area.innerHTML = '';
 
-        const wArea = document.getElementById('writing-display');
-        wArea.innerHTML = '';
-        quiz.a.forEach(item => {
-            const box = document.createElement('div');
-            box.className = 'word-box';
-            const blank = document.createElement('div');
-            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+        if (currentMode === 'INTRO') {
+            header.innerText = "English Master #20";
+            nav.classList.add('hidden');
+            area.innerHTML = `
+                <div class="main-title-card"><h1>Beyond Words:<br>Gestural Communication</h1><p>2025년 3월 고1 모의고사 20번</p></div>
+                <div class="intro-summary"><h3>📋 지문 요약</h3><p>• 몸짓은 메시지 보완의 도구<br>• 개방적 동작의 신뢰 형성<br>• 과도한 동작 지양 및 균형 강조</p></div>
+                <div class="intro-topic"><span class="topic-label">💡 Topic Sentence</span><p style="font-size:0.85rem; font-weight:600;">Gestures must balance with words to highlight, not overshadow, the message.</p></div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+            `;
+        } else if (currentMode === 'STEP2') {
+            header.innerText = `STEP 2. 문장 학습 (${currentIdx + 1}/10)`;
+            nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === 9) ? "FINISH" : "NEXT";
             
-            if(item.t === 'b') {
-                blank.onpointerdown = function(e) { 
-                    if (!this.classList.contains('revealed')) {
-                        speakFast(item.w); 
-                        this.classList.add('revealed');
-                    }
-                };
-            }
-            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
-            box.appendChild(blank);
-            wArea.appendChild(box);
-        });
+            const item = fullData[currentIdx];
+            area.innerHTML = `
+                <div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div>
+                <div class="voca-grid" id="voca-area"></div>
+                <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
+                <div id="trans-area" class="trans-content">${item.ko}</div>
+            `;
+            fillVoca(item.voca, '🍌', "#FFD600");
+        } else if (currentMode === 'STEP3') {
+            header.innerText = `STEP 3. 영작 연습 (${currentIdx + 1}/10)`;
+            nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === 9) ? "FINISH" : "NEXT";
 
-        document.getElementById('prev-btn').disabled = currentIdx === 0;
-        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+            const item = fullData[currentIdx];
+            area.innerHTML = `
+                <div class="kor-box">${item.ko}</div>
+                <div class="blank-area" id="blank-area"></div>
+                <div class="voca-grid" id="voca-area"></div>
+                <button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button>
+                <div id="trans-area" class="trans-content">${item.en}</div>
+            `;
+            fillBlanks(item.en);
+            fillVoca(item.voca, '🍇', "#9C27B0");
+        }
     }
 
-    function changeQuiz(dir) {
-        currentIdx += dir;
+    function fillVoca(vocaList, emoji, emojiColor) {
+        const container = document.getElementById('voca-area');
+        for (let i = 0; i < 10; i++) {
+            const div = document.createElement('div');
+            div.className = 'voca-item';
+            if (vocaList[i]) {
+                const [eng, kor] = vocaList[i].split(':');
+                div.innerText = eng;
+                div.onclick = function() {
+                    this.classList.toggle('revealed');
+                    this.innerText = this.classList.contains('revealed') ? kor : eng;
+                };
+            } else {
+                div.innerText = emoji;
+                div.style.color = emojiColor;
+                div.style.cursor = "default";
+            }
+            container.appendChild(div);
+        }
+    }
+
+ // 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
+
+    function startStep(step) {
+        currentMode = 'STEP' + step;
+        currentIdx = 0;
         render();
     }
 
-    loadVoice(); 
-    render();
-</script>
+    function nextSentence() {
+        if (currentIdx < 9) {
+            currentIdx++;
+            render();
+        } else {
+            currentMode = 'INTRO';
+            render();
+        }
+    }
 
+    function prevSentence() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            render();
+        }
+    }
+
+    function playTTS(text) {
+        synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        synth.speak(utterance);
+    }
+
+    function toggleView(id) {
+        const el = document.getElementById(id);
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    window.onload = render;
+</script>
 </body>
 </html>

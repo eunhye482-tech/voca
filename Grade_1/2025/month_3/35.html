@@ -3,283 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chalkboard Writing Class - Hero vs Villain</title>
+    <title>English Master #35 - Official Version</title>
     <style>
-        :root {
-            --chalkboard: #1e3932; 
-            --chalk-white: #ffffff;
-            --point-yellow: #fde047; 
-            --wood-frame: #451a03; 
+        :root { 
+            --lavender-light: #F3E5F5; 
+            --purple-pale: #E1BEE7; 
+            --purple-main: #9575CD; 
+            --purple-dark: #673AB7;
+            --pink-soft: #FFF0F6;
         }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
+        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        
+        .hidden { display: none !important; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        body {
-            font-family: 'Pretendard', -apple-system, sans-serif;
-            background-color: #0f172a;
-            margin: 0;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
+        .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
+        .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
+        .topic-kor { font-weight: bold; color: #D81B60; display: block; margin-bottom: 5px; }
+        .topic-eng { font-size: 0.85rem; color: #888; font-style: italic; }
 
-        .board-container {
-            width: 100%;
-            max-width: 1200px;
-            background-color: var(--chalkboard);
-            border: 15px solid var(--wood-frame);
-            border-radius: 10px;
-            padding: 50px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.2);
-            position: relative;
-        }
+        .sentence-box { background: var(--lavender-light); padding: 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 700; color: var(--purple-dark); margin-bottom: 15px; border: 2px solid var(--purple-pale); text-align: center; cursor: pointer; line-height: 1.5; }
+        .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
+        
+        .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item.revealed { background: var(--purple-main); color: white; }
+        
+        .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
+        .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
+        .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
 
-        .korean-sentence {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: var(--point-yellow);
-            text-align: center;
-            margin-bottom: 40px;
-            line-height: 1.6;
-            word-break: keep-all;
-            border-bottom: 1px solid rgba(253, 224, 71, 0.3);
-            padding-bottom: 20px;
-        }
-
-        .hint-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 60px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .hint-word {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 5px 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-        }
-
-        .writing-area {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px 15px;
-            min-height: 250px;
-        }
-
-        .word-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 85px;
-        }
-
-        .blank {
-            width: 100%;
-            border-bottom: 4px solid rgba(255, 255, 255, 0.4);
-            height: 65px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        .blank.fixed {
-            border-bottom: none;
-            cursor: default;
-        }
-
-        .word-text {
-            font-size: 1.7rem;
-            font-weight: 500;
-            color: var(--chalk-white);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .blank.fixed .word-text,
-        .blank.revealed .word-text {
-            opacity: 1;
-        }
-
-        .blank.revealed {
-            border-bottom-color: var(--point-yellow);
-        }
-
-        .blank.revealed .word-text {
-            color: var(--point-yellow);
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            align-items: center;
-        }
-
-        .page-info {
-            color: var(--chalk-white);
-            font-size: 1.2rem;
-        }
-
-        button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            border: 2px solid var(--point-yellow);
-            background: transparent;
-            color: var(--point-yellow);
-            cursor: pointer;
-        }
-
-        button:disabled {
-            border-color: #4b5563;
-            color: #4b5563;
-            cursor: not-allowed;
-        }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
     </style>
 </head>
 <body>
-
-<div class="board-container">
-    <div id="korean-display" class="korean-sentence"></div>
-    <div id="hint-display" class="hint-container"></div>
-    <div id="writing-display" class="writing-area"></div>
-
-    <div class="controls">
-        <button id="prev-btn" onclick="changeQuiz(-1)">PREV</button>
-        <div id="page-info" class="page-info">1 / 6</div>
-        <button id="next-btn" onclick="changeQuiz(1)">NEXT</button>
+<div class="phone-container">
+    <div class="header" id="header-title">English Master #35</div>
+    <div id="display-area"></div>
+    <div id="nav-area" class="nav-btns-fixed hidden">
+        <button class="btn-prev" onclick="prevSentence()">PREV</button>
+        <button class="btn-next" onclick="nextSentence()" id="main-next-btn">NEXT</button>
     </div>
 </div>
 
 <script>
-    const synth = window.speechSynthesis;
-    let voice = null;
-    let utter = new SpeechSynthesisUtterance();
-
-    function loadVoice() {
-        const voices = synth.getVoices();
-        voice = voices.find(v => v.lang.includes('en-US')) || voices[0];
-        const silent = new SpeechSynthesisUtterance("");
-        silent.volume = 0;
-        synth.speak(silent);
-    }
-
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = loadVoice;
-    }
-
-    function speakFast(text) {
-        synth.cancel();
-        const cleanText = text.replace(/[.,“”?—]/g, "");
-        utter.text = cleanText;
-        utter.voice = voice;
-        utter.lang = 'en-US';
-        utter.rate = 1.1;
-        synth.speak(utter);
-    }
-
-    const allQuizzes = [
-        {
-            k: "등장인물이 악당과 대비되는 영웅이라는 것은 무슨 의미인가?",
-            h: ["what", "do", "it", "mean", "for", "a", "character", "to", "be", "a", "hero", "as", "oppose", "to", "a", "villain"],
-            a: [{w:"What", t:"b"}, {w:"does", t:"b"}, {w:"it", t:"b"}, {w:"mean", t:"b"}, {w:"for", t:"f"}, {w:"a", t:"b"}, {w:"character", t:"b"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"a", t:"b"}, {w:"hero", t:"b"}, {w:"as", t:"f"}, {w:"opposed", t:"b"}, {w:"to", t:"f"}, {w:"a", t:"b"}, {w:"villain?", t:"b"}]
-        },
-        {
-            k: "예술적이고 오락적인 묘사에서 작가가 주인공과 관객 사이에 긍정적인 관계를 수립하는 것이 필수적이다.",
-            h: ["in", "artistic", "and", "entertainment", "description", "it", "be", "essential", "for", "the", "author", "to", "establish", "a", "positive", "relationship", "between", "a", "protagonist", "and", "the", "audience"],
-            a: [{w:"In", t:"f"}, {w:"artistic", t:"b"}, {w:"and", t:"b"}, {w:"entertainment", t:"b"}, {w:"descriptions,", t:"b"}, {w:"it’s", t:"b"}, {w:"essential", t:"b"}, {w:"for", t:"f"}, {w:"the", t:"b"}, {w:"author", t:"b"}, {w:"to", t:"f"}, {w:"establish", t:"b"}, {w:"a", t:"b"}, {w:"positive", t:"b"}, {w:"relationship", t:"b"}, {w:"between", t:"f"}, {w:"a", t:"b"}, {w:"protagonist", t:"b"}, {w:"and", t:"b"}, {w:"the", t:"b"}, {w:"audience.", t:"b"}]
-        },
-        {
-            k: "비극이 감정적 반응을 끌어내기 위해 등장인물은 친구 또는 적 중 하나로 인식될 수 있도록 조정되어야 한다.",
-            h: ["in", "order", "for", "tragedy", "or", "misfortune", "to", "draw", "out", "an", "emotional", "response", "in", "viewer", "the", "character", "must", "be", "adjust", "so", "as", "to", "be", "recognizable", "as", "either", "friend", "or", "enemy"],
-            a: [{w:"In", t:"f"}, {w:"order", t:"b"}, {w:"for", t:"f"}, {w:"tragedy", t:"b"}, {w:"or", t:"b"}, {w:"misfortune", t:"b"}, {w:"to", t:"f"}, {w:"draw", t:"b"}, {w:"out", t:"f"}, {w:"an", t:"b"}, {w:"emotional", t:"b"}, {w:"response", t:"b"}, {w:"in", t:"f"}, {w:"viewers,", t:"b"}, {w:"the", t:"b"}, {w:"character", t:"b"}, {w:"must", t:"b"}, {w:"be", t:"b"}, {w:"adjusted", t:"b"}, {w:"so", t:"b"}, {w:"as", t:"f"}, {w:"to", t:"f"}, {w:"be", t:"b"}, {w:"recognizable", t:"b"}, {w:"as", t:"f"}, {w:"either", t:"b"}, {w:"friend", t:"b"}, {w:"or", t:"b"}, {w:"enemy.", t:"b"}]
-        },
-        {
-            k: "우리는 주인공이 행동이 우리에게 이로움을 주는 누군가이며 가치 있는 동료나 협력자라고 느껴야 한다.",
-            h: ["whether", "the", "portrayal", "be", "fictional", "or", "documentary", "we", "must", "feel", "that", "the", "protagonist", "be", "someone", "whose", "action", "benefit", "us", "the", "protagonist", "be", "or", "would", "be", "a", "worthy", "companion", "or", "valued", "ally"],
-            a: [{w:"Whether", t:"b"}, {w:"the", t:"b"}, {w:"portrayal", t:"b"}, {w:"is", t:"b"}, {w:"fictional", t:"b"}, {w:"or", t:"b"}, {w:"documentary,", t:"b"}, {w:"we", t:"b"}, {w:"must", t:"b"}, {w:"feel", t:"b"}, {w:"that", t:"b"}, {w:"the", t:"b"}, {w:"protagonist", t:"b"}, {w:"is", t:"b"}, {w:"someone", t:"b"}, {w:"whose", t:"b"}, {w:"actions", t:"b"}, {w:"benefit", t:"b"}, {w:"us;", t:"b"}, {w:"the", t:"b"}, {w:"protagonist", t:"b"}, {w:"is,", t:"b"}, {w:"or", t:"b"}, {w:"would", t:"b"}, {w:"be,", t:"b"}, {w:"a", t:"b"}, {w:"worthy", t:"b"}, {w:"companion", t:"b"}, {w:"or", t:"b"}, {w:"valued", t:"b"}, {w:"ally.", t:"b"}]
-        },
-        {
-            k: "폭력 액션 영화는 흔히 관객의 반응을 거의 끌어내지 않는 비중이 적은 등장인물의 많은 죽음으로 가득 차 있다.",
-            h: ["violent", "action", "film", "be", "often", "fill", "with", "dozen", "of", "incidental", "death", "of", "minor", "character", "that", "draw", "out", "little", "response", "in", "the", "audience"],
-            a: [{w:"Violent", t:"b"}, {w:"action", t:"b"}, {w:"films", t:"b"}, {w:"are", t:"b"}, {w:"often", t:"b"}, {w:"filled", t:"b"}, {w:"with", t:"f"}, {w:"dozens", t:"b"}, {w:"of", t:"f"}, {w:"incidental", t:"b"}, {w:"deaths", t:"b"}, {w:"of", t:"f"}, {w:"minor", t:"b"}, {w:"characters", t:"b"}, {w:"that", t:"b"}, {w:"draw", t:"b"}, {w:"out", t:"f"}, {w:"little", t:"b"}, {w:"response", t:"b"}, {w:"in", t:"f"}, {w:"the", t:"b"}, {w:"audience.", t:"b"}]
-        },
-        {
-            k: "강한 감정을 느끼기 위해 관객은 협력자 또는 적 중 하나로 등장인물에게 감정적으로 연관되어 있어야 한다.",
-            h: ["in", "order", "to", "feel", "strong", "emotion", "the", "audience", "must", "be", "emotionally", "invest", "in", "a", "character", "as", "either", "ally", "or", "enemy"],
-            a: [{w:"In", t:"f"}, {w:"order", t:"b"}, {w:"to", t:"f"}, {w:"feel", t:"b"}, {w:"strong", t:"b"}, {w:"emotions,", t:"b"}, {w:"the", t:"b"}, {w:"audience", t:"b"}, {w:"must", t:"b"}, {w:"be", t:"b"}, {w:"emotionally", t:"b"}, {w:"invested", t:"b"}, {w:"in", t:"f"}, {w:"a", t:"b"}, {w:"character", t:"b"}, {w:"as", t:"f"}, {w:"either", t:"b"}, {w:"ally", t:"b"}, {w:"or", t:"b"}, {w:"enemy.", t:"b"}]
-        }
+    const fullData = [
+        { en: "What does it mean for a character to be a hero as opposed to a villain?", ko: "어떤 캐릭터가 악당이 아니라 영웅이라는 것은 무엇을 의미할까요?", voca: ["character:캐릭터", "hero:영웅", "as opposed to:~와대조적으로", "villain:악당", "mean:의미하다", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "In artistic and entertainment descriptions, it’s essential for the author to establish a positive relationship between a protagonist and the audience.", ko: "예술적이고 오락적인 묘사에서, 작가가 주인공과 관객 사이에 긍정적인 관계를 형성하는 것은 필수적입니다.", voca: ["artistic:예술적인", "essential:필수적인", "author:작가", "establish:형성하다", "positive:긍정적인", "relationship:관계", "protagonist:주인공", "audience:관객", "entertainment:오락", "descriptions:묘사"] },
+        { en: "In order for tragedy or misfortune to draw out an emotional response in viewers, the character must be adjusted so as to be recognizable as either friend or enemy.", ko: "비극이나 불행이 시청자들에게 정서적 반응을 이끌어내기 위해서는, 그 캐릭터가 친구나 적 중 하나로 인식될 수 있도록 조정되어야 합니다.", voca: ["tragedy:비극", "misfortune:불행", "draw out:이끌어내다", "emotional:정서적인", "response:반응", "adjusted:조정된", "recognizable:인식가능한", "either:둘중하나", "friend:친구", "enemy:적"] },
+        { en: "Whether the portrayal is fictional or documentary, we must feel that the protagonist is someone whose actions benefit us; the protagonist is, or would be, a worthy companion or valued ally.", ko: "묘사가 허구이든 다큐멘터리이든 상관없이, 우리는 주인공이 우리에게 이익을 주는 행동을 하는 사람이라고 느껴야 합니다. 즉 주인공은 가치 있는 동반자이거나 소중한 아군이며, 혹은 그렇게 될 사람이어야 합니다.", voca: ["portrayal:묘사", "fictional:허구의", "documentary:다큐멘터리", "benefit:이익을주다", "worthy:가치있는", "companion:동반자", "valued:소중한", "ally:아군", "actions:행동", "must:해야한다"] },
+        { en: "Violent action films are often filled with dozens of incidental deaths of minor characters that draw out little response in the audience.", ko: "폭력적인 액션 영화들은 종종 관객들에게 거의 반응을 이끌어내지 못하는 단역 캐릭터들의 수십 가지 부수적인 죽음으로 가득 차 있습니다.", voca: ["violent:폭력적인", "filled with:~로가득찬", "dozens:수십의", "incidental:부수적인", "deaths:죽음", "minor:단역의", "characters:캐릭터", "little:거의없는", "often:종종", "response:반응"] },
+        { en: "In order to feel strong emotions, the audience must be emotionally invested in a character as either ally or enemy.", ko: "강렬한 감정을 느끼기 위해서, 관객은 아군이나 적 중 하나로서 캐릭터에 정서적으로 몰입해야 합니다.", voca: ["feel:느끼다", "strong:강렬한", "emotions:감정", "emotionally:정서적으로", "invested:몰입된/투자된", "character:캐릭터", "either:둘중하나", "ally:아군", "enemy:적", "must:해야한다"] }
     ];
 
+    let currentMode = 'INTRO';
     let currentIdx = 0;
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
+    const synth = window.speechSynthesis;
 
     function render() {
-        const quiz = allQuizzes[currentIdx];
-        document.getElementById('korean-display').innerText = quiz.k;
-        document.getElementById('page-info').innerText = `${currentIdx + 1} / ${allQuizzes.length}`;
-        
-        const hArea = document.getElementById('hint-display');
-        hArea.innerHTML = '';
-        shuffle([...quiz.h]).forEach(word => {
-            const s = document.createElement('span');
-            s.className = 'hint-word';
-            s.innerText = word;
-            hArea.appendChild(s);
-        });
+        const area = document.getElementById('display-area');
+        const nav = document.getElementById('nav-area');
+        const header = document.getElementById('header-title');
+        area.innerHTML = '';
 
-        const wArea = document.getElementById('writing-display');
-        wArea.innerHTML = '';
-        quiz.a.forEach(item => {
-            const box = document.createElement('div');
-            box.className = 'word-box';
-            const blank = document.createElement('div');
-            blank.className = item.t === 'f' ? 'blank fixed' : 'blank';
+        if (currentMode === 'INTRO') {
+            header.innerText = "English Master #35";
+            nav.classList.add('hidden');
+            area.innerHTML = `
+                <div class="main-title-card"><h1>Character Affinity and<br>Emotional Response</h1><p>2025년 3월 고1 모의고사 35번</p></div>
+                <div class="intro-summary">
+                    <p>• <b>📍 서론:</b> 주인공과 관객 사이의 긍정적 관계 형성은 작품에서 필수적임.</p>
+                    <p>• <b>📍 본론:</b> 관객이 비극에 반응하려면 캐릭터가 아군 혹은 적군으로 인식되어야 함.</p>
+                    <p>• <b>📍 결론:</b> 강렬한 감정적 몰입은 캐릭터를 소중한 동료나 명확한 적으로 느낄 때 발생함.</p>
+                </div>
+                <div class="intro-topic">
+                    <span class="topic-kor">주제: 관객의 감정적 몰입을 위한 주인공과의 관계 형성의 중요성</span>
+                    <span class="topic-eng">Topic: The Importance of Establishing a Relationship with Characters for Emotional Engagement</span>
+                </div>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+            `;
+        } else if (currentMode === 'STEP2' || currentMode === 'STEP3') {
+            const stepNum = currentMode === 'STEP2' ? 2 : 3;
+            header.innerText = `STEP ${stepNum}. ${stepNum === 2 ? '문장 학습' : '영작 연습'} (${currentIdx + 1}/${fullData.length})`;
+            nav.classList.remove('hidden');
+            document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
             
-            if(item.t === 'b') {
-                blank.onpointerdown = function(e) { 
-                    if (!this.classList.contains('revealed')) {
-                        speakFast(item.w); 
-                        this.classList.add('revealed');
-                    }
-                };
+            const item = fullData[currentIdx];
+            if (currentMode === 'STEP2') {
+                area.innerHTML = `
+                    <div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.ko}</div>
+                `;
+                fillVoca(item.voca, '🍌', "#FFD600");
+            } else {
+                area.innerHTML = `
+                    <div class="kor-box">${item.ko}</div>
+                    <div class="blank-area" id="blank-area"></div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.en}</div>
+                `;
+                fillBlanks(item.en);
+                fillVoca(item.voca, '🍇', "#9C27B0");
             }
-            blank.innerHTML = `<span class="word-text">${item.w}</span>`;
-            box.appendChild(blank);
-            wArea.appendChild(box);
-        });
-
-        document.getElementById('prev-btn').disabled = currentIdx === 0;
-        document.getElementById('next-btn').disabled = currentIdx === allQuizzes.length - 1;
+        }
     }
 
-    function changeQuiz(dir) {
-        currentIdx += dir;
-        render();
+    function fillVoca(vocaList, emoji, emojiColor) {
+        const container = document.getElementById('voca-area');
+        for (let i = 0; i < 10; i++) {
+            const div = document.createElement('div');
+            div.className = 'voca-item';
+            if (vocaList[i]) {
+                const [eng, kor] = vocaList[i].split(':');
+                div.innerText = eng;
+                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? kor : eng; };
+            } else {
+                div.innerText = emoji; div.style.color = emojiColor; div.style.cursor = "default";
+            }
+            container.appendChild(div);
+        }
     }
 
-    loadVoice(); 
-    render();
+ // 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
+
+    function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
+    function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
+    function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
+    function playTTS(text) { synth.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.9; synth.speak(utterance); }
+    function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
+    window.onload = render;
 </script>
-
 </body>
 </html>

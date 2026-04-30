@@ -3,185 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Writing Practice - Main Selection</title>
+    <title>English Master - Main Selection</title>
     <style>
         :root { 
-            --bg-deep-navy: #0f172a;
-            --bg-card: rgba(30, 41, 59, 0.7);
-            --point-yellow: #fde047; /* 진한 노란색 */
-            --point-green: #10b981;  /* 선명한 녹색 */
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --mint-dark: #00796B; /* 진한 민트색 */
+            --mint-pale: #B2DFDB; 
+            --black: #000000; /* 세컨 컬러 */
+            --yellow-point: #FFEB3B; /* 포인트 노랑색 */
+            --white: #FFFFFF;
+            --gray-light: #F5F5F5;
         }
-
-        body { 
-            font-family: 'Pretendard', -apple-system, sans-serif; 
-            margin: 0; 
-            background: var(--bg-deep-navy); 
-            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
-            background-attachment: fixed;
-            display: flex; 
-            justify-content: center; 
-            min-height: 100vh;
-            color: var(--text-main);
-        }
-
-        .pad-container { 
-            width: 100%; 
-            max-width: 950px; /* 패드 화면에 맞는 넓은 너비 */
-            padding: 50px 30px;
-            display: flex; 
-            flex-direction: column; 
-            gap: 35px;
-        }
-
-        .header { 
-            text-align: center; 
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 3.5rem;
-            letter-spacing: -1.5px;
-            background: linear-gradient(to right, var(--point-yellow), var(--point-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
-        .header p {
-            margin-top: 15px;
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            letter-spacing: 3px;
-            font-weight: 500;
-        }
-
-        .section-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            padding: 35px;
-            border-radius: 28px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
-        }
-
-        .section-label { 
-            font-size: 1.1rem; 
-            font-weight: 800; 
-            color: var(--point-green); /* 섹션 제목은 그린 */
-            margin-bottom: 25px; 
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-label::before {
-            content: "";
-            width: 4px;
-            height: 18px;
-            background: var(--point-yellow); /* 라벨 앞 포인트는 옐로우 */
-            border-radius: 2px;
-        }
-
-        .btn-group { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 12px; 
-        }
-
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: var(--gray-light); display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: var(--white); display: flex; flex-direction: column; position: relative; border: 1px solid #eee; }
+        .header { padding: 15px; text-align: center; font-weight: bold; color: var(--white); border-bottom: 2px solid var(--black); background: var(--mint-dark); font-size: 1.1rem; }
+        .content { flex: 1; padding: 20px; overflow-y: auto; background: var(--white); }
+        .section-label { font-size: 0.9rem; font-weight: bold; color: var(--black); margin: 20px 0 10px 5px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        .section-label:first-child { margin-top: 5px; }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
         button { 
-            border: 1px solid var(--glass-border); 
-            background: rgba(255, 255, 255, 0.05); 
-            border-radius: 16px; 
-            padding: 18px 25px; 
-            font-weight: 700; 
-            font-size: 1.1rem;
-            color: var(--text-main);
+            border: 1.5px solid var(--mint-pale); 
+            background: var(--white); 
+            border-radius: 8px; 
+            padding: 12px; 
+            font-weight: 600; 
             cursor: pointer; 
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
+            color: var(--mint-dark);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-
-        /* 호버 효과 */
-        @media (hover: hover) {
-            button:hover {
-                background: rgba(255, 255, 255, 0.1);
-                border-color: var(--text-muted);
-            }
+        button:hover {
+            border-color: var(--mint-dark);
         }
-
-        /* 선택된 버튼 스타일: 노란색 테두리와 그림자 */
-        button.selected { 
-            background: var(--point-yellow); 
-            color: var(--bg-deep-navy); 
-            border-color: var(--point-yellow); 
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 10px 20px rgba(253, 224, 71, 0.25);
+        button:active, button.selected { 
+            background: var(--mint-dark); 
+            color: var(--white); 
+            border-color: var(--mint-dark); 
+            box-shadow: 0 4px 10px rgba(0, 121, 107, 0.3);
         }
-
-        /* 패드 화면 버튼 너비 최적화 */
-        .grade-btn { flex: 1; min-width: 150px; }
-        .year-btn { width: calc(20% - 10px); }
-        .month-btn { width: calc(25% - 9px); }
-        .num-btn { width: calc(12.5% - 11px); min-width: 75px; padding: 15px 0; }
-
-        .footer { 
-            margin-top: 20px;
-            position: sticky;
-            bottom: 40px;
+        button.selected::after {
+            content: ' ✓';
+            color: var(--yellow-point); /* 선택된 버튼에 노랑색 체크 표시 */
         }
-
-        .btn-start-final { 
-            background: linear-gradient(135deg, var(--point-yellow) 0%, #eab308 100%);
-            color: #0f172a; 
-            padding: 28px; 
-            border-radius: 22px; 
-            border: none; 
-            font-size: 1.6rem; 
-            font-weight: 900; 
-            cursor: pointer; 
-            width: 100%; 
-            transition: all 0.3s;
-            box-shadow: 0 15px 35px rgba(234, 179, 8, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
+        .grade-btn { flex: 1; min-width: 90px; }
+        .year-btn { width: calc(33.33% - 7px); }
+        .month-btn { width: calc(50% - 5px); }
+        .num-btn { width: calc(20% - 8px); font-size: 0.85rem; padding: 10px 0; }
+        .footer { padding: 20px; background: var(--white); border-top: 1px solid #eee; }
+        .btn-start-final { background: var(--black); color: var(--yellow-point); padding: 18px; border-radius: 12px; border: 2px solid var(--black); font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-start-final:hover {
+            background: var(--mint-dark);
+            border-color: var(--mint-dark);
+            color: var(--white);
         }
-
         .btn-start-final:active {
-            transform: scale(0.97);
-            filter: brightness(1.1);
+            transform: scale(0.98);
         }
-
-        /* 스크롤바 디자인 */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
     </style>
 </head>
 <body>
-<div class="pad-container">
-    <div class="header">
-        <h1>Writing Practice</h1>
-        <p>CHOOSE YOUR STUDY MISSION</p>
-    </div>
-    
-    <div class="section-card">
-        <span class="section-label">SELECT GRADE</span>
+<div class="phone-container">
+    <div class="header">English Master - 지문 선택</div>
+    <div class="content">
+        <span class="section-label">📍 학년 선택</span>
         <div class="btn-group">
-            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_1')">고1 (Grade 1)</button>
-            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_2')">고2 (Grade 2)</button>
-            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_3')">고3 (Grade 3)</button>
+            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_1')">고1</button>
+            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_2')">고2</button>
+            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_3')">고3</button>
         </div>
-    </div>
 
-    <div class="section-card">
-        <span class="section-label">SELECT YEAR</span>
+        <span class="section-label">📅 연도 선택</span>
         <div class="btn-group">
             <button class="year-btn" onclick="select(this, 'year', '2022')">2022</button>
             <button class="year-btn" onclick="select(this, 'year', '2023')">2023</button>
@@ -189,20 +79,16 @@
             <button class="year-btn" onclick="select(this, 'year', '2025')">2025</button>
             <button class="year-btn" onclick="select(this, 'year', '2026')">2026</button>
         </div>
-    </div>
 
-    <div class="section-card">
-        <span class="section-label">SELECT MONTH</span>
+        <span class="section-label">🗓️ 시행월 선택</span>
         <div class="btn-group">
-            <button class="month-btn" onclick="select(this, 'month', 'month_3')">3월 (Mar)</button>
-            <button class="month-btn" onclick="select(this, 'month', 'month_6')">6월 (Jun)</button>
-            <button class="month-btn" onclick="select(this, 'month', 'month_9')">9월 (Sep)</button>
-            <button class="month-btn" onclick="select(this, 'month', 'month_11')">11월 (Nov)</button>
+            <button class="month-btn" onclick="select(this, 'month', 'month_3')">3월</button>
+            <button class="month-btn" onclick="select(this, 'month', 'month_6')">6월</button>
+            <button class="month-btn" onclick="select(this, 'month', 'month_9')">9월</button>
+            <button class="month-btn" onclick="select(this, 'month', 'month_11')">11월</button>
         </div>
-    </div>
 
-    <div class="section-card">
-        <span class="section-label">QUESTION NUMBER</span>
+        <span class="section-label">🔢 문항 번호 선택</span>
         <div class="btn-group">
             <button class="num-btn" onclick="select(this, 'num', '20')">20</button>
             <button class="num-btn" onclick="select(this, 'num', '21')">21</button>
@@ -225,13 +111,12 @@
     </div>
 
     <div class="footer">
-        <button class="btn-start-final" onclick="startLearning()">
-            PRACTICE START <span>▶</span>
-        </button>
+        <button class="btn-start-final" onclick="startLearning()">지문 학습 시작 ▶</button>
     </div>
 </div>
 
 <script>
+    // 선택된 실제 폴더 경로 값을 저장하는 변수입니다
     let selections = { grade: '', year: '', month: '', num: '' };
 
     function select(el, type, folderName) {
@@ -239,18 +124,23 @@
         buttons.forEach(btn => btn.classList.remove('selected'));
         el.classList.add('selected');
         
+        // 버튼 텍스트 대신 'Grade_1' 같은 실제 폴더명을 저장합니다
         selections[type] = folderName || el.innerText;
     }
 
     function startLearning() {
         if (!selections.grade || !selections.year || !selections.month || !selections.num) {
-            alert('모든 항목을 선택해 주세요! (Please select all options)');
+            alert('모든 항목을 선택해 주세요!');
             return;
         }
 
+        // 사용자님의 컴퓨터 폴더 구조에 맞춰 경로를 생성합니다
+        // 예: ./Grade_1/2025/month_3/20.html
         const targetPath = `./${selections.grade}/${selections.year}/${selections.month}/${selections.num}.html`;
+        
+        // 생성된 경로로 이동합니다
         window.location.href = targetPath;
     }
 </script>
 </body>
-</html>
+</html>s
