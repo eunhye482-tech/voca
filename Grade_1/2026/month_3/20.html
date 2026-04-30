@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클릭 정답 확인 영작 연습</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+        .exercise-box {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 1px solid #e1e4e8;
+            border-radius: 12px;
+            position: relative;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: #2980b9;
+            margin-top: 0;
+        }
+        .korean-guide {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+            border-left: 4px solid #3498db;
+        }
+        .word-list {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .writing-area {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.3rem;
+            line-height: 2.5;
+            word-spacing: 3px;
+        }
+        /* 빈칸 스타일 */
+        .blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid #333;
+            text-align: center;
+            cursor: pointer;
+            color: transparent; /* 평소에는 글자를 숨김 */
+            transition: all 0.3s ease;
+            padding: 0 10px;
+        }
+        /* 클릭했을 때 나타나는 스타일 */
+        .blank.reveal {
+            color: #e74c3c;
+            border-bottom-color: #e74c3c;
+            font-weight: bold;
+        }
+        .hint {
+            font-size: 0.8rem;
+            color: #95a5a6;
+            margin-top: 10px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Smart Writing Practice</h1>
+    <p style="text-align: center; color: #7f8c8d;">빈칸을 클릭하면 정답이 나타납니다!</p>
+
+    <!-- Exercise 1 -->
+    <div class="exercise-box">
+        <h2>Exercise 1. 일반동사 활용문</h2>
+        <div class="korean-guide">
+            개인적인 이야기는 설득을 위한 토대를 마련하기 위해 화자와 청중을 효과적으로 연결한다.
+        </div>
+        <div class="word-list">
+            <b>Keywords:</b> personal, story, connect, speaker, foundation, persuasion
+        </div>
+        <div class="writing-area">
+            <span class="blank" onclick="reveal(this)">Personal</span> 
+            <span class="blank" onclick="reveal(this)">stories</span> 
+            effectively 
+            <span class="blank" onclick="reveal(this)">connect</span> 
+            a 
+            <span class="blank" onclick="reveal(this)">speaker</span> 
+            with an audience to build a 
+            <span class="blank" onclick="reveal(this)">foundation</span> 
+            for 
+            <span class="blank" onclick="reveal(this)">persuasion</span>.
+        </div>
+        <div class="hint">* Click each blank to check answer</div>
+    </div>
+
+    <!-- Exercise 2 -->
+    <div class="exercise-box">
+        <h2>Exercise 2. be동사 활용문</h2>
+        <div class="korean-guide">
+            개인적인 일화를 공유하는 것은 낯선 이들과 진정성 있는 유대감을 형성하는 가장 강력한 방법이다.
+        </div>
+        <div class="word-list">
+            <b>Keywords:</b> share, anecdote, powerful, establish, authentic, bond
+        </div>
+        <div class="writing-area">
+            <span class="blank" onclick="reveal(this)">Sharing</span> 
+            a personal 
+            <span class="blank" onclick="reveal(this)">anecdote</span> 
+            is the most 
+            <span class="blank" onclick="reveal(this)">powerful</span> 
+            way to 
+            <span class="blank" onclick="reveal(this)">establish</span> 
+            an 
+            <span class="blank" onclick="reveal(this)">authentic</span> 
+            <span class="blank" onclick="reveal(this)">bond</span> 
+            with strangers.
+        </div>
+        <div class="hint">* Click each blank to check answer</div>
+    </div>
+</div>
+
+<script>
+    // 클릭 시 'reveal' 클래스를 추가/제거하는 함수
+    function reveal(element) {
+        element.classList.toggle('reveal');
+    }
+</script>
+
+</body>
+</html>
