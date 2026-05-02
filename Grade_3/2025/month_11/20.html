@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #20 - 11월 모의고사</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Master #20 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -12,13 +12,13 @@
             --purple-dark: #673AB7;
             --pink-soft: #FFF0F6;
         }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
-        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
-        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
+        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
         /* STEP 1: 인트로 (서론/본론/결론 명시) */
@@ -41,7 +41,7 @@
 
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -56,13 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "One of the most important aspects of sustaining long-term relationships is communication.", ko: "장기적인 관계를 유지하는 가장 중요한 측면 중 하나는 소통입니다.", voca: ["sustaining:유지하는", "long-term:장기적인", "aspects:측면들", "communication:소통", "One of:~ 중 하나", "important:중요한", "relationships:관계들", "is:~이다", "🍌", "🍌"] },
-        { en: "It’s easy to connect with someone and then let the relationship get stuck due to a lack of follow-up.", ko: "누군가와 연결된 후 사후 관리의 부족으로 인해 관계가 정체되게 두는 것은 쉽습니다.", voca: ["connect:연결하다", "stuck:정체된/갇힌", "due to:~때문에", "lack:부족", "follow-up:사후 관리", "easy:쉬운", "relationship:관계", "let:하게 두다", "someone:누군가", "🍌"] },
-        { en: "To keep the connection alive, make a conscious effort to stay in touch.", ko: "관계를 계속 유지하기 위해서, 연락을 취하려는 의식적인 노력을 하십시오.", voca: ["connection:관계/연결", "alive:살아있는/유효한", "conscious:의식적인", "effort:노력", "stay in touch:연락을 유지하다", "make:하다", "keep:유지하다", "to:~하기 위해", "🍌", "🍌"] },
-        { en: "This doesn’t mean constantly reaching out with requests or updates but rather maintaining a friendly and consistent line of communication.", ko: "이것은 끊임없이 요청이나 업데이트를 가지고 연락하는 것을 의미하는 것이 아니라, 오히려 친절하고 일관된 소통의 선을 유지하는 것을 의미합니다.", voca: ["constantly:끊임없이", "reaching out:연락을 취하다", "requests:요청", "maintaining:유지하는 것", "friendly:친밀한", "consistent:일관된", "rather:오히려", "mean:의미하다", "line:선/연결", "🍌"] },
-        { en: "A simple message to check in or share something of value can go a long way in reinforcing your relationship.", ko: "안부를 묻거나 가치 있는 것을 공유하기 위한 간단한 메시지는 당신의 관계를 강화하는 데 큰 도움이 될 수 있습니다.", voca: ["check in:안부를 묻다", "value:가치", "go a long way:큰 도움이 되다", "reinforcing:강화하는", "simple:간단한", "message:메시지", "share:공유하다", "something:무언가", "relationship:관계", "🍌"] },
-        { en: "For example, if you come across an article or resource that you think might interest a connection, share it with them, even if you haven’t spoken in a while.", ko: "예를 들어, 만약 당신이 어떤 지인에게 흥미로울 것 같은 기사나 자료를 우연히 발견한다면, 한동안 이야기를 나누지 않았더라도 그것을 그들과 공유하십시오.", voca: ["come across:우연히 발견하다", "article:기사", "resource:자료/자원", "interest:흥미를 끌다", "connection:지인/관계", "share:공유하다", "even if:비록 ~일지라도", "spoken:말을 한", "example:예시", "🍌"] },
-        { en: "This shows that you’re thinking of them and are invested in maintaining the relationship.", ko: "이것은 당신이 그들을 생각하고 있으며 관계를 유지하는 데 정성을 들이고 있다는 것을 보여줍니다.", voca: ["invested in:~에 정성을 들이는", "maintaining:유지하는 것", "relationship:관계", "shows:보여주다", "thinking of:~을 생각하는", "them:그들", "that:~라는 것을", "and:그리고", "🍌", "🍌"] }
+        { en: "People often ask me, 'What surprises you most about habits?'", ko: "사람들은 종종 나에게 '습관에 대해 무엇이 당신을 가장 놀라게 하나요?'라고 묻습니다.", voca: ["habits:습관", "surprises:놀라게하다", "often:종종", "most:가장", "ask:묻다", "people:사람들", "about:~에대해", "what:무엇", "me:나에게", "🍌"] },
+        { en: "One thing that continually astonishes me is the degree to which we’re influenced by sheer convenience.", ko: "나를 계속해서 깜짝 놀라게 하는 한 가지는 우리가 순전한 편리함에 의해 영향을 받는 정도입니다.", voca: ["continually:계속해서", "astonishes:놀라게하다", "degree:정도", "influenced:영향을받는", "sheer:순전한", "convenience:편리함", "thing:것", "which:그것", "we are:우리는", "🍌"] },
+        { en: "The amount of effort, time, or decision making required by an action has a huge influence on habit formation.", ko: "행동에 요구되는 노력, 시간, 또는 의사 결정의 양은 습관 형성에 큰 영향을 미칩니다.", voca: ["effort:노력", "decision making:의사결정", "required:요구되는", "huge:거대한/큰", "influence:영향", "formation:형성", "amount:양", "action:행동", "habit:습관", "time:시간"] },
+        { en: "To a truly remarkable extent, we’re more likely to do something if it’s convenient, and less likely if it’s not.", ko: "정말로 주목할 만한 정도로, 우리는 어떤 일이 편리하면 그것을 할 가능성이 더 높고, 편리하지 않으면 그럴 가능성이 낮습니다.", voca: ["remarkable:주목할만한", "extent:정도", "more likely:더~할것같은", "convenient:편리한", "less likely:덜~할것같은", "truly:정말로", "something:무언가", "if:~라면", "🍌", "🍌"] },
+        { en: "For this reason, we should pay close attention to the convenience of any activity we want to make into a habit.", ko: "이러한 이유로, 우리는 습관으로 만들고 싶은 모든 활동의 편리함에 세심한 주의를 기울여야 합니다.", voca: ["reason:이유", "pay attention:주의를기울이다", "activity:활동", "habit:습관", "close:세심한", "should:~해야한다", "convenience:편리함", "any:어떤/모든", "want:원하다", "make:만들다"] },
+        { en: "Putting a wastebasket next to our front door made mail sorting slightly more convenient, and I stopped procrastinating with this chore.", ko: "현관 옆에 휴지통을 두는 것은 우편물 분류를 약간 더 편리하게 만들었고, 나는 이 잡일을 미루는 것을 그만두었습니다.", voca: ["wastebasket:휴지통", "sorting:분류", "slightly:약간", "procrastinating:미루는것", "chore:잡일", "putting:두는것", "next to:~옆에", "front door:현관", "stopped:그만두었다", "convenient:편리한"] },
+        { en: "Many people report that they do a much better job of staying close to distant family members now that tools like group chats make it easy to stay in touch.", ko: "많은 사람들은 이제 그룹 채팅과 같은 도구들이 연락을 유지하는 것을 쉽게 만들어 주기 때문에 멀리 떨어진 가족들과 친밀하게 지내는 일을 훨씬 더 잘한다고 보고합니다.", voca: ["report:보고하다", "distant:먼/떨어진", "group chats:그룹채팅", "stay in touch:연락을유지하다", "family members:가족구성원", "better:더나은", "tools:도구", "easy:쉬운", "stay:머물다", "like:~와같은"] }
     ];
 
     let currentMode = 'INTRO';
@@ -79,16 +79,16 @@
             header.innerText = "English Master #20";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Maintaining Long-term<br>Relationships</h1><p>2025년 11월 고1 모의고사 20번</p></div>
+                <div class="main-title-card"><h1>The Influence of Convenience<br>on Habit Formation</h1><p>2025년 6월 고1 모의고사 20번</p></div>
                 
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 장기적인 관계 유지에서 가장 중요한 요소는 지속적인 '소통'임.</p>
-                    <p>• <b>📍 본론:</b> 관계가 정체되지 않으려면 용건이 없더라도 안부를 묻거나 가치 있는 자료를 공유하는 의식적인 노력이 필요함.</p>
-                    <p>• <b>📍 결론:</b> 이러한 사소한 배려는 상대방을 생각하고 관계에 투자하고 있다는 강력한 메시지를 전달함.</p>
+                    <p>• <b>📍 서론:</b> 습관 형성에서 가장 놀라운 요소는 바로 '순전한 편리함'임.</p>
+                    <p>• <b>📍 본론:</b> 행동에 필요한 노력, 시간, 의사결정의 양이 적을수록 습관이 되기 쉬움.</p>
+                    <p>• <b>📍 결론:</b> 습관을 만들고 싶다면 그 활동을 최대한 편리하게 환경을 조성해야 함.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 장기적인 관계 유지를 위한 일관되고 의식적인 소통의 필요성</span>
-                    <span class="topic-eng">Topic: The Need for Consistent and Conscious Communication to Sustain Long-term Relationships</span>
+                    <span class="topic-kor">주제: 편리함이 습관 형성에 미치는 지대한 영향</span>
+                    <span class="topic-eng">Topic: The Profound Influence of Convenience on the Formation of Habits</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -138,15 +138,36 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+  // 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

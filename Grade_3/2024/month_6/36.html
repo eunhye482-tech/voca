@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #36 - 24년 6월 모의고사</title>
+    <title>English Master #36 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -15,7 +15,7 @@
         body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
         .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
-        #display-area { flex: 1; padding: 20px; display: flex; padding-bottom: 80px; flex-direction: column; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
@@ -56,15 +56,15 @@
 
 <script>
     const fullData = [
-        { en: "As businesses shift some core business activities to digital, such as sales, marketing, or archiving, it is assumed that the impact on the environment will be less negative.", ko: "기업들이 판매, 마케팅 또는 기록 보관과 같은 일부 핵심 사업 활동을 디지털로 전환함에 따라, 환경에 미치는 영향이 덜 부정적일 것이라고 가정됩니다.", voca: ["shift:전환하다", "core:핵심의", "archiving:기록 보관", "assumed:가정된", "impact:영향", "environment:환경", "negative:부정적인", "activities:활동들", "digital:디지털", "🍌"] },
-        { en: "However, digital business activities can still threaten the environment.", ko: "하지만 디지털 사업 활동은 여전히 환경을 위협할 수 있습니다.", voca: ["threaten:위협하다", "environment:환경", "still:여전히", "However:하지만", "business:사업/비즈니스", "activities:활동들", "can:할 수 있다", "🍌", "🍌", "🍌"] },
-        { en: "In some cases, the harm of digital businesses can be even more hazardous.", ko: "어떤 경우에는 디지털 사업의 해악이 훨씬 더 위험할 수 있습니다.", voca: ["harm:해악/피해", "hazardous:위험한", "even more:훨씬 더", "cases:경우들", "businesses:사업들", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "A few decades ago, offices used to have much more paper waste since all documents were paper based.", ko: "수십 년 전에는 모든 문서가 종이에 기반했기 때문에 사무실에 훨씬 더 많은 종이 쓰레기가 있었습니다.", voca: ["decades:수십 년", "paper waste:종이 쓰레기", "documents:문서들", "paper based:종이 기반의", "used to:~하곤 했다", "since:~때문에", "offices:사무실들", "🍌", "🍌", "🍌"] },
-        { en: "When workplaces shifted from paper to digital documents, invoices, and emails, it was a promising step to save trees.", ko: "작업장이 종이에서 디지털 문서, 송장, 이메일로 전환되었을 때, 그것은 나무를 구하기 위한 유망한 단계였습니다.", voca: ["workplaces:작업장/일터", "shifted:전환된", "invoices:송장", "promising:유망한/희망적인", "step:단계", "save:구하다", "trees:나무들", "documents:문서들", "🍌", "🍌"] },
-        { en: "However, the cost of the Internet and electricity for the environment is neglected.", ko: "하지만 환경을 위한 인터넷과 전기의 비용(대가)은 무시되고 있습니다.", voca: ["cost:비용/대가", "electricity:전기", "neglected:무시된/방치된", "Internet:인터넷", "environment:환경", "for:~을 위한", "However:하지만", "🍌", "🍌", "🍌"] },
-        { en: "A recent Wired report declared that most data centers’ energy source is fossil fuels.", ko: "최근 'Wired' 보고서는 대부분의 데이터 센터의 에너지원이 화석 연료라고 선언했습니다.", voca: ["recent:최근의", "declared:선언했다", "data centers:데이터 센터", "energy source:에너지원", "fossil fuels:화석 연료", "report:보고서", "most:대부분의", "🍌", "🍌", "🍌"] },
-        { en: "When we store bigger data on clouds, increased carbon emissions make our green clouds gray.", ko: "우리가 클라우드에 더 큰 데이터를 저장할 때, 증가된 탄소 배출은 우리의 초록색 클라우드를 회색으로 만듭니다.", voca: ["store:저장하다", "clouds:클라우드", "increased:증가된", "carbon emissions:탄소 배출", "gray:회색의", "bigger:더 큰", "data:데이터", "make:만들다", "🍌", "🍌"] },
-        { en: "The carbon footprint of an email is smaller than mail sent via a post office, but still, it causes four grams of CO₂, and it can be as much as 50 grams if the attachment is big.", ko: "이메일의 탄소 발자국은 우체국을 통해 보내는 편지보다 작지만, 여전히 4그램의 이산화탄소를 발생시키며, 첨부 파일이 크면 50그램이나 될 수도 있습니다.", voca: ["carbon footprint:탄소 발자국", "sent via:~을 통해 보내진", "causes:유발하다", "attachment:첨부 파일", "smaller:더 작은", "CO₂:이산화탄소", "post office:우체국", "still:여전히", "much as:~만큼 많이", "🍌"] }
+        { en: "History, people often say, repeats itself.", ko: "사람들은 흔히 역사는 반복된다고 말합니다.", voca: ["History:역사", "often:흔히/종종", "repeats:반복하다", "itself:그자체", "people:사람들", "say:말하다", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "And looking at the historical records of the ancient civilizations, some things do seem to happen again and again.", ko: "그리고 고대 문명의 역사적 기록을 보면 어떤 일들은 정말로 반복해서 일어나는 것처럼 보입니다.", voca: ["historical:역사적인", "records:기록", "ancient:고대의", "civilizations:문명", "seem:~처럼보이다", "happen:일어나다", "again and again:반복해서", "looking at:~을보면", "things:일들", "🍌"] },
+        { en: "Civilizations expand, get overextended, and then collapse as in the cases of Rome, which went under in 476 AD, and the British Empire, which fell apart more than a thousand years later in the post-World War II era.", ko: "기원후 476년에 멸망한 로마와 그로부터 천 년도 더 지난 제2차 세계 대전 이후 시대에 해체된 대영 제국의 사례처럼, 문명은 팽창하고 과도하게 확장되었다가 붕괴합니다.", voca: ["expand:팽창하다", "overextended:과도하게확장된", "collapse:붕괴하다", "went under:멸망하다", "fell apart:해체되다/무너지다", "era:시대", "civilizations:문명", "cases:사례", "later:후에", "thousand:천"] },
+        { en: "But is this always the case?", ko: "하지만 이것이 항상 그러할까요?", voca: ["always:항상", "case:사실/경우", "But:하지만", "is:~인가", "this:이것", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "If so, archaeology would be pretty boring; one thing would happen again and again.", ko: "만약 그렇다면 고고학은 꽤 지루할 것입니다. 똑같은 일이 계속 반복될 테니까요.", voca: ["archaeology:고고학", "boring:지루한", "happen:일어나다", "again and again:반복해서", "pretty:꽤", "would:일것이다", "If so:만약그렇다면", "thing:일", "🍌", "🍌"] },
+        { en: "But that’s not what archaeologists see.", ko: "하지만 그것은 고고학자들이 보는 모습이 아닙니다.", voca: ["archaeologists:고고학자들", "see:보다", "what:것", "not:아닌", "that:그것", "But:하지만", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Some civilizations end suddenly, like the Aztec and Inca, conquered by invaders in the 1520s AD.", ko: "1520년대에 침략자들에 의해 정복당한 아즈텍과 잉카처럼 어떤 문명들은 갑자기 끝이 납니다.", voca: ["suddenly:갑자기", "conquered:정복당한", "invaders:침략자들", "civilizations:문명", "end:끝나다", "like:~처럼", "AD:기원후", "Some:어떤", "🍌", "🍌"] },
+        { en: "Those empires never had the chance to collapse as a result of overexpansion.", ko: "그 제국들은 과도한 팽창의 결과로 붕괴할 기회조차 전혀 없었습니다.", voca: ["empires:제국들", "chance:기회", "collapse:붕괴하다", "as a result of:~의결과로", "overexpansion:과도한팽창", "never:결코~않다", "had:가졌다", "Those:그들", "🍌", "🍌"] },
+        { en: "So in the case of civilizations, 'history repeats itself' seems to be an oversimplification.", ko: "그래서 문명의 경우에 있어 '역사는 반복된다'는 말은 지나친 단순화인 것처럼 보입니다.", voca: ["case:경우", "repeats:반복하다", "seems:~처럼보이다", "oversimplification:지나친단순화", "civilizations:문명", "history:역사", "itself:그자체", "be:~이다", "So:그래서", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -81,16 +81,15 @@
             header.innerText = "English Master #36";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Gray Side of<br>Digital Business</h1><p>2024년 6월 고1 모의고사 36번</p></div>
-                
+                <div class="main-title-card"><h1>Is History Repeating?<br>Civilizations' Ends</h1><p>2025년 6월 고1 모의고사 36번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 사업 활동이 디지털로 전환되면서 환경에 미치는 부정적 영향이 줄어들 것이라고 흔히 가정함.</p>
-                    <p>• <b>📍 본론:</b> 종이 사용은 줄었지만, 데이터 센터 운영을 위한 화석 연료 소비와 막대한 전기 사용이라는 새로운 환경 위협이 등장함.</p>
-                    <p>• <b>📍 결론:</b> 클라우드 저장과 이메일 전송조차 상당한 탄소 발자국을 남기며, 디지털 전환이 반드시 친환경적이지는 않음을 시사함.</p>
+                    <p>• <b>📍 서론:</b> 흔히 역사는 반복된다고 하며, 로마나 대영제국처럼 과도한 확장 후 붕괴하는 사례가 존재함.</p>
+                    <p>• <b>📍 본론:</b> 그러나 모든 문명이 같은 길을 걷는 것은 아니며, 아즈텍이나 잉카처럼 침략에 의해 갑자기 멸망하기도 함.</p>
+                    <p>• <b>📍 결론:</b> 따라서 문명의 역사를 단순히 '반복'으로 규정하는 것은 지나치게 단순화된 시각임.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 디지털 비즈니스 전환에 가려진 인터넷과 데이터 센터의 환경적 비용</span>
-                    <span class="topic-eng">Topic: The Hidden Environmental Costs of the Internet and Data Centers in the Shift to Digital Business</span>
+                    <span class="topic-kor">주제: 문명의 멸망 방식의 다양성과 역사 반복론의 한계</span>
+                    <span class="topic-eng">Topic: Diversity in the Collapse of Civilizations and Limitations of the Historical Repetition Theory</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -140,16 +139,38 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
 
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
     function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }

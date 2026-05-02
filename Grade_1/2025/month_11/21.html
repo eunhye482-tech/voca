@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #21 - 11월 모의고사</title>
+    <title>English Master #21 - Zoomable Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 (서론/본론/결론 명시) */
+        /* STEP 1: 인트로 */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,12 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "Currently, urban regeneration projects in degraded areas have been promoted as improving the wellbeing of residents and solving environmental injustice problems.", ko: "현재 낙후된 지역의 도시 재생 프로젝트는 주민의 복지를 개선하고 환경적 부정의 문제를 해결하는 것으로 홍보되어 왔습니다.", voca: ["Currently:현재", "urban:도시의", "regeneration:재생", "degraded:낙후된/저하된", "promoted:홍보된", "wellbeing:복지/안녕", "residents:주민들", "environmental:환경적인", "injustice:부정의/불공평", "solving:해결하는 것"] },
-        { en: "However, such environmental improvements in ethnic communities and/or low-income households can create an urban green space paradox.", ko: "하지만 특정 인종 공동체나 저소득 가구 지역의 그러한 환경 개선은 '도시 녹지 공간의 역설'을 초래할 수 있습니다.", voca: ["However:하지만", "ethnic:민족의/인종의", "communities:공동체", "low-income:저소득의", "households:가구/세대", "create:만들다/초래하다", "green space:녹지 공간", "paradox:역설", "urban:도시의", "🍌"] },
-        { en: "The creation of new, high-quality green spaces can increase attractiveness, making these neighbourhood more desirable.", ko: "새롭고 질 높은 녹지 공간의 조성은 매력도를 높여서, 이러한 인근 지역을 더 살고 싶은 곳으로 만들 수 있습니다.", voca: ["creation:조성/창조", "high-quality:질 높은", "increase:높이다/증가시키다", "attractiveness:매력", "making:만드는 것", "neighbourhood:인근 지역", "desirable:가치 있는/탐나는", "new:새로운", "can:할 수 있다", "🍌"] },
-        { en: "By contrast, the cost of housing can rise, and residents may not be able to afford the rent.", ko: "대조적으로, 주거 비용이 상승할 수 있고, 주민들은 임대료를 감당할 수 없게 될 수도 있습니다.", voca: ["By contrast:대조적으로", "cost:비용", "housing:주거", "rise:상승하다", "afford:~할 여유가 되다", "rent:임대료", "residents:주민들", "may:~일지도 모른다", "can:할 수 있다", "🍌"] },
-        { en: "This results in the exclusion or displacement of the poor neighbourhood’s residents, who were intended to benefit from the ecosystem services provided by the new green space.", ko: "이것은 가난한 지역 주민들의 소외나 내몰림을 초래하는데, 이들은 원래 새로운 녹지 공간이 제공하는 생태계 서비스로부터 혜택을 받기로 의도되었던 사람들입니다.", voca: ["results in:~을 초래하다", "exclusion:소외/제외", "displacement:내몰림/이동", "intended:의도된", "benefit:혜택을 얻다", "ecosystem:생태계", "provided:제공된", "poor:가난한", "new:새로운", "🍌"] },
-        { en: "In turn, the residents may only be able to afford to live in a similar degraded neighbourhood to the one they left, with low access to green infrastructure.", ko: "결과적으로, 그 주민들은 자신들이 떠나온 곳과 유사하게 녹지 기반 시설에 대한 접근성이 낮은 낙후된 지역에서 살 수밖에 없게 될지도 모릅니다.", voca: ["In turn:결과적으로/차례로", "similar:유사한", "degraded:낙후된", "access:접근(성)", "infrastructure:기반 시설", "left:떠났다", "afford:여유가 되다", "green:녹지의", "only:오직", "🍌"] }
+        { en: "It is common sense that people’s inner beliefs may drive their external behavior.", ko: "사람들의 내면적인 신념이 외적 행동을 유도할 수도 있다는 것은 상식입니다.", voca: ["common sense:상식", "inner:내면적인", "beliefs:신념", "drive:유도하다", "external:외적인", "behavior:행동", "people:사람들", "may:~일수도있다", "🍌", "🍌"] },
+        { en: "If you’re attracted to a certain person, you should be more likely to socialize with that person.", ko: "만약 여러분이 어떤 사람에게 끌린다면, 여러분은 그 사람과 사귈 가능성이 더 높을 것입니다.", voca: ["attracted:끌리는", "certain:어떤/특정한", "likely to:~할것같은", "socialize:사귀다/교제하다", "person:사람", "should:~할것이다", "more:더", "with:~와함께", "🍌", "🍌"] },
+        { en: "If you favor a brand of toothpaste, you’re more likely to buy it.", ko: "만약 여러분이 어떤 브랜드의 치약을 선호한다면, 여러분은 그것을 살 가능성이 더 높습니다.", voca: ["favor:선호하다", "brand:브랜드", "toothpaste:치약", "likely to:~할것같은", "buy:사다", "more:더", "if:~라면", "🍌", "🍌", "🍌"] },
+        { en: "Of course, our internal thoughts don’t always predict our public behavior, but, overall, what we do obviously reflects what we think.", ko: "물론 우리의 내면적인 생각이 항상 우리의 공적 행동을 예측하는 것은 아니지만, 전반적으로 우리가 하는 일은 분명히 우리가 생각하는 것을 반영합니다.", voca: ["internal:내면적인", "predict:예측하다", "public:공적인", "overall:전반적으로", "obviously:분명히", "reflects:반영하다", "thoughts:생각", "always:항상", "what:것", "think:생각하다"] },
+        { en: "But beliefs and behaviors are also related in a more remarkable way.", ko: "하지만 신념과 행동은 또한 더 놀라운 방식으로 관련되어 있습니다.", voca: ["beliefs:신념", "behaviors:행동", "related:관련된", "remarkable:놀라운", "way:방식", "also:또한", "more:더", "🍌", "🍌", "🍌"] },
+        { en: "It turns out that the arrow is as likely to point in the reverse direction.", ko: "화살표가 반대 방향을 가리킬 가능성도 똑같다는 것이 밝혀졌습니다.", voca: ["turns out:밝혀지다", "arrow:화살표", "point:가리키다", "reverse:반대의", "direction:방향", "likely to:~할것같은", "reverse:반대", "🍌", "🍌", "🍌"] },
+        { en: "As social psychologist David Myers observes, 'If social psychology has taught us anything during the last 25 years, it is that we are likely not only to think ourselves into a way of acting but also to act ourselves into a way of thinking.'", ko: "사회심리학자 David Myers가 관찰한 바와 같이, '만약 사회심리학이 지난 25년 동안 우리에게 무엇인가를 가르쳤다면, 그것은 우리가 행동 방식에 따라 생각하게 될 뿐만 아니라 생각하는 방식에 따라 행동하게 될 가능성도 있다는 것입니다.'", voca: ["psychologist:심리학자", "observes:관찰하다", "taught:가르쳤다", "not only:A뿐만아니라", "but also:B도역시", "acting:행동하기", "thinking:생각하기", "likely to:~할것같은", "during:~동안", "way:방식"] }
     ];
 
     let currentMode = 'INTRO';
@@ -78,15 +79,15 @@
             header.innerText = "English Master #21";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Urban Green Space<br>Paradox</h1><p>2025년 11월 고1 모의고사 21번</p></div>
+                <div class="main-title-card"><h1>The Relationship Between<br>Beliefs and Behaviors</h1><p>2025년 6월 고1 모의고사 21번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 도시 재생 프로젝트는 낙후 지역의 복지 개선을 목표로 추진됨.</p>
-                    <p>• <b>📍 본론:</b> 고품질 녹지가 조성되면 지역 매력도가 높아지지만, 동시에 주거비와 임대료가 상승함.</p>
-                    <p>• <b>📍 결론:</b> 결국 원주민들은 임대료를 감당 못 해 쫓겨나고, 다시 녹지가 부족한 낙후 지역으로 이동하게 되는 역설이 발생함.</p>
+                    <p>• <b>📍 서론:</b> 내면의 신념이 외적 행동을 유도하는 것은 상식적인 일임.</p>
+                    <p>• <b>📍 본론:</b> 반대로, 우리의 외적 행동이 내면의 사고 방식을 결정하기도 함.</p>
+                    <p>• <b>📍 결론:</b> 신념과 행동은 서로 양방향으로 영향을 주고받는 관계임.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 도시 환경 개선이 원주민의 내몰림을 초래하는 녹지 공간의 역설</span>
-                    <span class="topic-eng">Topic: The Urban Green Space Paradox Where Environmental Improvements Lead to Resident Displacement</span>
+                    <span class="topic-kor">주제: 신념과 행동 사이의 상호 유기적이고 양방향적인 관계</span>
+                    <span class="topic-eng">Topic: The Mutual and Bi-directional Relationship Between Beliefs and Behaviors</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -136,7 +137,8 @@
         }
     }
 
- // 수정된 Step 3 빈칸 생성 로직
+
+// 수정된 Step 3 빈칸 생성 로직
 function fillBlanks(s) {
     const c = document.getElementById('blank-area');
     
@@ -166,6 +168,8 @@ function fillBlanks(s) {
         c.appendChild(sp);
     });
 }
+
+
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

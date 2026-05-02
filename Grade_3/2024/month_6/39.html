@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #39 - 24년 6월 모의고사</title>
+    <title>English Master #39 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -56,14 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "Spending time as children allows animals to learn about their environment.", ko: "어린 시절로 시간을 보내는 것은 동물들이 그들의 환경에 대해 배울 수 있게 해줍니다.", voca: ["children:어린 시절", "allows:허용하다", "learn:배우다", "environment:환경", "Spending:보내는 것", "animals:동물들", "about:~에 대해", "time:시간", "🍌", "🍌"] },
-        { en: "Without childhood, animals must rely more fully on hardware, and therefore be less flexible.", ko: "어린 시절이 없다면, 동물들은 하드웨어(본능)에 더 전적으로 의존해야 하며, 따라서 덜 유연해질 것입니다.", voca: ["childhood:어린 시절", "rely on:~에 의존하다", "fully:전적으로", "hardware:하드웨어/본능", "therefore:따라서", "flexible:유연한", "less:덜", "must:~해야 한다", "without:~없이", "🍌"] },
-        { en: "Among migratory bird species, those that are born knowing how, when, and where to migrate—those that are migrating entirely with instructions they were born with—sometimes have very inefficient migration routes.", ko: "철새 종들 중에서, 어떻게, 언제, 어디로 이동해야 하는지 알고 태어난 개체들, 즉 태어날 때 가지고 나온 지침에만 전적으로 의존해 이동하는 개체들은 때때로 매우 비효율적인 이동 경로를 가집니다.", voca: ["migratory:이주하는/철새의", "migrate:이동하다", "entirely:전적으로", "instructions:지침", "inefficient:비효율적인", "routes:경로", "born knowing:알고 태어난", "sometimes:때때로", "among:~ 중에", "🍌"] },
-        { en: "These birds, born knowing how to migrate, don’t adapt easily.", ko: "어떻게 이동하는지 알고 태어난 이 새들은 쉽게 적응하지 못합니다.", voca: ["adapt:적응하다", "easily:쉽게", "migrate:이동하다", "born:태어난", "knowing:알고 있는", "how to:~하는 방법", "birds:새들", "don't:하지 않는다", "these:이", "🍌"] },
-        { en: "So when lakes dry up, forest becomes farmland, or climate change pushes breeding grounds farther north, those birds that are born knowing how to migrate keep flying by the old rules and maps.", ko: "그래서 호수가 마르거나 숲이 농경지가 되거나 기후 변화가 번식지를 더 북쪽으로 밀어낼 때, 이동 방법을 알고 태어난 새들은 계속해서 옛 규칙과 지도에 따라 날아갑니다.", voca: ["dry up:마르다", "farmland:농경지", "breeding grounds:번식지", "farther:더 멀리", "rules:규칙", "maps:지도", "climate change:기후 변화", "pushes:밀어내다", "keep flying:계속 날다", "🍌"] },
-        { en: "By comparison, birds with the longest childhoods, and those that migrate with their parents, tend to have the most efficient migration routes.", ko: "대조적으로, 가장 긴 어린 시절을 보내는 새들과 부모와 함께 이동하는 새들은 가장 효율적인 이동 경로를 갖는 경향이 있습니다.", voca: ["comparison:대조/비교", "longest:가장 긴", "parents:부모", "tend to:~하는 경향이 있다", "efficient:효율적인", "migration:이동", "routes:경로", "most:가장", "with:~와 함께", "🍌"] },
-        { en: "Childhood facilitates the passing on of cultural information, and culture can evolve faster than genes.", ko: "어린 시절은 문화적 정보의 전달을 용이하게 하며, 문화는 유전자보다 더 빠르게 진화할 수 있습니다.", voca: ["facilitates:용이하게 하다", "passing on:전달", "cultural:문화적인", "information:정보", "evolve:진화하다", "genes:유전자", "faster:더 빠르게", "than:~보다", "culture:문화", "🍌"] },
-        { en: "Childhood gives flexibility in a changing world.", ko: "어린 시절은 변화하는 세상에서 유연성을 제공합니다.", voca: ["flexibility:유연성", "changing:변화하는", "world:세상", "gives:주다", "childhood:어린 시절", "in:~에서", "a:한", "🍌", "🍌", "🍌"] }
+        { en: "We have a 'diving reflex', like other marine mammals.", ko: "우리는 다른 해양 포유류와 마찬가지로 '잠수 반사'를 가지고 있습니다.", voca: ["diving reflex:잠수 반사", "marine:해양의", "mammals:포유류", "like:~와 같이", "have:가지다", "other:다른", "we:우리", "🍌", "🍌", "🍌"] },
+        { en: "This means that special nerve endings on our faces, around the mouth and nose, trigger this reflex only when the facial region goes under water.", ko: "이것은 우리의 입과 코 주변인 얼굴에 있는 특수한 신경 말단이 얼굴 부위가 물속으로 들어갈 때만 이 반사를 유발한다는 것을 의미합니다.", voca: ["nerve endings:신경 말단", "trigger:유발하다", "facial:얼굴의", "region:부위/영역", "means:의미하다", "special:특수한", "around:주변에", "under:아래/속으로", "only when:~할 때만", "mouth and nose:입과 코"] },
+        { en: "If we are in the water, with our head out in the air, there is no diving reflex.", ko: "우리가 물속에 있더라도 머리가 공기 중에 나와 있으면 잠수 반사는 일어나지 않습니다.", voca: ["water:물", "air:공기", "diving reflex:잠수 반사", "head out:머리가 밖으로", "no:아무것도 없는", "If:~라면", "we are:우리가 있다", "🍌", "🍌", "🍌"] },
+        { en: "But if we sink just our face in a bowl of water, while the whole of the rest of our body is in the dry air, the diving reflex is triggered.", ko: "하지만 몸의 나머지 전체가 건조한 공기 중에 있는 동안 얼굴만 물 한 그릇에 담그면 잠수 반사가 유발됩니다.", voca: ["sink:담그다/가라앉다", "bowl:그릇", "rest:나머지", "triggered:유발된", "dry air:건조한 공기", "whole:전체", "while:~하는 동안", "But:하지만", "just:단지", "face:얼굴"] },
+        { en: "It automatically closes down the airway, reducing the risk of swallowing water, and it narrows the small air-passages in the lungs.", ko: "그것은 자동으로 기도를 폐쇄하여 물을 삼킬 위험을 줄이고 폐 안의 작은 공기 통로를 좁힙니다.", voca: ["automatically:자동으로", "airway:기도", "reducing:줄이는 것", "swallowing:삼키는 것", "narrows:좁히다", "air-passages:공기 통로", "lungs:폐", "risk:위험", "closes down:폐쇄하다", "🍌"] },
+        { en: "At the same time the heart rate is slowed down to half speed and blood is shunted to the vital organs, protecting them from the effects of the brief stop in breathing.", ko: "동시에 심박수는 절반 속도로 느려지고 혈액은 중요 장기로 우회되어, 일시적인 호흡 정지의 영향으로부터 장기들을 보호합니다.", voca: ["at the same time:동시에", "heart rate:심박수", "shunted:우회된/돌려진", "vital organs:중요 장기", "protecting:보호하는 것", "effects:영향", "brief:일시적인/짧은", "breathing:호흡", "slowed down:느려진", "blood:혈액"] },
+        { en: "By contrast, if a chimpanzee or a gorilla found itself in water with its face below the surface, it would panic, its heart would race and it would quickly drown.", ko: "대조적으로, 만약 침팬지나 고릴라가 얼굴이 수면 아래에 있는 상태로 물속에 있게 된다면, 그것은 공황 상태에 빠지고 심장은 요동치며 금방 익사할 것입니다.", voca: ["By contrast:대조적으로", "surface:수면/표면", "panic:공황 상태", "race:요동치다/빨리 뛰다", "drown:익사하다", "found itself:처하게 되다", "below:~ 아래에", "quickly:빨리", "chimpanzee:침팬지", "gorilla:고릴라"] }
     ];
 
     let currentMode = 'INTRO';
@@ -80,16 +79,15 @@
             header.innerText = "English Master #39";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Childhood and<br>Flexibility</h1><p>2024년 6월 고1 모의고사 39번</p></div>
-                
+                <div class="main-title-card"><h1>The Human Diving Reflex:<br>Survival Mechanism</h1><p>2025년 6월 고1 모의고사 39번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 동물의 어린 시절은 환경에 대해 배우고 적응하는 중요한 기간임.</p>
-                    <p>• <b>📍 본론:</b> 본능(하드웨어)에만 의존하는 새들은 환경 변화에 적응하지 못하고 옛 방식만 고수하여 비효율적인 경로를 택함.</p>
-                    <p>• <b>📍 결론:</b> 어린 시절이 길고 부모에게 배우는 동물은 유전자보다 빠른 문화적 진화를 통해 변화하는 세상에서 더 큰 유연성을 가짐.</p>
+                    <p>• <b>📍 서론:</b> 인간은 해양 포유류처럼 얼굴이 물에 닿을 때 작동하는 '잠수 반사'를 가짐.</p>
+                    <p>• <b>📍 본론:</b> 잠수 반사는 기도를 닫고 심박수를 늦추며 혈액을 주요 장기로 보내 호흡 정지로부터 몸을 보호함.</p>
+                    <p>• <b>📍 결론:</b> 이 반사가 없는 유인원과 달리 인간은 물속에서 생존할 수 있는 본능적 기제를 보유함.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 변화하는 환경에 대한 유연성과 문화 전달을 가능케 하는 어린 시절의 중요성</span>
-                    <span class="topic-eng">Topic: The Importance of Childhood in Enabling Flexibility and Cultural Transmission in a Changing Environment</span>
+                    <span class="topic-kor">주제: 인간이 가진 생존 본능인 잠수 반사의 원리와 기능</span>
+                    <span class="topic-eng">Topic: The Principles and Functions of the Human Diving Reflex as a Survival Instinct</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -139,15 +137,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

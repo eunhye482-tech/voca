@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #31 - 24년 9월 모의고사</title>
+    <title>English Master #31 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,17 +56,16 @@
 
 <script>
     const fullData = [
-        { en: "You hear again and again that some of the greatest composers were misunderstood in their own day.", ko: "여러분은 위대한 작곡가 중 일부가 당대에 오해를 받았다는 말을 반복해서 듣습니다.", voca: ["composers:작곡가들", "misunderstood:오해받은", "again and again:반복해서", "greatest:가장 위대한", "own day:당대/그들 자신의 시대", "hear:듣다", "some:일부", "that:~라는 것을", "🍌", "🍌"] },
-        { en: "Not everyone could understand the compositions of Beethoven, Brahms, or Stravinsky in their day.", ko: "모든 사람이 당대에 베토벤, 브람스, 또는 스트라빈스키의 작품을 이해할 수 있었던 것은 아니었습니다.", voca: ["understand:이해하다", "compositions:작품/작곡", "Not everyone:모두가 ~인 것은 아니다", "could:~할 수 있었다", "Beethoven:베토벤", "Brahms:브람스", "Stravinsky:스트라빈스키", "day:시대/날", "in:~에", "🍌"] },
-        { en: "The reason for this initial lack of acceptance is unfamiliarity.", ko: "이러한 초기 수용 부족의 원인은 낯설음입니다.", voca: ["initial:초기의", "lack:부족", "acceptance:수용", "unfamiliarity:낯설음", "reason:이유", "for:~에 대한", "this:이것", "is:~이다", "🍌", "🍌"] },
-        { en: "The musical forms, or ideas expressed within them, were completely new.", ko: "음악적 형식이나 그 안에 표현된 아이디어들이 완전히 새로운 것이었습니다.", voca: ["musical forms:음악적 형식", "expressed:표현된", "within:~ 안에", "completely:완전히", "new:새로운", "ideas:아이디어들", "were:~이었다", "or:또는", "them:그것들", "🍌"] },
-        { en: "And yet, this is exactly one of the things that makes them so great.", ko: "그럼에도 불구하고, 이것이 바로 그들을 그토록 위대하게 만드는 요소 중 하나입니다.", voca: ["And yet:그럼에도 불구하고", "exactly:정확히/바로", "makes:만들다", "so great:그토록 위대하게", "things:것들/요소들", "this:이것", "is:~이다", "one of:~ 중 하나", "that:~하는", "🍌"] },
-        { en: "Effective composers have their own ideas.", ko: "유능한 작곡가들은 자신만의 아이디어를 가지고 있습니다.", voca: ["Effective:유능한/효과적인", "own:자신만의", "ideas:아이디어들", "composers:작곡가들", "have:가지다", "their:그들의", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Have you ever seen the classic movie Amadeus?", ko: "고전 영화 '아마데우스'를 본 적이 있나요?", voca: ["classic:고전적인", "movie:영화", "seen:본", "Have you ever:본 적이 있는가", "Amadeus:아마데우스", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "The composer Antonio Salieri is the 'host' of this movie; he’s depicted as one of the most famous non-great composers—he lived at the time of Mozart and was completely overshadowed by him.", ko: "작곡가 안토니오 살리에리가 이 영화의 '호스트'인데, 그는 가장 유명한 '위대하지 않은' 작곡가 중 한 명으로 묘사됩니다. 그는 모차르트 시대에 살았고 그에 의해 완전히 가려졌습니다.", voca: ["depicted:묘사된", "non-great:위대하지 않은", "overshadowed:가려진/빛을 잃은", "host:호스트/진행자", "time:시대/시간", "Mozart:모차르트", "completely:완전히", "lived:살았다", "famous:유명한", "🍌"] },
-        { en: "Now, Salieri wasn’t a bad composer; in fact, he was a very good one.", ko: "자, 살리에리는 형편없는 작곡가는 아니었습니다. 사실 그는 매우 훌륭한 작곡가였습니다.", voca: ["in fact:사실", "good one:훌륭한 작곡가", "bad:나쁜/형편없는", "composer:작곡가", "wasn't:~이 아니었다", "Now:자/이제", "very:매우", "🍌", "🍌", "🍌"] },
-        { en: "But he wasn’t one of the world’s great composers because his work wasn’t original.", ko: "하지만 그의 작품이 독창적이지 않았기 때문에 그는 세계적인 위대한 작곡가 중 한 명은 아니었습니다.", voca: ["original:독창적인", "work:작품", "world's:세계의", "because:~때문에", "wasn't:~이 아니었다", "great:위대한", "composers:작곡가들", "one of:~ 중 하나", "But:하지만", "🍌"] },
-        { en: "What he wrote sounded just like what everyone else was composing at the time.", ko: "그가 쓴 것은 당시 다른 모든 사람들이 작곡하고 있던 것과 똑같이 들렸습니다.", voca: ["sounded:들렸다", "just like:~와 똑같이", "everyone else:그 외 모든 사람", "composing:작곡하는 것", "at the time:당시에", "What:~한 것", "wrote:썼다", "he:그", "was:~이었다", "🍌"] }
+        { en: "In everyday life, we use previous experience to predict where we should pay attention.", ko: "일상생활에서 우리는 이전의 경험을 사용하여 어디에 주의를 기울여야 할지 예측합니다.", voca: ["everyday life:일상생활", "previous:이전의", "experience:경험", "predict:예측하다", "pay attention:주의를기울이다", "where:어디에", "should:~해야한다", "use:사용하다", "🍌", "🍌"] },
+        { en: "Different environments create different expectations.", ko: "서로 다른 환경은 서로 다른 기대를 만듭니다.", voca: ["Different:다른", "environments:환경", "create:만들다", "expectations:기대", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "This was profoundly illustrated by the scientist Jared Diamond in his book Guns, Germs, and Steel.", ko: "이것은 과학자 Jared Diamond에 의해 그의 저서 '총, 균, 쇠'에서 깊이 있게 설명되었습니다.", voca: ["profoundly:깊이있게", "illustrated:설명된/그려진", "scientist:과학자", "Guns:총", "Germs:균", "Steel:쇠", "book:책", "🍌", "🍌", "🍌"] },
+        { en: "He describes an adventure wandering through the New Guinea jungle with native New Guineans.", ko: "그는 뉴기니 원주민들과 함께 뉴기니 정글을 헤매는 모험을 묘사합니다.", voca: ["describes:묘사하다", "adventure:모험", "wandering:헤매는", "through:~을통해", "native:원주민", "jungle:정글", "with:~와함께", "🍌", "🍌", "🍌"] },
+        { en: "He relates that these natives tend to perform poorly at tasks Westerners have been trained to do since childhood.", ko: "그는 이 원주민들이 서구인들이 어린 시절부터 하도록 훈련받아온 과업에서 서투른 성과를 내는 경향이 있다고 이야기합니다.", voca: ["relates:이야기하다", "tend to:~하는경향이있다", "perform:수행하다", "poorly:서투르게/형편없이", "tasks:과업/일", "Westerners:서구인들", "trained:훈련된", "since:~이후로", "childhood:어린시절", "natives:원주민들"] },
+        { en: "But they are hardly stupid.", ko: "하지만 그들은 결코 어리석지 않습니다.", voca: ["hardly:결코~않다", "stupid:어리석은", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "They can detect the most subtle changes in the jungle, good for following the tracks of a predator or for finding the way back home.", ko: "그들은 정글의 가장 미묘한 변화를 감지할 수 있는데, 이는 포식자의 흔적을 따라가거나 집으로 돌아가는 길을 찾는 데 유용합니다.", voca: ["detect:감지하다", "subtle:미묘한", "changes:변화들", "following:따라가는것", "tracks:흔적/자국", "predator:포식자", "finding:찾는것", "way back:돌아오는길", "good for:~에좋은", "jungle:정글"] },
+        { en: "They know which insects to leave alone, know where food exists, can build and tear down shelters with ease.", ko: "그들은 어떤 곤충을 건드리지 말아야 할지 알고, 음식이 어디에 있는지 알며, 숙소를 쉽게 짓고 허물 수 있습니다.", voca: ["insects:곤충", "leave alone:내버려두다", "exists:존재하다", "build:짓다", "tear down:허물다", "shelters:숙소/은신처", "with ease:쉽게", "know:알다", "where:어디에", "🍌"] },
+        { en: "Diamond, who had never spent time in such places, has no ability to pay attention to these things.", ko: "그런 장소에서 시간을 보낸 적이 없는 Diamond는 이러한 것들에 주의를 기울일 능력이 없습니다.", voca: ["spent time:시간을보내다", "such:그런", "places:장소들", "ability:능력", "pay attention:주의를기울이다", "things:것들", "never:결코~않은", "Diamond:다이아몬드", "🍌", "🍌"] },
+        { en: "Were he to be tested on such tasks, he also would perform poorly.", ko: "만약 그가 그런 과업으로 테스트를 받는다면, 그 또한 서투른 성과를 낼 것입니다.", voca: ["tested:테스트받는", "tasks:과업", "perform:수행하다", "poorly:서투르게", "also:또한", "such:그런", "🍌", "🍌", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -83,16 +82,15 @@
             header.innerText = "English Master #31";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Originality and<br>Greatness</h1><p>2024년 9월 고1 모의고사 31번</p></div>
-                
+                <div class="main-title-card"><h1>Environment and<br>Attention Expectations</h1><p>2025년 6월 고1 모의고사 31번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 위대한 작곡가들이 당대에 오해받은 이유는 그들의 음악적 형식이 완전히 '새로웠기' 때문임.</p>
-                    <p>• <b>📍 본론:</b> 영화 '아마데우스'의 살리에리는 실력은 좋았으나 당대의 보편적인 스타일을 따랐기에 위대해질 수 없었음.</p>
-                    <p>• <b>📍 결론:</b> 진정으로 위대한 작곡가는 남들과 똑같은 곡이 아닌, 자신만의 독창적인 아이디어를 제시하는 사람임.</p>
+                    <p>• <b>📍 서론:</b> 일상에서 우리는 이전 경험을 바탕으로 주의를 기울일 곳을 예측함.</p>
+                    <p>• <b>📍 본론:</b> 뉴기니 원주민들은 서구적 과업엔 서툴지만, 정글의 미묘한 변화를 읽는 데는 탁월함.</p>
+                    <p>• <b>📍 결론:</b> 능력은 지능의 문제가 아니라, 각자가 처한 환경과 훈련된 경험에 따라 달라짐.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 위대한 작곡가를 결정짓는 핵심 요소로서의 독창성(Originality)</span>
-                    <span class="topic-eng">Topic: Originality as the Key Factor in Defining a Great Composer</span>
+                    <span class="topic-kor">주제: 환경과 경험에 따른 주의 집중 영역과 능력의 차이</span>
+                    <span class="topic-eng">Topic: Differences in Areas of Attention and Ability Based on Environment and Experience</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -142,15 +140,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+ 
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #32 - 25년 3월 고2</title>
+    <title>English Master #32 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -18,11 +18,12 @@
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        
-        .btn-intro-step { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
-        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; color: #444; }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
         .topic-kor { font-weight: bold; color: #D81B60; display: block; margin-bottom: 5px; }
         .topic-eng { font-size: 0.85rem; color: #888; font-style: italic; }
@@ -31,19 +32,16 @@
         .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
         
         .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #333; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         .voca-item.revealed { background: var(--purple-main); color: white; }
         
         .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
         .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
         .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
 
-        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; color: #555; }
-        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; color: #444; }
-        
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; gap: 10px; align-items: center; }
-        .btn-prev { background: #EDF2F7; color: #718096; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1; display: flex; align-items: center; justify-content: center; }
-        .btn-next { background: var(--purple-main); color: white; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1.5; display: flex; align-items: center; justify-content: center; margin-top: 0; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
     </style>
 </head>
 <body>
@@ -57,16 +55,13 @@
 </div>
 
 <script>
-    const prepositions = ["of", "beyond", "in", "by", "to", "at", "after", "for", "from"];
     const fullData = [
-        { en: "Great scientists are seldom one‑hit wonders.", ko: "위대한 과학자가 반짝 스타인 경우는 드물다.", voca: ["seldom:드문", "one‑hit wonders:반짝 스타", "scientists:과학자들", "Great:위대한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Newton is a prime example: beyond the Newtonian mechanics, he developed the theory of gravitation, calculus, laws of motion, and optimization.", ko: "뉴턴이 대표적인 예인데, 그는 뉴턴 역학을 넘어 중력 이론, 미적분학, 운동 법칙 및 최적화를 발전시켰다.", voca: ["prime:대표적인", "mechanics:역학", "gravitation:중력", "calculus:미적분학", "optimization:최적화", "beyond:~을 넘어", "developed:발전시켰다", "🍎", "🍎", "🍎"] },
-        { en: "In fact, well‑known scientists are often involved in multiple discoveries, a phenomenon potentially explained by the Matthew effect.", ko: "사실, 잘 알려진 과학자들은 종종 여러 발견에 관여하는데, 이는 아마도 매튜 효과로 설명되는 현상일 것이다.", voca: ["involved in:~에 관여된", "multiple:여러/다양한", "discoveries:발견", "phenomenon:현상", "potentially:아마도/잠재적으로", "Matthew effect:매튜 효과", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Indeed, an initial success may offer a scientist legitimacy, improve peer perception, provide knowledge of how to score and win, enhance social status, and attract resources and quality collaborators, each of these payoffs further increasing her odds of scoring another win.", ko: "실제로, 최초의 성공은 과학자에게 정당성을 부여하고, 동료들의 인식을 향상시키며, 어떻게 성과를 내고 성공하는지에 대한 지식을 제공하고, 사회적 지위를 높이며, 자원과 우수한 협력자를 끌어들이는데, 이러한 각각의 보상들은 과학자가 또 다른 성공을 거둘 가능성을 더욱 높여 준다.", voca: ["initial:최초의", "legitimacy:정당성", "perception:인식", "enhance:높이다", "collaborators:협력자", "payoffs:보상", "odds:가능성/확률", "🍎", "🍎", "🍎"] },
-        { en: "Yet, there is an appealing alternative explanation: Great scientists have multiple hits and consistently succeed in their scientific endeavors simply because they’re exceptionally talented.", ko: "그러나, 매력적인 대안이 되는 설명이 있는데, 위대한 과학자들이 여러 번의 성공을 거두고 지속적으로 과학적 노력에서 성과를 이루는 이유는 단지 그들이 유난히 재능이 있기 때문이라는 것이다.", voca: ["appealing:매력적인", "alternative:대안의", "consistently:지속적으로", "endeavors:노력", "exceptionally:유난히/특별히", "talented:재능 있는", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Therefore, future success again goes to those who have had success earlier, not because of advantages offered by the previous success, but because the earlier success was indicative of a hidden talent.", ko: "따라서, 미래의 성공이 이전에 성공한 적이 있는 사람에게 다시 돌아가는데, 이는 이전의 성공으로 인해 제공된 이점 때문이 아니라, 이전의 성공이 숨겨진 재능을 나타내는 것이기 때문이다.", voca: ["indicative of:~을 나타내는", "advantages:이점", "previous:이전의", "hidden:숨겨진", "Therefore:따라서", "earlier:이전의", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "The Matthew effect posits that success alone increases the future probability of success, raising the question: Does status dictate outcomes, or does it simply reflect an underlying talent or quality?", ko: "매튜 효과는 성공은 그 하나만으로 미래의 성공 확률을 높인다고 상정하며, 다음과 같은 의문을 제기한다. 지위가 결과를 좌우하는 것일까, 아니면 그것은 근본적인 재능이나 자질을 단순히 반영하는 것일까?", voca: ["posits:상정하다/단정하다", "probability:확률", "dictate:좌우하다", "underlying:근본적인", "reflect:반영하다", "outcomes:결과", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "In other words, is there really a Matthew effect after all?", ko: "다시 말하면, 결론적으로 매튜 효과가 정말로 존재하는 것일까?", voca: ["In other words:다시 말하면", "after all:결론적으로/결국", "really:정말로", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "Most entrepreneurs put in tremendous amounts of time and effort in creating and launching new products and services and then make the mistake of overpricing them.", ko: "대부분의 기업가는 신제품과 서비스를 만들고 출시하는 데 엄청난 시간과 노력을 들이고 나서 그것들에 너무 높은 가격을 매기는 실수를 범합니다.", voca: ["entrepreneurs:기업가", "tremendous:엄청난", "amounts:양", "effort:노력", "launching:출시", "mistake:실수", "overpricing:과도하게가격을매기다", "products:제품", "services:서비스", "creating:창조/제작"] },
+        { en: "They have created something they care deeply about, it’s theirs, and this powerful sense of ownership distorts their perception of value which causes them to overprice their products.", ko: "그들은 자신들이 깊이 관심을 두는 무언가를 만들었고, 그것은 자신들의 것이며, 이러한 강력한 소유 의식은 가치에 대한 인식을 왜곡하여 그들이 제품 가격을 과하게 책정하게 만듭니다.", voca: ["care deeply:깊이관심두다", "ownership:소유권", "distorts:왜곡하다", "perception:인식", "value:가치", "causes:유발하다", "overprice:과하게가격매기다", "sense:의식/감각", "powerful:강력한", "theirs:그들의것"] },
+        { en: "While many of them are quick to realize that their initial prices are too high, not all these people are happy or willing to drop their prices to make their products more attractive.", ko: "그들 중 다수는 초기 가격이 너무 높다는 것을 빨리 깨닫지만, 이 사람들 모두가 제품을 더 매력적으로 만들기 위해 기꺼이 가격을 내리거나 기쁘게 생각하는 것은 아닙니다.", voca: ["realize:깨닫다", "initial:초기의", "willing to:기꺼이~하는", "drop:내리다", "attractive:매력적인", "while:~이지만", "quick:빠른", "prices:가격", "people:사람들", "happy:기쁜"] },
+        { en: "And this can be a very costly mistake that may lead to the failure of their new business.", ko: "그리고 이것은 새로운 사업의 실패로 이어질 수 있는 매우 큰 대가를 치르는 실수가 될 수 있습니다.", voca: ["costly:대가가큰/비싼", "mistake:실수", "lead to:~로이어지다", "failure:실패", "business:사업", "new:새로운", "can:할수있다", "very:매우", "may:일지도모른다", "🍌"] },
+        { en: "When you launch a new product or service, your priority should be to get sufficient market adoption as soon as possible and you should be ready to sacrifice your initial prices and profits to achieve this aim.", ko: "신제품이나 서비스를 출시할 때, 여러분의 우선순위는 가능한 한 빨리 충분한 시장 채택을 얻는 것이어야 하며, 이 목표를 달성하기 위해 초기 가격과 이익을 희생할 준비가 되어 있어야 합니다.", voca: ["priority:우선순위", "sufficient:충분한", "adoption:채택", "as soon as possible:가능한한빨리", "sacrifice:희생하다", "profits:이익", "achieve:달성하다", "aim:목표", "ready:준비된", "initial:초기의"] },
+        { en: "Once you have strong sales volumes, you can increase your prices to maximize your profits.", ko: "일단 강력한 판매량을 확보하면, 이익을 극대화하기 위해 가격을 올릴 수 있습니다.", voca: ["Once:일단~하면", "sales volumes:판매량", "increase:늘리다/인상하다", "maximize:극대화하다", "profits:이익", "strong:강력한", "prices:가격", "can:할수있다", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -83,70 +78,100 @@
             header.innerText = "English Master #32";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Matthew Effect<br>in Science</h1><p>2025년 3월 고2 32번</p></div>
-                
+                <div class="main-title-card"><h1>The Trap of Overpricing:<br>Ownership Bias</h1><p>2025년 6월 고1 모의고사 32번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 뉴턴처럼 위대한 과학자들은 한 번의 성공에 그치지 않고 여러 분야에서 지속적인 성과를 냄.</p>
-                    <p>• <b>📍 본론 1:</b> 매튜 효과는 초기 성공이 가져다주는 사회적 지위와 자원이 다음 성공을 더 쉽게 만든다고 설명함.</p>
-                    <p>• <b>📍 본론 2:</b> 반면, 연속된 성공은 단지 그 과학자가 가진 탁월하고 숨겨진 '재능'의 결과일 뿐이라는 대안적 설명도 존재함.</p>
-                    <p>• <b>📍 결론:</b> 성공이 지위를 결정하는지, 아니면 지위가 단지 재능을 반영하는 것인지에 대한 근본적 의문을 던짐.</p>
+                    <p>• <b>📍 서론:</b> 많은 기업가들이 신제품 출시 시 소유 의식 때문에 가격을 너무 높게 책정하는 실수를 함.</p>
+                    <p>• <b>📍 본론:</b> 소유권에 대한 애착은 가치 인식을 왜곡하며, 가격 인하를 주저하게 만들어 사업 실패를 초래함.</p>
+                    <p>• <b>📍 결론:</b> 초기에는 이익보다 시장 점유율 확보를 우선시해야 하며, 판매량이 안정된 후 가격을 올려야 함.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 과학적 성취의 연속성을 설명하는 매튜 효과와 개인의 재능이라는 두 가지 관점</span>
-                    <span class="topic-eng">Topic: Two perspectives on scientific success: the Matthew Effect versus innate talent</span>
+                    <span class="topic-kor">주제: 신제품 출시 시 과도한 가격 책정의 위험성과 시장 채택의 우선순위</span>
+                    <span class="topic-eng">Topic: The Dangers of Overpricing and the Priority of Market Adoption in New Product Launch</span>
                 </div>
-                <button class="btn-intro-step" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
-                <button class="btn-intro-step" style="background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
             `;
-        } else {
+        } else if (currentMode === 'STEP2' || currentMode === 'STEP3') {
             const stepNum = currentMode === 'STEP2' ? 2 : 3;
-            header.innerText = `STEP ${stepNum} (${currentIdx + 1}/${fullData.length})`;
+            header.innerText = `STEP ${stepNum}. ${stepNum === 2 ? '문장 학습' : '영작 연습'} (${currentIdx + 1}/${fullData.length})`;
             nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
             
             const item = fullData[currentIdx];
             if (currentMode === 'STEP2') {
-                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인</button><div id="trans-area" class="trans-content">${item.ko}</div>`;
-                fillVoca(item.voca, '🍎', "#FF3B30");
+                area.innerHTML = `
+                    <div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.ko}</div>
+                `;
+                fillVoca(item.voca, '🍌', "#FFD600");
             } else {
-                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인</button><div id="trans-area" class="trans-content">${item.en}</div>`;
+                area.innerHTML = `
+                    <div class="kor-box">${item.ko}</div>
+                    <div class="blank-area" id="blank-area"></div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.en}</div>
+                `;
                 fillBlanks(item.en);
                 fillVoca(item.voca, '🍇', "#9C27B0");
             }
         }
     }
 
-    function fillVoca(vList, emo, col) {
-        const area = document.getElementById('voca-area');
+    function fillVoca(vocaList, emoji, emojiColor) {
+        const container = document.getElementById('voca-area');
         for (let i = 0; i < 10; i++) {
             const div = document.createElement('div');
             div.className = 'voca-item';
-            if (vList[i] && vList[i].includes(':')) {
-                const [en, ko] = vList[i].split(':');
-                div.innerText = en;
-                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? ko : en; };
+            if (vocaList[i]) {
+                const [eng, kor] = vocaList[i].split(':');
+                div.innerText = eng;
+                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? kor : eng; };
             } else {
-                div.innerText = emo; div.style.color = col; div.style.cursor = "default";
+                div.innerText = emoji; div.style.color = emojiColor; div.style.cursor = "default";
             }
-            area.appendChild(div);
+            container.appendChild(div);
         }
     }
 
-    function fillBlanks(s) {
-        const area = document.getElementById('blank-area');
-        s.split(' ').forEach(w => {
-            const span = document.createElement('span');
-            const cw = w.replace(/[.,'"]/g, "").toLowerCase();
-            if(prepositions.includes(cw)) { span.innerText = w; span.style.margin="0 4px"; span.style.fontWeight="bold"; }
-            else { span.className = 'word-blank'; span.innerText = w; span.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; }
-            area.appendChild(span);
-        });
-    }
 
-    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
+
+    function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
     function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
-    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; synth.speak(u); }
+    function playTTS(text) { synth.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.9; synth.speak(utterance); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;
 </script>

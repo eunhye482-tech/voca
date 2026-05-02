@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #29 - 23년 3월 고1 모의고사</title>
+    <title>English Master #29 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,12 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "The most noticeable human characteristic projected onto animals is that they can talk in human language.", ko: "동물에게 투사되는 가장 눈에 띄는 인간의 특징은 그들이 인간의 언어로 말할 수 있다는 것입니다.", voca: ["noticeable:눈에 띄는", "characteristic:특징", "projected:투사된", "language:언어", "human:인간의", "animals:동물들", "talk:말하다", "most:가장", "that:~라는 것", "🍎"] },
-        { en: "Physically, animal cartoon characters and toys made after animals are also most often deformed in such a way as to resemble humans.", ko: "신체적으로, 동물 만화 캐릭터와 동물을 본떠 만든 장난감들도 또한 인간을 닮게 하는 방식으로 변형되는 경우가 아주 많습니다.", voca: ["Physically:신체적으로", "cartoon:만화", "deformed:변형된", "resemble:닮다", "made after:~을 본떠 만든", "characters:캐릭터들", "toys:장난감들", "often:종종", "way:방식", "🍎"] },
-        { en: "This is achieved by showing them with humanlike facial features and deformed front legs to resemble human hands.", ko: "이것은 인간과 유사한 얼굴 특징과 인간의 손을 닮게 변형된 앞다리를 보여줌으로써 달성됩니다.", voca: ["achieved:달성된", "humanlike:인간과 유사한", "facial features:얼굴 특징", "front legs:앞다리", "hands:손", "showing:보여주는 것", "resemble:닮다", "deformed:변형된", "by:~함으로써", "🍎"] },
-        { en: "In more recent animated movies the trend has been to show the animals in a more “natural” way.", ko: "최신 애니메이션 영화에서 경향은 동물을 더 '자연스러운' 방식으로 보여주는 것이었습니다.", voca: ["recent:최근의", "animated movies:애니메이션 영화", "trend:경향", "natural:자연스러운", "way:방식", "show:보여주다", "more:더", "the:그", "in:~로", "🍎"] },
-        { en: "However, they still use their front legs like human hands (for example, lions can pick up and lift small objects with one paw), and they still talk with an appropriate facial expression.", ko: "하지만, 그들은 여전히 앞다리를 인간의 손처럼 사용하고(예를 들어, 사자가 한 발로 작은 물체를 집어 들어 올릴 수 있음), 여전히 적절한 얼굴 표정으로 말합니다.", voca: ["still:여전히", "pick up:집어 들다", "lift:들어 올리다", "objects:물체들", "appropriate:적절한", "expression:표정/표현", "hands:손", "paw:발", "facial:얼굴의", "🍎"] },
-        { en: "A general strategy that is used to make the animal characters more emotionally appealing, both to children and adults, is to give them enlarged and deformed childlike features.", ko: "아이들과 어른들 모두에게 동물 캐릭터를 감정적으로 더 매력적이게 만들기 위해 사용되는 일반적인 전략은 그들에게 확대되고 변형된 어린아이 같은 특징을 부여하는 것입니다.", voca: ["strategy:전략", "emotionally:감정적으로", "appealing:매력적인", "enlarged:확대된", "childlike:어린아이 같은", "features:특징들", "children:아이들", "adults:어른들", "give:주다/부여하다", "🍎"] }
+        { en: "Studies of experts provide insight into what it means to have deep and flexible understanding.", ko: "전문가들에 대한 연구는 깊고 유연한 이해를 갖는다는 것이 무엇을 의미하는지에 대한 통찰력을 제공합니다.", voca: ["Studies:연구", "experts:전문가", "provide:제공하다", "insight:통찰력", "flexible:유연한", "understanding:이해", "means:의미하다", "deep:깊은", "into:~에대한", "🍌"] },
+        { en: "Experts in a particular domain are people who have deep, richly interconnected ideas about the world.", ko: "특정 분야의 전문가는 세상에 대해 깊고 풍부하게 상호 연결된 아이디어를 가진 사람들입니다.", voca: ["particular:특정한", "domain:분야/영역", "richly:풍부하게", "interconnected:상호연결된", "ideas:아이디어", "world:세상", "people:사람들", "about:~에대해", "deep:깊은", "🍌"] },
+        { en: "They are not just good thinkers or people who are exceptionally smart.", ko: "그들은 단순히 훌륭한 사고가이거나 예외적으로 똑똑한 사람들이 아닙니다.", voca: ["just:단순히", "thinkers:사고자", "exceptionally:예외적으로", "smart:똑똑한", "people:사람들", "They:그들", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Rather, experts have knowledge in a specific domain—such as chess, chemistry, or tennis—and are not generalists.", ko: "오히려 전문가는 체스, 화학 또는 테니스와 같은 특정 분야의 지식을 갖고 있으며 다방면에 능한 사람(제너럴리스트)이 아닙니다.", voca: ["Rather:오히려", "knowledge:지식", "specific:특정한", "chemistry:화학", "generalists:제너럴리스트", "domain:분야", "such as:~와같은", "🍌", "🍌", "🍌"] },
+        { en: "However, experts do not just know 'a bunch of facts.'", ko: "하지만 전문가는 단순히 '많은 사실'만을 알고 있는 것이 아닙니다.", voca: ["However:하지만", "just:단순히", "a bunch of:많은/다수의", "facts:사실들", "know:알다", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "In fact, having expertise in a topic means that knowledge is organized into coherent frameworks, and the expert understands the inter-relationship between facts and can distinguish which ideas are most central.", ko: "사실, 한 주제에 대해 전문 지식을 갖는다는 것은 지식이 일관된 체계로 조직되어 있다는 것을 의미하며, 전문가는 사실들 사이의 상호 관계를 이해하고 어떤 아이디어가 가장 핵심적인지 구별할 수 있습니다.", voca: ["expertise:전문지식", "organized:조직된", "coherent:일관된", "frameworks:체계/프레임워크", "inter-relationship:상호관계", "distinguish:구별하다", "central:핵심적인", "means:의미하다", "knowledge:지식", "between:~사이에"] },
+        { en: "This kind of deep but organized understanding allows for greater flexibility in learning and facilitates application across multiple contexts.", ko: "이러한 종류의 깊고 조직된 이해는 학습의 더 큰 유연성을 가능하게 하고 여러 맥락에 걸친 적용을 용이하게 합니다.", voca: ["kind:종류", "organized:조직된", "allows:가능하게하다", "flexibility:유연성", "facilitates:용이하게하다", "application:적용", "multiple:여러/다양한", "contexts:맥락", "across:~에걸쳐", "learning:학습"] }
     ];
 
     let currentMode = 'INTRO';
@@ -78,16 +79,16 @@
             header.innerText = "English Master #29";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Anthropomorphism in<br>Animal Characters</h1><p>2023년 3월 고1 모의고사 29번</p></div>
-                
+                <div class="main-title-card"><h1>The Nature of Expertise:<br>Coherent Frameworks</h1><p>2025년 6월 고1 모의고사 29번</p></div>
+                [Image of structured knowledge organization versus a list of random facts]
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 동물 캐릭터의 가장 큰 의인화 특징은 인간의 언어를 사용한다는 점임.</p>
-                    <p>• <b>📍 본론:</b> 신체적으로도 손을 닮은 앞발, 인간 같은 얼굴 표정 등 인간을 닮도록 변형되는 경우가 많음.</p>
-                    <p>• <b>📍 결론:</b> 특히 전 연령층에 감정적인 매력을 주기 위해 '확대된 어린아이 같은 특징'을 부여하는 디자인 전략이 흔히 사용됨.</p>
+                    <p>• <b>📍 서론:</b> 전문가는 특정 분야에서 깊고 상호 연결된 아이디어를 가진 사람임.</p>
+                    <p>• <b>📍 본론:</b> 전문 지식은 단순히 사실을 아는 것이 아니라, 일관된 체계로 지식을 조직하고 핵심을 구별하는 능력임.</p>
+                    <p>• <b>📍 결론:</b> 이러한 조직된 이해는 학습의 유연성을 높이고 다양한 상황에 지식을 적용하게 해줌.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 정서적 호소력을 높이기 위해 동물 캐릭터에 인간과 어린아이의 특징을 부여하는 의인화</span>
-                    <span class="topic-eng">Topic: Anthropomorphism in animal characters by giving them human and childlike features to increase emotional appeal</span>
+                    <span class="topic-kor">주제: 전문가의 지식 조직화와 깊고 유연한 이해의 특성</span>
+                    <span class="topic-eng">Topic: Knowledge Organization and Characteristics of Deep and Flexible Understanding in Experts</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -106,7 +107,7 @@
                     <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
                     <div id="trans-area" class="trans-content">${item.ko}</div>
                 `;
-                fillVoca(item.voca, '🍎', "#FF3B30");
+                fillVoca(item.voca, '🍌', "#FFD600");
             } else {
                 area.innerHTML = `
                     <div class="kor-box">${item.ko}</div>
@@ -137,15 +138,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

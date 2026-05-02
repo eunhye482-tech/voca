@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #21 - 9월 모의고사</title>
+    <title>English Master #21 - Zoomable Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 (서론/본론/결론 명시) */
+        /* STEP 1: 인트로 */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,17 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "Many atoms in your body are nearly as old as the universe itself.", ko: "당신의 몸속에 있는 많은 원자들은 거의 우주 그 자체만큼이나 오래되었습니다.", voca: ["atoms:원자", "nearly:거의", "universe:우주", "itself:그 자체", "body:몸", "old:오래된", "many:많은", "as old as:~만큼 오래된", "🍌", "🍌"] },
-        { en: "When you breathe, for example, only some of the atoms that you inhale are exhaled in your next breath.", ko: "예를 들어, 당신이 숨을 쉴 때 당신이 들이마시는 원자들 중 일부만이 다음 호흡에서 내뱉어집니다.", voca: ["breathe:숨쉬다", "inhale:들이마시다", "exhale:내뱉다", "breath:호흡", "some:일부", "next:다음의", "only:오직", "example:예시", "🍌", "🍌"] },
-        { en: "The remaining atoms are taken into your body to become part of you, and they later leave your body by various means.", ko: "남은 원자들은 당신의 몸속으로 들어가 당신의 일부가 되고, 나중에 다양한 수단에 의해 당신의 몸을 떠납니다.", voca: ["remaining:남은", "taken into:~로 들어가다", "part:일부", "leave:떠나다", "various:다양한", "means:수단/방법", "later:나중에", "atoms:원자들", "body:몸", "become:되다"] },
-        { en: "You don’t 'own' the atoms that make up your body; you borrow them.", ko: "당신은 당신의 몸을 구성하는 원자들을 '소유'하는 것이 아니라, 그것들을 빌리는 것입니다.", voca: ["own:소유하다", "make up:구성하다", "borrow:빌리다", "atoms:원자들", "body:몸", "them:그것들", "not:아닌", "🍌", "🍌", "🍌"] },
-        { en: "We all share from the same atom pool because atoms forever travel around, within, and among us.", ko: "원자들은 영원히 우리 주변, 내부, 그리고 우리 사이를 여행하기 때문에 우리 모두는 같은 원자 풀을 공유합니다.", voca: ["share:공유하다", "pool:풀/저장고", "forever:영원히", "travel:여행하다/이동하다", "within:~내부에", "among:~사이에", "around:주변에", "same:같은", "because:~때문에", "atoms:원자들"] },
-        { en: "Atoms cycle from person to person as we breathe and as our sweat is evaporated.", ko: "우리가 숨을 쉬고 땀이 증발함에 따라 원자들은 사람에서 사람으로 순환합니다.", voca: ["cycle:순환하다", "sweat:땀", "evaporated:증발된", "person:사람", "breathe:숨쉬다", "atoms:원자들", "from:~로부터", "as:~함에 따라", "🍌", "🍌"] },
-        { en: "We recycle atoms on a grand scale.", ko: "우리는 거대한 규모로 원자들을 재활용합니다.", voca: ["recycle:재활용하다", "grand scale:거대한 규모", "atoms:원자들", "we:우리", "on:~으로", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "The origin of the lightest atoms goes back to the origin of the universe, and most heavier atoms are older than the Sun and Earth.", ko: "가장 가벼운 원자들의 기원은 우주의 기원으로 거슬러 올라가며, 대부분의 더 무거운 원자들은 태양과 지구보다 더 오래되었습니다.", voca: ["origin:기원", "lightest:가장 가벼운", "goes back:거슬러 올라가다", "heavier:더 무거운", "Sun:태양", "Earth:지구", "older:더 오래된", "most:대부분", "universe:우주", "atoms:원자들"] },
-        { en: "There are atoms in your body that have existed since the first moments of time, recycling throughout the universe among limitless forms, both nonliving and living.", ko: "당신의 몸속에는 시간의 첫 순간부터 존재해 온 원자들이 있으며, 생물과 무생물 모두를 포함한 무한한 형태들 사이에서 우주 전역을 재활용하며 순환하고 있습니다.", voca: ["existed:존재했다", "since:~이후로", "first moments:첫 순간", "throughout:~전역에", "limitless:무한한", "forms:형태들", "nonliving:무생물", "living:생물", "recycling:재활용하며", "atoms:원자들"] },
-        { en: "You’re the present caretaker of the atoms in your body.", ko: "당신은 당신 몸속에 있는 원자들의 현재 관리인입니다.", voca: ["present:현재의", "caretaker:관리인", "atoms:원자들", "body:몸", "your:당신의", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "There will be many who will follow you.", ko: "당신의 뒤를 이을 사람들이 많을 것입니다.", voca: ["follow:뒤를 잇다/따르다", "many:많은 사람들", "will:~할 것이다", "you:당신", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] }
+        { en: "It is common sense that people’s inner beliefs may drive their external behavior.", ko: "사람들의 내면적인 신념이 외적 행동을 유도할 수도 있다는 것은 상식입니다.", voca: ["common sense:상식", "inner:내면적인", "beliefs:신념", "drive:유도하다", "external:외적인", "behavior:행동", "people:사람들", "may:~일수도있다", "🍌", "🍌"] },
+        { en: "If you’re attracted to a certain person, you should be more likely to socialize with that person.", ko: "만약 여러분이 어떤 사람에게 끌린다면, 여러분은 그 사람과 사귈 가능성이 더 높을 것입니다.", voca: ["attracted:끌리는", "certain:어떤/특정한", "likely to:~할것같은", "socialize:사귀다/교제하다", "person:사람", "should:~할것이다", "more:더", "with:~와함께", "🍌", "🍌"] },
+        { en: "If you favor a brand of toothpaste, you’re more likely to buy it.", ko: "만약 여러분이 어떤 브랜드의 치약을 선호한다면, 여러분은 그것을 살 가능성이 더 높습니다.", voca: ["favor:선호하다", "brand:브랜드", "toothpaste:치약", "likely to:~할것같은", "buy:사다", "more:더", "if:~라면", "🍌", "🍌", "🍌"] },
+        { en: "Of course, our internal thoughts don’t always predict our public behavior, but, overall, what we do obviously reflects what we think.", ko: "물론 우리의 내면적인 생각이 항상 우리의 공적 행동을 예측하는 것은 아니지만, 전반적으로 우리가 하는 일은 분명히 우리가 생각하는 것을 반영합니다.", voca: ["internal:내면적인", "predict:예측하다", "public:공적인", "overall:전반적으로", "obviously:분명히", "reflects:반영하다", "thoughts:생각", "always:항상", "what:것", "think:생각하다"] },
+        { en: "But beliefs and behaviors are also related in a more remarkable way.", ko: "하지만 신념과 행동은 또한 더 놀라운 방식으로 관련되어 있습니다.", voca: ["beliefs:신념", "behaviors:행동", "related:관련된", "remarkable:놀라운", "way:방식", "also:또한", "more:더", "🍌", "🍌", "🍌"] },
+        { en: "It turns out that the arrow is as likely to point in the reverse direction.", ko: "화살표가 반대 방향을 가리킬 가능성도 똑같다는 것이 밝혀졌습니다.", voca: ["turns out:밝혀지다", "arrow:화살표", "point:가리키다", "reverse:반대의", "direction:방향", "likely to:~할것같은", "reverse:반대", "🍌", "🍌", "🍌"] },
+        { en: "As social psychologist David Myers observes, 'If social psychology has taught us anything during the last 25 years, it is that we are likely not only to think ourselves into a way of acting but also to act ourselves into a way of thinking.'", ko: "사회심리학자 David Myers가 관찰한 바와 같이, '만약 사회심리학이 지난 25년 동안 우리에게 무엇인가를 가르쳤다면, 그것은 우리가 행동 방식에 따라 생각하게 될 뿐만 아니라 생각하는 방식에 따라 행동하게 될 가능성도 있다는 것입니다.'", voca: ["psychologist:심리학자", "observes:관찰하다", "taught:가르쳤다", "not only:A뿐만아니라", "but also:B도역시", "acting:행동하기", "thinking:생각하기", "likely to:~할것같은", "during:~동안", "way:방식"] }
     ];
 
     let currentMode = 'INTRO';
@@ -83,15 +79,15 @@
             header.innerText = "English Master #21";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Eternal Cycle<br>of Atoms</h1><p>2025년 9월 고1 모의고사 21번</p></div>
+                <div class="main-title-card"><h1>The Relationship Between<br>Beliefs and Behaviors</h1><p>2025년 6월 고1 모의고사 21번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 우리 몸의 원자들은 우주만큼이나 오래되었으며, 우리는 이를 잠시 빌려 쓰는 것임.</p>
-                    <p>• <b>📍 본론:</b> 원자들은 호흡과 증발을 통해 사람 사이를 끊임없이 이동하며 거대한 규모로 재활용됨.</p>
-                    <p>• <b>📍 결론:</b> 우리는 몸속 원자들의 현재 관리인일 뿐이며, 원자들은 무한한 형태를 거쳐 계속 순환할 것임.</p>
+                    <p>• <b>📍 서론:</b> 내면의 신념이 외적 행동을 유도하는 것은 상식적인 일임.</p>
+                    <p>• <b>📍 본론:</b> 반대로, 우리의 외적 행동이 내면의 사고 방식을 결정하기도 함.</p>
+                    <p>• <b>📍 결론:</b> 신념과 행동은 서로 양방향으로 영향을 주고받는 관계임.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 우주적 규모에서 이루어지는 원자들의 영원한 순환과 재활용</span>
-                    <span class="topic-eng">Topic: The Eternal Cycling and Recycling of Atoms on a Cosmic Scale</span>
+                    <span class="topic-kor">주제: 신념과 행동 사이의 상호 유기적이고 양방향적인 관계</span>
+                    <span class="topic-eng">Topic: The Mutual and Bi-directional Relationship Between Beliefs and Behaviors</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -141,7 +137,7 @@
         }
     }
 
- 
+
 // 수정된 Step 3 빈칸 생성 로직
 function fillBlanks(s) {
     const c = document.getElementById('blank-area');
@@ -172,6 +168,8 @@ function fillBlanks(s) {
         c.appendChild(sp);
     });
 }
+
+
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

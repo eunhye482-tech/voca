@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>English Master #38 - Official Version</title>
     <style>
         :root { 
@@ -12,13 +12,13 @@
             --purple-dark: #673AB7;
             --pink-soft: #FFF0F6;
         }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
-        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
-        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
         /* STEP 1: 인트로 (서론/본론/결론 명시) */
@@ -41,7 +41,7 @@
 
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
     </style>
 </head>
 <body>
@@ -56,13 +56,14 @@
 
 <script>
     const fullData = [
-        { en: "Piaget put the same amount of water into two different glasses: a tall narrow glass and a wide glass, then asked kids to compare two glasses.", ko: "피아제는 같은 양의 물을 두 개의 다른 유리잔, 즉 높고 좁은 유리잔과 넓은 유리잔에 넣은 다음, 아이들에게 두 유리잔을 비교해 보라고 요청했습니다.", voca: ["amount:양", "narrow:좁은", "glasses:유리잔", "compare:비교하다", "different:다른", "tall:높은", "wide:넓은", "asked:요청했다", "water:물", "same:같은"] },
-        { en: "Kids younger than six or seven usually say that the tall narrow glass now holds more water, because the level is higher.", ko: "6~7세보다 어린 아이들은 대개 높고 좁은 유리잔이 이제 더 많은 물을 담고 있다고 말하는데, 그 이유는 수위가 더 높기 때문입니다.", voca: ["younger:더어린", "usually:대개", "holds:담고있다", "level:수위/높이", "higher:더높은", "because:때문에", "narrow:좁은", "glass:유리잔", "seven:일곱", "six:여섯"] },
-        { en: "And when they are ready, they figure out the conservation of volume for themselves just by playing with cups of water.", ko: "그리고 준비가 되면, 아이들은 단지 물컵을 가지고 노는 것만으로 부피 보존 법칙을 스스로 깨닫게 됩니다.", voca: ["ready:준비된", "figure out:깨닫다/이해하다", "conservation:보존", "volume:부피", "themselves:스스로", "playing:노는것", "cups:컵들", "just:단지", "water:물", "when:때"] },
-        { en: "Piaget argued that children’s understanding of morality is like their understanding of those water glasses: we can’t say that it is innate or kids learn it directly from adults.", ko: "피아제는 아이들의 도덕성에 대한 이해가 그 유리잔들에 대한 이해와 같다고 주장했습니다. 즉 그것이 타고난 것이라거나 아이들이 어른들로부터 직접 배운다고 말할 수 없다는 것입니다.", voca: ["argued:주장했다", "understanding:이해", "morality:도덕성", "innate:타고난", "directly:직접적으로", "adults:어른들", "learn:배우다", "children:아이들", "say:말하다", "like:~와같은"] },
-        { en: "Rather, it is self-constructed as kids play with other kids.", ko: "오히려, 그것은 아이들이 다른 아이들과 함께 놀면서 스스로 구성됩니다.", voca: ["Rather:오히려", "self-constructed:스스로구성된", "play:놀다", "other:다른", "kids:아이들", "as:~하면서", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Taking turns in a game is like pouring water back and forth between glasses.", ko: "게임에서 차례를 지키는 것은 유리잔 사이로 물을 앞뒤로 붓는 것과 같습니다.", voca: ["Taking turns:차례지키기", "pouring:붓는것", "back and forth:앞뒤로", "between:~사이에", "game:게임", "glasses:유리잔", "water:물", "like:~와같은", "🍌", "🍌"] },
-        { en: "Once kids have reached the age of five or six, then playing games and working things out together will help them learn about fairness far more effectively than any teaching from adults.", ko: "아이들이 5~6세에 이르면, 함께 게임을 하고 문제를 해결하는 것은 어른들의 어떤 가르침보다 훨씬 더 효과적으로 공정함에 대해 배우도록 도와줄 것입니다.", voca: ["reached:도달했다", "fairness:공정함", "effectively:효과적으로", "teaching:가르침", "working things out:문제를해결하다", "help:돕다", "together:함께", "playing:하는것", "adults:어른들", "age:나이"] }
+        { en: "To monitor our surroundings is to focus on what’s outside of ourselves: what we see, hear, smell, feel, and perhaps even taste.", ko: "우리의 주변을 관찰하는 것은 우리 외부에 있는 것, 즉 우리가 보고, 듣고, 냄새 맡고, 느끼고, 아마도 심지어 맛보는 것에 집중하는 것입니다.", voca: ["monitor:관찰/감시하다", "surroundings:주변 환경", "focus on:~에 집중하다", "outside:외부", "perhaps:아마도", "taste:맛보다", "smell:냄새맡다", "ourselves:우리 자신", "hear:듣다", "see:보다"] },
+        { en: "But sometimes what really marks a place is something less specific—a feeling within us.", ko: "하지만 때때로 어떤 장소를 정말로 특징짓는 것은 덜 구체적인 것, 즉 우리 내면의 감정입니다.", voca: ["sometimes:때때로", "marks:특징짓다/표시하다", "specific:구체적인", "feeling:감정", "within:~내부의", "less:덜", "place:장소", "really:정말로", "🍌", "🍌"] },
+        { en: "An interesting example emerged from a study of subway passenger behavior.", ko: "지하철 승객 행동 연구에서 흥미로운 사례가 나타났습니다.", voca: ["emerged:나타나다/출현하다", "study:연구", "subway:지하철", "passenger:승객", "behavior:행동", "interesting:흥미로운", "example:사례", "🍌", "🍌", "🍌"] },
+        { en: "Researchers trying to understand why people sit where they sit or stand where they stand in subway and metro trains examined the factors that shape the way riders used and navigated that space in different situations.", ko: "지하철과 메트로 열차에서 사람들이 왜 그 자리에 앉는지 또는 그 자리에 서 있는지를 이해하려는 연구원들은 승객들이 다양한 상황에서 그 공간을 사용하고 이동하는 방식을 형성하는 요인들을 조사했습니다.", voca: ["examined:조사하다", "factors:요인들", "shape:형성하다", "navigated:이동하다/길을찾다", "space:공간", "situations:상황들", "understand:이해하다", "riders:승객/타는사람", "different:다른", "metro:메트로"] },
+        { en: "One of their findings involved the reasons many riders like to plant themselves close to the train’s doors.", ko: "그들의 발견 중 하나는 많은 승객이 열차 문 근처에 자리를 잡고 싶어 하는 이유와 관련이 있었습니다.", voca: ["findings:발견(물)", "involved:관련되다/포함하다", "reasons:이유들", "plant oneself:자리를 잡다", "close to:~에 가까이", "doors:문들", "riders:승객들", "train:열차", "like:좋아하다", "🍌"] },
+        { en: "Partly this was the obvious convenience of being able to exit more quickly.", ko: "부분적으로 이것은 더 빨리 내릴 수 있다는 분명한 편리함 때문이었습니다.", voca: ["Partly:부분적으로", "obvious:분명한", "convenience:편리함", "exit:나가다/내리다", "quickly:빨리", "being able to:~할 수 있음", "this:이것", "more:더", "🍌", "🍌"] },
+        { en: "But it was shaped partly by a more abstract sensation—the desire to avoid the sometimes uncomfortable feeling of accidentally making eye contact with seated passengers.", ko: "하지만 그것은 부분적으로 더 추상적인 느낌, 즉 앉아 있는 승객들과 우연히 눈이 마주치는 때때로 불편한 기분을 피하고 싶은 욕구에 의해 형성되었습니다.", voca: ["abstract:추상적인", "sensation:느낌/감각", "desire:욕구", "avoid:피하다", "uncomfortable:불편한", "accidentally:우연히", "eye contact:눈맞춤", "seated:앉아 있는", "passengers:승객들", "feeling:기분"] },
+        { en: "We can’t see feelings—but they’re very real, and they influence our experience of the world.", ko: "우리는 감정을 볼 수는 없지만, 그것들은 매우 실제적이며 우리가 세상을 경험하는 데 영향을 미칩니다.", voca: ["influence:영향을 주다", "experience:경험", "real:실제적인", "world:세상", "feelings:감정들", "very:매우", "they:그것들", "see:보다", "can't:할 수 없다", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -79,16 +80,15 @@
             header.innerText = "English Master #38";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Cognitive and Moral<br>Development of Children</h1><p>2025년 3월 고1 모의고사 38번</p></div>
-                
+                <div class="main-title-card"><h1>Inside the Mind:<br>Feelings Shape Experience</h1><p>2025년 6월 고1 모의고사 38번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 아이들은 놀이를 통해 스스로 부피 보존의 법칙을 깨닫게 됨.</p>
-                    <p>• <b>📍 본론:</b> 도덕성 발달 또한 부피 이해와 같아서, 어른에게 배우기보다 아이들끼리의 놀이를 통해 스스로 형성됨.</p>
-                    <p>• <b>📍 결론:</b> 또래와의 게임과 상호작용은 가르침보다 공정함을 배우는 데 훨씬 효과적임.</p>
+                    <p>• <b>📍 서론:</b> 주변 관찰은 외부 자극에 집중하는 것이지만, 내면의 감정이 장소를 특징짓기도 함.</p>
+                    <p>• <b>📍 본론:</b> 지하철 승객들이 문 근처에 서는 이유는 편리함 외에도 승객과의 눈맞춤을 피하려는 심리적 요인이 큼.</p>
+                    <p>• <b>📍 결론:</b> 감정은 눈에 보이지 않지만 매우 실제적이며 우리가 세상을 경험하는 방식에 큰 영향을 미침.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 또래와의 놀이를 통한 자발적인 도덕성 및 인지적 구성</span>
-                    <span class="topic-eng">Topic: Self-Constructed Moral and Cognitive Development Through Peer Play</span>
+                    <span class="topic-kor">주제: 보이지 않는 내면의 감정이 공간 이용과 경험에 미치는 영향</span>
+                    <span class="topic-eng">Topic: How Invisible Internal Feelings Influence Spatial Use and World Experience</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -138,7 +138,8 @@
         }
     }
 
-    // 수정된 Step 3 빈칸 생성 로직
+
+// 수정된 Step 3 빈칸 생성 로직
 function fillBlanks(s) {
     const c = document.getElementById('blank-area');
     

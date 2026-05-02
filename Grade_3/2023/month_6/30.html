@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #30 - 23년 6월 고1 모의고사</title>
+    <title>English Master #30 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,12 +56,14 @@
 
 <script>
     const fullData = [
-        { en: "Advertisers often displayed considerable facility in adapting their claims to the market status of the goods they promoted.", ko: "광고주들은 종종 자신들이 홍보하는 상품의 시장 상황에 맞춰 그들의 주장을 조절하는 상당한 솜씨를 보여주었습니다.", voca: ["Advertisers:광고주", "considerable:상당한", "facility:솜씨/재주", "adapting:조절하는/적응시키는", "claims:주장", "status:상태/상황", "promoted:홍보된", "often:종종", "goods:상품", "🍎"] },
-        { en: "Fleischmann’s yeast, for instance, was used as an ingredient for cooking homemade bread.", ko: "예를 들어, Fleischmann의 효모는 집에서 만든 빵을 요리하는 재료로 사용되었습니다.", voca: ["yeast:효모", "for instance:예를 들어", "ingredient:재료", "homemade:집에서 만든", "bread:빵", "cooking:요리하는", "used as:~로 사용된", "🍎", "🍎", "🍎"] },
-        { en: "Yet more and more people in the early 20th century were buying their bread from stores or bakeries, so consumer demand for yeast declined.", ko: "하지만 20세기 초 점점 더 많은 사람들이 상점이나 빵집에서 빵을 사기 시작했고, 그래서 효모에 대한 소비자 수요가 감소했습니다.", voca: ["20th century:20세기", "bakeries:빵집", "consumer:소비자", "demand:수요", "declined:감소했다", "buying:사는 것", "stores:상점들", "Yet:하지만", "so:그래서", "🍎"] },
-        { en: "The producer of Fleischmann’s yeast hired the J. Walter Thompson advertising agency to come up with a different marketing strategy to boost sales.", ko: "Fleischmann 효모 생산자는 판매를 늘리기 위해 다른 마케팅 전략을 고안하려고 J. Walter Thompson 광고 대행사를 고용했습니다.", voca: ["producer:생산자", "hired:고용했다", "advertising agency:광고 대행사", "come up with:고안하다", "strategy:전략", "boost:늘리다/부양하다", "sales:판매", "different:다른", "marketing:마케팅", "🍎"] },
-        { en: "No longer the “Soul of Bread,” the Thompson agency first turned yeast into an important source of vitamins with significant health benefits.", ko: "더 이상 '빵의 영혼'이 아닌, Thompson 대행사는 먼저 효모를 상당한 건강상의 이점이 있는 비타민의 중요한 공급원으로 바꾸었습니다.", voca: ["No longer:더 이상 ~않다", "Soul:영혼", "source:공급원", "vitamins:비타민", "significant:상당한", "health benefits:건강상의 이점", "turned into:~로 바꾸다", "first:먼저", "important:중요한", "🍎"] },
-        { en: "Shortly thereafter, the advertising agency transformed yeast into a natural laxative. Repositioning yeast helped increase sales.", ko: "그 직후, 광고 대행사는 효모를 천연 변비약으로 변모시켰습니다. 효모의 이미지(위치)를 재정립하는 것이 판매 증가를 도왔습니다.", voca: ["thereafter:그 후에", "transformed:변모시켰다", "natural:천연의", "laxative:변비약(완하제)", "Repositioning:재정립/재포지셔닝", "increase:증가시키다", "helped:도왔다", "sales:판매", "Shortly:곧/직후", "🍎"] }
+        { en: "It is natural for people to observe happenings and then seek explanations for why those happenings occurred.", ko: "사람들이 일어난 일을 관찰하고 그 일이 왜 일어났는지에 대한 설명을 찾는 것은 자연스러운 일입니다.", voca: ["natural:자연스러운", "observe:관찰하다", "happenings:일어난일들", "seek:찾다", "explanations:설명", "occurred:일어났다", "people:사람들", "why:왜", "those:그러한", "🍌"] },
+        { en: "But sometimes the reasoning is wrong because of one or more misconceptions.", ko: "하지만 때때로 하나 이상의 오해 때문에 그 추론이 틀릴 수도 있습니다.", voca: ["reasoning:추론", "wrong:틀린", "misconceptions:오해", "because of:~때문에", "sometimes:때때로", "more:더많은", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "One of these is the ecological fallacy, where an argument claims that there is a causal relationship between two things merely because they occur together.", ko: "이 중 하나는 생태학적 오류로, 단순히 두 가지가 함께 발생한다는 이유만으로 인과 관계가 있다고 주장하는 것입니다.", voca: ["ecological:생태학적", "fallacy:오류", "argument:주장", "claims:주장하다", "causal:인과의", "relationship:관계", "merely:단순히", "occur:발생하다", "together:함께", "between:~사이에"] },
+        { en: "For example, in the 1950s it was found that crime rates were the highest in neighborhoods where immigrants were most numerous.", ko: "예를 들어, 1950년대에 이민자가 가장 많은 동네에서 범죄율이 가장 높다는 사실이 밝혀졌습니다.", voca: ["example:예시", "found:발견된", "crime rates:범죄율", "highest:가장높은", "neighborhoods:이웃/동네", "immigrants:이민자", "most:가장", "numerous:수많은", "where:~한곳", "🍌"] },
+        { en: "Some people used this 'co-occurrence' to argue that immigrants were a cause of crime.", ko: "어떤 사람들은 이 '공존'을 이민자가 범죄의 원인이라고 주장하는 데 사용했습니다.", voca: ["used:사용했다", "co-occurrence:공존", "argue:주장하다", "immigrants:이민자", "cause:원인", "crime:범죄", "Some:어떤", "this:이것", "🍌", "🍌"] },
+        { en: "But a careful analysis of this situation revealed that immigrants were forced to live in neighborhoods where crime rates were already high; they could not afford more expensive housing in safer neighborhoods.", ko: "하지만 이 상황을 주의 깊게 분석한 결과, 이민자들은 범죄율이 이미 높은 지역에 살도록 강요받았다는 사실이 드러났습니다. 그들은 더 안전한 동네의 비싼 집값을 감당할 수 없었기 때문입니다.", voca: ["careful:주의깊은", "analysis:분석", "revealed:드러냈다", "forced:강요받은", "already:이미", "afford:~할여유가되다", "expensive:비싼", "housing:주택", "safer:더안전한", "situation:상황"] },
+        { en: "Immigrants themselves committed very few of the crimes.", ko: "이민자들 스스로가 저지른 범죄는 극히 적었습니다.", voca: ["themselves:그들스스로", "committed:저질렀다", "very few:극히적은", "crimes:범죄들", "Immigrants:이민자들", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Unless you analyze the claim carefully, you would misinterpret the relationship and thereby construct a faulty belief.", ko: "주장을 주의 깊게 분석하지 않으면 관계를 오해하여 잘못된 믿음을 형성하게 될 것입니다.", voca: ["Unless:~하지않으면", "analyze:분석하다", "claim:주장", "misinterpret:오해하다", "relationship:관계", "thereby:그로인해", "construct:형성하다", "faulty:잘못된", "belief:믿음", "carefully:주의깊게"] }
     ];
 
     let currentMode = 'INTRO';
@@ -78,16 +80,15 @@
             header.innerText = "English Master #30";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Art of<br>Repositioning</h1><p>2023년 6월 고1 모의고사 30번</p></div>
-                
+                <div class="main-title-card"><h1>Avoiding Logical Errors:<br>Ecological Fallacy</h1><p>2025년 6월 고1 모의고사 30번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 유능한 광고주는 시장 상황의 변화에 맞춰 제품의 마케팅 포인트를 유연하게 조절함.</p>
-                    <p>• <b>📍 본론:</b> 집에서 빵을 굽지 않게 되자 수요가 줄어든 효모를 '건강 보조제(비타민)'로 홍보 전략을 변경함.</p>
-                    <p>• <b>📍 결론:</b> 이후 다시 '천연 변비약'으로 용도를 재정립(Repositioning)함으로써 위기에 처한 제품의 판매량을 다시 끌어올림.</p>
+                    <p>• <b>📍 서론:</b> 사람들은 어떤 현상을 관찰한 뒤 원인을 찾으려 하지만, 오해로 인해 잘못된 추론을 하기도 함.</p>
+                    <p>• <b>📍 본론:</b> 단순히 함께 발생한다고 인과관계로 단정 짓는 '생태학적 오류'가 대표적인 예임.</p>
+                    <p>• <b>📍 결론:</b> 면밀한 분석 없이 상관관계를 인과관계로 오해하면 잘못된 믿음을 형성하게 됨.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 시장 상황에 따른 제품 이미지 재정립(Repositioning)과 마케팅 전략의 유연성</span>
-                    <span class="topic-eng">Topic: Product repositioning and flexibility of marketing strategies according to market status</span>
+                    <span class="topic-kor">주제: 생태학적 오류와 인과관계 분석의 중요성</span>
+                    <span class="topic-eng">Topic: The Ecological Fallacy and the Importance of Analyzing Causal Relationships</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -106,7 +107,7 @@
                     <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
                     <div id="trans-area" class="trans-content">${item.ko}</div>
                 `;
-                fillVoca(item.voca, '🍎', "#FF3B30");
+                fillVoca(item.voca, '🍌', "#FFD600");
             } else {
                 area.innerHTML = `
                     <div class="kor-box">${item.ko}</div>
@@ -137,15 +138,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+ 
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>English Master #31 - Official Version</title>
     <style>
         :root { 
@@ -12,13 +12,13 @@
             --purple-dark: #673AB7;
             --pink-soft: #FFF0F6;
         }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
-        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
-        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
         /* STEP 1: 인트로 (서론/본론/결론 명시) */
@@ -41,7 +41,7 @@
 
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
     </style>
 </head>
 <body>
@@ -56,15 +56,16 @@
 
 <script>
     const fullData = [
-        { en: "Plato argued that when you see something that strikes you as beautiful, you are really just seeing a partial reflection of true beauty, just as a painting or even a photograph only captures part of the real thing.", ko: "플라톤은 여러분이 아름답다고 생각되는 무언가를 볼 때, 그림이나 심지어 사진이 실제 사물의 일부만을 담아내는 것과 마찬가지로, 여러분은 실제로는 진정한 아름다움의 부분적인 반영만을 보고 있는 것이라고 주장했습니다.", voca: ["argued:주장했다", "strikes:생각나게하다", "beautiful:아름다운", "reflection:반영/투영", "true:진정한", "captures:담아내다", "real:실제의", "partial:부분적인", "photograph:사진", "painting:그림"] },
-        { en: "True beauty, or what Plato calls the Form of Beauty, has no particular color, shape, or size.", ko: "진정한 아름다움, 즉 플라톤이 아름다움의 '형상'이라고 부르는 것은 특정한 색깔, 모양, 또는 크기를 가지고 있지 않습니다.", voca: ["calls:부르다", "Form:형상", "particular:특정한", "color:색깔", "shape:모양", "size:크기", "beauty:아름다움", "has no:~이없다", "🍌", "🍌"] },
-        { en: "Rather, it is an abstract idea, like the number five.", ko: "오히려 그것은 숫자 5와 같은 추상적인 관념입니다.", voca: ["Rather:오히려", "abstract:추상적인", "idea:관념/아이디어", "number:숫자", "five:다섯", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "You can make drawings of the number five in blue or red ink, big or small, but the number five itself is none of those things.", ko: "여러분은 숫자 5를 파란색이나 빨간색 잉크로, 크게 혹은 작게 그릴 수 있지만, 숫자 5 그 자체는 그러한 것들 중 어느 것도 아닙니다.", voca: ["drawings:그림", "ink:잉크", "itself:그 자체", "none:아무것도없음", "those:그러한것들", "blue:파란색", "red:빨간색", "big:큰", "small:작은", "make:만들다"] },
-        { en: "It has no physical form.", ko: "그것은 물리적인 형태가 없습니다.", voca: ["physical:물리적인", "form:형태", "has no:~이없다", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Think of the idea of a triangle, for example.", ko: "예를 들어, 삼각형이라는 관념을 생각해 보십시오.", voca: ["Think of:~을생각하다", "triangle:삼각형", "example:예시", "idea:관념", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Although it has no particular color or size, it somehow lies within each and every triangle you see.", ko: "그것이 특정한 색깔이나 크기를 가지고 있지 않음에도 불구하고, 그것은 왠지 여러분이 보는 모든 각각의 삼각형 안에 존재합니다.", voca: ["Although:~에도불구하고", "particular:특정한", "somehow:왠지/어떻게든", "lies within:~안에존재하다", "each:각각의", "every:모든", "triangle:삼각형", "see:보다", "color:색깔", "size:크기"] },
-        { en: "Plato thought the same was true of beauty.", ko: "플라톤은 아름다움에 대해서도 마찬가지라고 생각했습니다.", voca: ["thought:생각했다", "same:같은것", "true of:~에해당하는", "beauty:아름다움", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "The Form of Beauty somehow lies within each and every beautiful thing you see.", ko: "아름다움의 형상은 여러분이 보는 각각의 모든 아름다운 것 안에 왠지 존재합니다.", voca: ["Form:형상", "somehow:왠지", "lies within:~안에있다", "each:각각의", "every:모든", "beautiful:아름다운", "thing:것", "see:보다", "beauty:아름다움", "within:~안에"] }
+        { en: "In everyday life, we use previous experience to predict where we should pay attention.", ko: "일상생활에서 우리는 이전의 경험을 사용하여 어디에 주의를 기울여야 할지 예측합니다.", voca: ["everyday life:일상생활", "previous:이전의", "experience:경험", "predict:예측하다", "pay attention:주의를기울이다", "where:어디에", "should:~해야한다", "use:사용하다", "🍌", "🍌"] },
+        { en: "Different environments create different expectations.", ko: "서로 다른 환경은 서로 다른 기대를 만듭니다.", voca: ["Different:다른", "environments:환경", "create:만들다", "expectations:기대", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "This was profoundly illustrated by the scientist Jared Diamond in his book Guns, Germs, and Steel.", ko: "이것은 과학자 Jared Diamond에 의해 그의 저서 '총, 균, 쇠'에서 깊이 있게 설명되었습니다.", voca: ["profoundly:깊이있게", "illustrated:설명된/그려진", "scientist:과학자", "Guns:총", "Germs:균", "Steel:쇠", "book:책", "🍌", "🍌", "🍌"] },
+        { en: "He describes an adventure wandering through the New Guinea jungle with native New Guineans.", ko: "그는 뉴기니 원주민들과 함께 뉴기니 정글을 헤매는 모험을 묘사합니다.", voca: ["describes:묘사하다", "adventure:모험", "wandering:헤매는", "through:~을통해", "native:원주민", "jungle:정글", "with:~와함께", "🍌", "🍌", "🍌"] },
+        { en: "He relates that these natives tend to perform poorly at tasks Westerners have been trained to do since childhood.", ko: "그는 이 원주민들이 서구인들이 어린 시절부터 하도록 훈련받아온 과업에서 서투른 성과를 내는 경향이 있다고 이야기합니다.", voca: ["relates:이야기하다", "tend to:~하는경향이있다", "perform:수행하다", "poorly:서투르게/형편없이", "tasks:과업/일", "Westerners:서구인들", "trained:훈련된", "since:~이후로", "childhood:어린시절", "natives:원주민들"] },
+        { en: "But they are hardly stupid.", ko: "하지만 그들은 결코 어리석지 않습니다.", voca: ["hardly:결코~않다", "stupid:어리석은", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "They can detect the most subtle changes in the jungle, good for following the tracks of a predator or for finding the way back home.", ko: "그들은 정글의 가장 미묘한 변화를 감지할 수 있는데, 이는 포식자의 흔적을 따라가거나 집으로 돌아가는 길을 찾는 데 유용합니다.", voca: ["detect:감지하다", "subtle:미묘한", "changes:변화들", "following:따라가는것", "tracks:흔적/자국", "predator:포식자", "finding:찾는것", "way back:돌아오는길", "good for:~에좋은", "jungle:정글"] },
+        { en: "They know which insects to leave alone, know where food exists, can build and tear down shelters with ease.", ko: "그들은 어떤 곤충을 건드리지 말아야 할지 알고, 음식이 어디에 있는지 알며, 숙소를 쉽게 짓고 허물 수 있습니다.", voca: ["insects:곤충", "leave alone:내버려두다", "exists:존재하다", "build:짓다", "tear down:허물다", "shelters:숙소/은신처", "with ease:쉽게", "know:알다", "where:어디에", "🍌"] },
+        { en: "Diamond, who had never spent time in such places, has no ability to pay attention to these things.", ko: "그런 장소에서 시간을 보낸 적이 없는 Diamond는 이러한 것들에 주의를 기울일 능력이 없습니다.", voca: ["spent time:시간을보내다", "such:그런", "places:장소들", "ability:능력", "pay attention:주의를기울이다", "things:것들", "never:결코~않은", "Diamond:다이아몬드", "🍌", "🍌"] },
+        { en: "Were he to be tested on such tasks, he also would perform poorly.", ko: "만약 그가 그런 과업으로 테스트를 받는다면, 그 또한 서투른 성과를 낼 것입니다.", voca: ["tested:테스트받는", "tasks:과업", "perform:수행하다", "poorly:서투르게", "also:또한", "such:그런", "🍌", "🍌", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -81,16 +82,15 @@
             header.innerText = "English Master #31";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Plato's Philosophy:<br>The Form of Beauty</h1><p>2025년 3월 고1 모의고사 31번</p></div>
-                
+                <div class="main-title-card"><h1>Environment and<br>Attention Expectations</h1><p>2025년 6월 고1 모의고사 31번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 우리가 보는 아름다운 것들은 진정한 아름다움의 부분적인 반영임.</p>
-                    <p>• <b>📍 본론:</b> 진정한 아름다움(형상)은 물리적 형태가 없는 추상적인 관념임.</p>
-                    <p>• <b>📍 결론:</b> 형상은 숫자나 도형의 관념처럼 모든 개별적인 것들 안에 존재함.</p>
+                    <p>• <b>📍 서론:</b> 일상에서 우리는 이전 경험을 바탕으로 주의를 기울일 곳을 예측함.</p>
+                    <p>• <b>📍 본론:</b> 뉴기니 원주민들은 서구적 과업엔 서툴지만, 정글의 미묘한 변화를 읽는 데는 탁월함.</p>
+                    <p>• <b>📍 결론:</b> 능력은 지능의 문제가 아니라, 각자가 처한 환경과 훈련된 경험에 따라 달라짐.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 개별 사물 속에 존재하는 추상적이고 진정한 아름다움의 형상</span>
-                    <span class="topic-eng">Topic: The Abstract Form of Beauty Residing within All Beautiful Things</span>
+                    <span class="topic-kor">주제: 환경과 경험에 따른 주의 집중 영역과 능력의 차이</span>
+                    <span class="topic-eng">Topic: Differences in Areas of Attention and Ability Based on Environment and Experience</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -140,15 +140,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+ 
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

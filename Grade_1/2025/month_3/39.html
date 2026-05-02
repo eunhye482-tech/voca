@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>English Master #39 - Official Version</title>
     <style>
         :root { 
@@ -12,13 +12,13 @@
             --purple-dark: #673AB7;
             --pink-soft: #FFF0F6;
         }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
-        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
-        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
         /* STEP 1: 인트로 (서론/본론/결론 명시) */
@@ -41,7 +41,7 @@
 
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
     </style>
 </head>
 <body>
@@ -56,15 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "The rise of air-conditioning accelerated the construction of sealed boxes, where the building’s only airflow is through the filtered ducts of the air-conditioning unit.", ko: "에어컨의 등장은 건물의 유일한 환기가 에어컨 장치의 필터가 달린 덕트를 통해서만 이루어지는 밀폐된 상자 형태의 건축을 가속화했습니다.", voca: ["accelerated:가속화했다", "construction:건설/건축", "sealed:밀폐된", "airflow:공기흐름", "filtered:필터가달린", "ducts:덕트/통로", "rise:상승/등장", "unit:장치", "through:~을통해", "only:유일한"] },
-        { en: "It doesn’t have to be this way.", ko: "꼭 이런 방식일 필요는 없습니다.", voca: ["way:방식", "have to:~해야한다", "this:이런", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Look at any old building in a hot climate, whether it’s in Sicily or Marrakesh or Tehran.", ko: "시칠리아든 마라케시든 테헤란이든, 더운 기후의 오래된 건물을 보십시오.", voca: ["climate:기후", "whether:A이든 B이든", "building:건물", "old:오래된", "hot:더운", "look at:~을보다", "any:어떤", "🍌", "🍌", "🍌"] },
-        { en: "Architects understood the importance of shade, airflow, light colors.", ko: "건축가들은 그늘, 공기 흐름, 밝은 색상의 중요성을 이해했습니다.", voca: ["Architects:건축가들", "importance:중요성", "shade:그늘", "light colors:밝은색상", "understood:이해했다", "airflow:공기흐름", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "They oriented buildings to capture cool breezes and block the worst heat of the afternoon.", ko: "그들은 시원한 바람을 포착하고 오후의 최악의 열기를 차단하도록 건물을 배치했습니다.", voca: ["oriented:배치했다/향하게했다", "capture:포착하다", "breezes:미풍/바람", "block:차단하다", "worst:최악의", "afternoon:오후", "heat:열기", "buildings:건물들", "cool:시원한", "They:그들"] },
-        { en: "They built with thick walls and white roofs and transoms over doors to encourage airflow.", ko: "그들은 공기 흐름을 장려하기 위해 두꺼운 벽, 하얀 지붕, 그리고 문 위의 환기창을 갖추어 건축했습니다.", voca: ["thick:두꺼운", "roofs:지붕", "transoms:환기창", "encourage:장려하다/촉진하다", "walls:벽", "white:하얀", "doors:문들", "built:지었다", "airflow:공기흐름", "over:~위에"] },
-        { en: "Anyone who has ever spent a few minutes in a mudbrick house in Tucson, or walked on the narrow streets of old Seville, knows how well these construction methods work.", ko: "투손의 진흙 벽돌집에서 몇 분을 보냈거나 오래된 세비야의 좁은 거리를 걸어본 적이 있는 사람이라면 누구나 이러한 건축 방식이 얼마나 잘 작동하는지 알고 있습니다.", voca: ["mudbrick:진흙벽돌", "narrow:좁은", "methods:방식/방법", "construction:건축", "knows:알고있다", "spent:보냈다", "walked:걸었다", "streets:거리", "well:잘", "anyone:누구나"] },
-        { en: "But all this wisdom about how to deal with heat, accumulated over centuries of practical experience, is all too often ignored.", ko: "그러나 수 세기에 걸친 실질적인 경험을 통해 축적된 더위를 다루는 법에 관한 이 모든 지혜는 너무나 자주 무시됩니다.", voca: ["wisdom:지혜", "deal with:~을다루다", "accumulated:축적된", "practical:실질적인", "experience:경험", "ignored:무시된", "centuries:수세기", "often:자주", "heat:더위", "all:모든"] },
-        { en: "In this sense, air-conditioning is not just a technology of personal comfort; it is also a technology of forgetting.", ko: "이런 의미에서 에어컨은 단순히 개인의 쾌적함을 위한 기술일 뿐만 아니라, '망각'의 기술이기도 합니다.", voca: ["sense:의미/감각", "technology:기술", "personal:개인의", "comfort:안락/쾌적함", "forgetting:망각", "not just:~뿐만아니라", "also:또한", "air-conditioning:에어컨", "it:그것", "just:단순히"] }
+        { en: "We have a 'diving reflex', like other marine mammals.", ko: "우리는 다른 해양 포유류와 마찬가지로 '잠수 반사'를 가지고 있습니다.", voca: ["diving reflex:잠수 반사", "marine:해양의", "mammals:포유류", "like:~와 같이", "have:가지다", "other:다른", "we:우리", "🍌", "🍌", "🍌"] },
+        { en: "This means that special nerve endings on our faces, around the mouth and nose, trigger this reflex only when the facial region goes under water.", ko: "이것은 우리의 입과 코 주변인 얼굴에 있는 특수한 신경 말단이 얼굴 부위가 물속으로 들어갈 때만 이 반사를 유발한다는 것을 의미합니다.", voca: ["nerve endings:신경 말단", "trigger:유발하다", "facial:얼굴의", "region:부위/영역", "means:의미하다", "special:특수한", "around:주변에", "under:아래/속으로", "only when:~할 때만", "mouth and nose:입과 코"] },
+        { en: "If we are in the water, with our head out in the air, there is no diving reflex.", ko: "우리가 물속에 있더라도 머리가 공기 중에 나와 있으면 잠수 반사는 일어나지 않습니다.", voca: ["water:물", "air:공기", "diving reflex:잠수 반사", "head out:머리가 밖으로", "no:아무것도 없는", "If:~라면", "we are:우리가 있다", "🍌", "🍌", "🍌"] },
+        { en: "But if we sink just our face in a bowl of water, while the whole of the rest of our body is in the dry air, the diving reflex is triggered.", ko: "하지만 몸의 나머지 전체가 건조한 공기 중에 있는 동안 얼굴만 물 한 그릇에 담그면 잠수 반사가 유발됩니다.", voca: ["sink:담그다/가라앉다", "bowl:그릇", "rest:나머지", "triggered:유발된", "dry air:건조한 공기", "whole:전체", "while:~하는 동안", "But:하지만", "just:단지", "face:얼굴"] },
+        { en: "It automatically closes down the airway, reducing the risk of swallowing water, and it narrows the small air-passages in the lungs.", ko: "그것은 자동으로 기도를 폐쇄하여 물을 삼킬 위험을 줄이고 폐 안의 작은 공기 통로를 좁힙니다.", voca: ["automatically:자동으로", "airway:기도", "reducing:줄이는 것", "swallowing:삼키는 것", "narrows:좁히다", "air-passages:공기 통로", "lungs:폐", "risk:위험", "closes down:폐쇄하다", "🍌"] },
+        { en: "At the same time the heart rate is slowed down to half speed and blood is shunted to the vital organs, protecting them from the effects of the brief stop in breathing.", ko: "동시에 심박수는 절반 속도로 느려지고 혈액은 중요 장기로 우회되어, 일시적인 호흡 정지의 영향으로부터 장기들을 보호합니다.", voca: ["at the same time:동시에", "heart rate:심박수", "shunted:우회된/돌려진", "vital organs:중요 장기", "protecting:보호하는 것", "effects:영향", "brief:일시적인/짧은", "breathing:호흡", "slowed down:느려진", "blood:혈액"] },
+        { en: "By contrast, if a chimpanzee or a gorilla found itself in water with its face below the surface, it would panic, its heart would race and it would quickly drown.", ko: "대조적으로, 만약 침팬지나 고릴라가 얼굴이 수면 아래에 있는 상태로 물속에 있게 된다면, 그것은 공황 상태에 빠지고 심장은 요동치며 금방 익사할 것입니다.", voca: ["By contrast:대조적으로", "surface:수면/표면", "panic:공황 상태", "race:요동치다/빨리 뛰다", "drown:익사하다", "found itself:처하게 되다", "below:~ 아래에", "quickly:빨리", "chimpanzee:침팬지", "gorilla:고릴라"] }
     ];
 
     let currentMode = 'INTRO';
@@ -81,16 +79,15 @@
             header.innerText = "English Master #39";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Air-Conditioning:<br>The Technology of Forgetting</h1><p>2025년 3월 고1 모의고사 39번</p></div>
-                
+                <div class="main-title-card"><h1>The Human Diving Reflex:<br>Survival Mechanism</h1><p>2025년 6월 고1 모의고사 39번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 에어컨의 보급으로 자연 환기가 차단된 밀폐된 건축 구조가 늘어남.</p>
-                    <p>• <b>📍 본론:</b> 과거의 건축가들은 그늘, 바람, 벽 두께 등을 이용해 자연적으로 더위를 이기는 지혜를 가졌음.</p>
-                    <p>• <b>📍 결론:</b> 에어컨에 의존하면서 인류가 수 세기 동안 쌓아온 자연 냉각의 지혜를 잊게 됨.</p>
+                    <p>• <b>📍 서론:</b> 인간은 해양 포유류처럼 얼굴이 물에 닿을 때 작동하는 '잠수 반사'를 가짐.</p>
+                    <p>• <b>📍 본론:</b> 잠수 반사는 기도를 닫고 심박수를 늦추며 혈액을 주요 장기로 보내 호흡 정지로부터 몸을 보호함.</p>
+                    <p>• <b>📍 결론:</b> 이 반사가 없는 유인원과 달리 인간은 물속에서 생존할 수 있는 본능적 기제를 보유함.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 에어컨 사용으로 인해 잊혀져 가는 전통적 자연 냉각 건축의 지혜</span>
-                    <span class="topic-eng">Topic: Traditional Architectural Wisdom for Heat Forgotten due to Air-Conditioning</span>
+                    <span class="topic-kor">주제: 인간이 가진 생존 본능인 잠수 반사의 원리와 기능</span>
+                    <span class="topic-eng">Topic: The Principles and Functions of the Human Diving Reflex as a Survival Instinct</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -140,7 +137,8 @@
         }
     }
 
-  // 수정된 Step 3 빈칸 생성 로직
+
+// 수정된 Step 3 빈칸 생성 로직
 function fillBlanks(s) {
     const c = document.getElementById('blank-area');
     

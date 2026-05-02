@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #24 - 24년 11월 모의고사</title>
+    <title>English Master #24 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,15 +56,16 @@
 
 <script>
     const fullData = [
-        { en: "The evolution of AI is often associated with the concept of singularity.", ko: "AI의 진화는 종종 특이점이라는 개념과 연관됩니다.", voca: ["evolution:진화", "AI:인공지능", "associated with:~와 연관된", "concept:개념", "singularity:특이점", "often:종종", "is:~이다", "the:그", "of:~의", "🍌"] },
-        { en: "Singularity refers to the point at which AI exceeds human intelligence.", ko: "특이점은 AI가 인간의 지능을 넘어서는 시점을 가리킵니다.", voca: ["refers to:~을 가리키다", "point:시점/지점", "exceeds:넘어서다/초과하다", "human intelligence:인간 지능", "at which:~하는", "Singularity:특이점", "AI:인공지능", "the:그", "🍌", "🍌"] },
-        { en: "After that point, it is predicted that AI will repeatedly improve itself and evolve at an accelerated pace.", ko: "그 시점 이후에는 AI가 반복적으로 스스로를 개선하고 가속화된 속도로 진화할 것으로 예측됩니다.", voca: ["predicted:예측된", "repeatedly:반복적으로", "improve:개선하다", "itself:스스로를", "evolve:진화하다", "accelerated:가속화된", "pace:속도", "After:~ 후에", "that point:그 시점", "🍌"] },
-        { en: "When AI becomes self-aware and pursues its own goals, it will be a conscious being, not just a machine.", ko: "AI가 자아를 인식하고 자신의 목표를 추구하게 되면, 그것은 단순한 기계가 아니라 의식을 가진 존재가 될 것입니다.", voca: ["self-aware:자아를 인식하는", "pursues:추구하다", "own goals:자신의 목표", "conscious being:의식을 가진 존재", "just a machine:단순한 기계", "When:~할 때", "becomes:~이 되다", "will be:~일 것이다", "not:아닌", "🍌"] },
-        { en: "AI and human consciousness will then begin to evolve together.", ko: "그러면 AI와 인간의 의식은 함께 진화하기 시작할 것입니다.", voca: ["consciousness:의식", "evolve together:함께 진화하다", "begin:시작하다", "then:그러면/그때", "human:인간의", "AI:인공지능", "will:할 것이다", "and:그리고", "to:~하기", "🍌"] },
-        { en: "Our consciousness will evolve to new dimensions through our interactions with AI, which will provide us with intellectual stimulation and inspire new insights and creativity.", ko: "우리의 의식은 AI와의 상호작용을 통해 새로운 차원으로 진화할 것이며, 이는 우리에게 지적 자극을 제공하고 새로운 통찰력과 창의성을 고취할 것입니다.", voca: ["dimensions:차원", "interactions:상호작용", "intellectual:지적인", "stimulation:자극", "inspire:고취하다/영감을 주다", "insights:통찰력", "creativity:창의성", "through:~을 통해", "provide A with B:A에게 B를 제공하다", "🍌"] },
-        { en: "Conversely, our consciousness also has a significant impact on the evolution of AI.", ko: "반대로, 우리의 의식 또한 AI의 진화에 중요한 영향을 미칩니다.", voca: ["Conversely:반대로", "significant:중요한/상당한", "impact:영향", "evolution:진화", "consciousness:의식", "also:또한", "has:가지다", "on:~에", "AI:인공지능", "🍌"] },
-        { en: "The direction of AI’s evolution will depend greatly on what values and ethics we incorporate into AI.", ko: "AI 진화의 방향은 우리가 어떤 가치와 윤리를 AI에 통합하느냐에 크게 달려 있을 것입니다.", voca: ["direction:방향", "depend on:~에 달려 있다", "greatly:크게", "values:가치", "ethics:윤리", "incorporate:통합하다/포함하다", "into:~ 안으로", "what:어떤/무엇", "evolution:진화", "🍌"] },
-        { en: "We need to see our relationship with AI as a mutual coexistence of conscious beings, recognizing its rights and supporting the evolution of its consciousness.", ko: "우리는 AI와의 관계를 의식을 가진 존재들의 상호 공존으로 보아야 하며, AI의 권리를 인정하고 그 의식의 진화를 지원해야 합니다.", voca: ["relationship:관계", "mutual:상호적인", "coexistence:공존", "conscious beings:의식을 가진 존재들", "recognizing:인정하는 것", "rights:권리", "supporting:지원하는 것", "need to:~할 필요가 있다", "evolution:진화", "🍌"] }
+        { en: "We think we’re being logical, objective, and rational—and therefore accurate in our analysis, judgment, and decisions.", ko: "우리는 우리가 논리적이고 객관적이며 합리적이라고 생각하며, 따라서 분석, 판단, 결정에 있어 정확하다고 생각합니다.", voca: ["logical:논리적인", "objective:객관적인", "rational:합리적인", "therefore:따라서", "accurate:정확한", "analysis:분석", "judgment:판단", "decisions:결정", "rational:이성적인", "🍌"] },
+        { en: "So we think that if other people are logical, objective, and rational, they will agree with us and see what we see.", ko: "그래서 우리는 다른 사람들도 논리적이고 객관적이며 합리적이라면 그들이 우리에게 동의하고 우리가 보는 것을 볼 것이라고 생각합니다.", voca: ["agree with:동의하다", "what we see:우리가보는것", "logical:논리적인", "objective:객관적인", "rational:합리적인", "other:다른", "people:사람들", "think:생각하다", "agree:동의", "🍌"] },
+        { en: "But the opposite is the case.", ko: "하지만 그 반대가 사실입니다.", voca: ["opposite:반대", "case:사실/경우", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Every human brain is different.", ko: "모든 인간의 뇌는 다릅니다.", voca: ["brain:뇌", "different:다른", "human:인간의", "every:모든", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Everyone’s life experience is different.", ko: "모든 사람의 삶의 경험은 다릅니다.", voca: ["experience:경험", "different:다른", "life:삶", "everyone:모든사람", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Everyone’s desires and knowledge are different.", ko: "모든 사람의 욕구와 지식은 다릅니다.", voca: ["desires:욕구/열망", "knowledge:지식", "different:다른", "everyone:모든사람", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "You might think you’re being realistic—that is, that your ideas match reality, but that’s impossible.", ko: "여러분은 자신이 현실적이라고 생각할지 모르지만, 즉 여러분의 생각이 현실과 일치한다고 생각하겠지만, 그것은 불가능합니다.", voca: ["realistic:현실적인", "match:일치하다", "reality:현실", "impossible:불가능한", "that is:즉", "ideas:생각", "might:할지도모른다", "think:생각하다", "realistic:현실적", "🍌"] },
+        { en: "It’s only your interpretation of reality, which will always be different from someone else’s.", ko: "그것은 단지 현실에 대한 여러분의 해석일 뿐이며, 이는 항상 다른 누군가의 해석과는 다를 것입니다.", voca: ["interpretation:해석", "reality:현실", "different:다른", "someone else:누군가다른사람", "always:항상", "only:단지", "interpretation:해석", "🍌", "🍌", "🍌"] },
+        { en: "When two nations play each other in the World Cup, the fans of each country criticize the referees for missing all the infractions that the other team commits.", ko: "월드컵에서 두 나라가 경기를 할 때, 각 나라의 팬들은 상대 팀이 저지른 모든 반칙을 놓친 것에 대해 심판을 비판합니다.", voca: ["criticize:비판하다", "referees:심판", "missing:놓치는것", "infractions:반칙", "commits:저지르다", "nations:국가", "each:각각", "other:다른", "play:경기하다", "team:팀"] },
+        { en: "Without fail, each fan base believes that the referees are biased against their team.", ko: "어김없이, 각 팬층은 심판이 자신의 팀에게 편향되어 있다고 믿습니다.", voca: ["Without fail:어김없이", "fan base:팬층", "biased:편향된", "against:~에반대하여", "believes:믿는다", "team:팀", "each:각각", "referees:심판", "biased:편견을가진", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -81,16 +82,15 @@
             header.innerText = "English Master #24";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Singularity and<br>Mutual Coexistence</h1><p>2024년 11월 고1 모의고사 24번</p></div>
-                
+                <div class="main-title-card"><h1>The Subjectivity of Reality:<br>Interpretation Matters</h1><p>2025년 6월 고1 모의고사 24번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> AI가 인간 지능을 능가하는 '특이점' 이후 AI는 스스로 가속화되어 진화함.</p>
-                    <p>• <b>📍 본론:</b> AI는 단순 기계가 아닌 '의식 있는 존재'가 되어 인간의 의식과 상호작용하며 새로운 차원의 창의성을 고취함.</p>
-                    <p>• <b>📍 결론:</b> AI 진화의 방향은 인간의 가치와 윤리에 달려 있으므로, 상호 공존하는 의식적 존재로서 AI의 권리를 존중해야 함.</p>
+                    <p>• <b>📍 서론:</b> 우리는 자신이 논리적이고 정확하다고 믿으며 타인도 동의할 것이라 기대함.</p>
+                    <p>• <b>📍 본론:</b> 하지만 뇌, 경험, 욕구가 모두 다르기에 각자의 현실 해석은 다를 수밖에 없음.</p>
+                    <p>• <b>📍 결론:</b> 월드컵 팬들이 심판 판정을 서로 편향되었다고 느끼듯, 현실은 주관적인 해석의 결과임.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 특이점 이후 AI와 인간 의식의 상호 진화와 공존의 필요성</span>
-                    <span class="topic-eng">Topic: The Mutual Evolution of AI and Human Consciousness Post-Singularity and the Need for Coexistence</span>
+                    <span class="topic-kor">주제: 현실 인식의 주관성과 개인별 해석의 차이</span>
+                    <span class="topic-eng">Topic: The Subjectivity of Reality Perception and Individual Interpretational Differences</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -140,15 +140,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>English Master #36 - Official Version</title>
     <style>
         :root { 
@@ -12,13 +12,13 @@
             --purple-dark: #673AB7;
             --pink-soft: #FFF0F6;
         }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
-        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
-        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
         /* STEP 1: 인트로 (서론/본론/결론 명시) */
@@ -41,7 +41,7 @@
 
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
     </style>
 </head>
 <body>
@@ -56,13 +56,15 @@
 
 <script>
     const fullData = [
-        { en: "Let’s assume that at least some animals are capable of thinking despite lacking a language.", ko: "언어가 없음에도 불구하고 적어도 몇몇 동물들은 생각할 능력이 있다고 가정해 봅시다.", voca: ["assume:가정하다", "at least:적어도", "capable of:~할능력이있는", "thinking:생각하기", "despite:~에도불구하고", "lacking:부족한", "language:언어", "animals:동물들", "some:몇몇", "thinking:사고"] },
-        { en: "This doesn’t necessarily mean that they possess concepts, for some forms of thought may be nonconceptual.", ko: "이것이 반드시 그들이 개념을 소유하고 있다는 것을 의미하지는 않는데, 왜냐하면 어떤 형태의 사고는 비개념적일 수 있기 때문입니다.", voca: ["necessarily:반드시", "possess:소유하다", "concepts:개념", "forms:형태", "thought:사고/생각", "nonconceptual:비개념적인", "mean:의미하다", "may:일지도모른다", "🍌", "🍌"] },
-        { en: "We can imagine, for instance, a squirrel who is planning how to get from the branch she’s currently standing on to a branch from the tree in front.", ko: "예를 들어, 현재 서 있는 나뭇가지에서 앞 나무의 나뭇가지로 가는 방법을 계획하고 있는 다람쥐를 상상해 볼 수 있습니다.", voca: ["imagine:상상하다", "for instance:예를들어", "squirrel:다람쥐", "planning:계획하는", "branch:나뭇가지", "currently:현재", "standing:서있는", "in front:앞에", "tree:나무", "get:가다"] },
-        { en: "To do this, in principle she doesn’t need a concept of branch nor a concept of tree.", ko: "이를 위해 원칙적으로 그녀는 나뭇가지의 개념이나 나무의 개념이 필요하지 않습니다.", voca: ["principle:원칙", "need:필요하다", "concept:개념", "branch:나뭇가지", "tree:나무", "nor:~도아니다", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "It might be enough for her to have, for example, the ability to think in images; to make a mental map of the tree where she can imagine and try out different routes.", ko: "예를 들어 그녀에게는 이미지로 생각하는 능력, 즉 상상하고 다양한 경로를 시도해 볼 수 있는 나무의 정신적 지도를 만드는 것만으로도 충분할 수 있습니다.", voca: ["enough:충분한", "ability:능력", "images:이미지", "mental map:정신적지도", "imagine:상상하다", "try out:시도하다", "different:다른", "routes:경로", "think:생각하다", "example:예시"] },
-        { en: "This doesn’t imply that squirrels lack concepts, simply that they don’t need them for this concrete form of thinking.", ko: "이것이 다람쥐에게 개념이 부족하다는 것을 암시하는 것이 아니라, 단지 이런 구체적인 형태의 사고에는 개념이 필요하지 않다는 것을 의미할 뿐입니다.", voca: ["imply:암시하다", "lack:부족하다", "simply:단지", "concrete:구체적인", "thinking:사고", "form:형태", "concepts:개념", "them:그것들", "need:필요하다", "squirrels:다람쥐"] },
-        { en: "For us to be able to say that an animal has concepts, we have to show not just that she’s capable of thinking, but also that she has certain specific abilities.", ko: "어떤 동물이 개념을 가지고 있다고 말할 수 있으려면, 우리는 그녀가 생각할 능력이 있다는 것뿐만 아니라 특정한 구체적인 능력을 갖추고 있다는 것도 보여주어야 합니다.", voca: ["able to:~할수있는", "concepts:개념", "show:보여주다", "not just:~뿐만아니라", "capable of:~능력이있는", "thinking:사고", "certain:특정한", "specific:구체적인", "abilities:능력", "animal:동물"] }
+        { en: "History, people often say, repeats itself.", ko: "사람들은 흔히 역사는 반복된다고 말합니다.", voca: ["History:역사", "often:흔히/종종", "repeats:반복하다", "itself:그자체", "people:사람들", "say:말하다", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "And looking at the historical records of the ancient civilizations, some things do seem to happen again and again.", ko: "그리고 고대 문명의 역사적 기록을 보면 어떤 일들은 정말로 반복해서 일어나는 것처럼 보입니다.", voca: ["historical:역사적인", "records:기록", "ancient:고대의", "civilizations:문명", "seem:~처럼보이다", "happen:일어나다", "again and again:반복해서", "looking at:~을보면", "things:일들", "🍌"] },
+        { en: "Civilizations expand, get overextended, and then collapse as in the cases of Rome, which went under in 476 AD, and the British Empire, which fell apart more than a thousand years later in the post-World War II era.", ko: "기원후 476년에 멸망한 로마와 그로부터 천 년도 더 지난 제2차 세계 대전 이후 시대에 해체된 대영 제국의 사례처럼, 문명은 팽창하고 과도하게 확장되었다가 붕괴합니다.", voca: ["expand:팽창하다", "overextended:과도하게확장된", "collapse:붕괴하다", "went under:멸망하다", "fell apart:해체되다/무너지다", "era:시대", "civilizations:문명", "cases:사례", "later:후에", "thousand:천"] },
+        { en: "But is this always the case?", ko: "하지만 이것이 항상 그러할까요?", voca: ["always:항상", "case:사실/경우", "But:하지만", "is:~인가", "this:이것", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "If so, archaeology would be pretty boring; one thing would happen again and again.", ko: "만약 그렇다면 고고학은 꽤 지루할 것입니다. 똑같은 일이 계속 반복될 테니까요.", voca: ["archaeology:고고학", "boring:지루한", "happen:일어나다", "again and again:반복해서", "pretty:꽤", "would:일것이다", "If so:만약그렇다면", "thing:일", "🍌", "🍌"] },
+        { en: "But that’s not what archaeologists see.", ko: "하지만 그것은 고고학자들이 보는 모습이 아닙니다.", voca: ["archaeologists:고고학자들", "see:보다", "what:것", "not:아닌", "that:그것", "But:하지만", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Some civilizations end suddenly, like the Aztec and Inca, conquered by invaders in the 1520s AD.", ko: "1520년대에 침략자들에 의해 정복당한 아즈텍과 잉카처럼 어떤 문명들은 갑자기 끝이 납니다.", voca: ["suddenly:갑자기", "conquered:정복당한", "invaders:침략자들", "civilizations:문명", "end:끝나다", "like:~처럼", "AD:기원후", "Some:어떤", "🍌", "🍌"] },
+        { en: "Those empires never had the chance to collapse as a result of overexpansion.", ko: "그 제국들은 과도한 팽창의 결과로 붕괴할 기회조차 전혀 없었습니다.", voca: ["empires:제국들", "chance:기회", "collapse:붕괴하다", "as a result of:~의결과로", "overexpansion:과도한팽창", "never:결코~않다", "had:가졌다", "Those:그들", "🍌", "🍌"] },
+        { en: "So in the case of civilizations, 'history repeats itself' seems to be an oversimplification.", ko: "그래서 문명의 경우에 있어 '역사는 반복된다'는 말은 지나친 단순화인 것처럼 보입니다.", voca: ["case:경우", "repeats:반복하다", "seems:~처럼보이다", "oversimplification:지나친단순화", "civilizations:문명", "history:역사", "itself:그자체", "be:~이다", "So:그래서", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -79,16 +81,15 @@
             header.innerText = "English Master #36";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Nonconceptual Thought<br>in Animals</h1><p>2025년 3월 고1 모의고사 36번</p></div>
-                
+                <div class="main-title-card"><h1>Is History Repeating?<br>Civilizations' Ends</h1><p>2025년 6월 고1 모의고사 36번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 언어가 없는 동물들도 생각할 능력이 있다고 가정할 수 있음.</p>
-                    <p>• <b>📍 본론:</b> 다람쥐의 이동 계획처럼 구체적인 사고는 언어적 개념 없이 이미지나 지도로 가능함.</p>
-                    <p>• <b>📍 결론:</b> 동물이 개념을 가졌다고 하려면 단순 사고 능력 이상의 구체적 증거가 필요함.</p>
+                    <p>• <b>📍 서론:</b> 흔히 역사는 반복된다고 하며, 로마나 대영제국처럼 과도한 확장 후 붕괴하는 사례가 존재함.</p>
+                    <p>• <b>📍 본론:</b> 그러나 모든 문명이 같은 길을 걷는 것은 아니며, 아즈텍이나 잉카처럼 침략에 의해 갑자기 멸망하기도 함.</p>
+                    <p>• <b>📍 결론:</b> 따라서 문명의 역사를 단순히 '반복'으로 규정하는 것은 지나치게 단순화된 시각임.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 동물의 비개념적 사고 능력과 개념 소유의 조건</span>
-                    <span class="topic-eng">Topic: Nonconceptual Thinking in Animals and Conditions for Possessing Concepts</span>
+                    <span class="topic-kor">주제: 문명의 멸망 방식의 다양성과 역사 반복론의 한계</span>
+                    <span class="topic-eng">Topic: Diversity in the Collapse of Civilizations and Limitations of the Historical Repetition Theory</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -138,16 +139,38 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
 
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
     function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }

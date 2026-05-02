@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #33 - 25년 3월 고2</title>
+    <title>English Master #33 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -18,11 +18,12 @@
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        
-        .btn-intro-step { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
-        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; color: #444; }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
         .topic-kor { font-weight: bold; color: #D81B60; display: block; margin-bottom: 5px; }
         .topic-eng { font-size: 0.85rem; color: #888; font-style: italic; }
@@ -31,19 +32,16 @@
         .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
         
         .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #333; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         .voca-item.revealed { background: var(--purple-main); color: white; }
         
         .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
         .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
         .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
 
-        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; color: #555; }
-        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; color: #444; }
-        
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; gap: 10px; align-items: center; }
-        .btn-prev { background: #EDF2F7; color: #718096; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1; display: flex; align-items: center; justify-content: center; }
-        .btn-next { background: var(--purple-main); color: white; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1.5; display: flex; align-items: center; justify-content: center; margin-top: 0; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
     </style>
 </head>
 <body>
@@ -57,14 +55,14 @@
 </div>
 
 <script>
-    const prepositions = ["in", "to", "before", "from", "at", "by", "along", "without", "into", "for"];
     const fullData = [
-        { en: "When we realize we’ve said something in error and we pause to go back to correct it, we stop gesturing a couple of hundred milliseconds before we stop speaking.", ko: "우리가 무언가를 잘못 말한 것을 깨닫고 다시 수정하려고 돌아가기 위해 말을 잠시 멈출 때, 우리는 말을 멈추기 수백 밀리세컨드(0.001초) 전에 손짓을 멈춘다.", voca: ["realize:깨닫다", "in error:잘못된/실수로", "pause:멈추다", "correct:수정하다", "gesturing:손짓하는 것", "milliseconds:밀리세컨드", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Such sequences suggest the startling notion that our hands “know” what we’re going to say before our conscious minds do, and in fact this is often the case.", ko: "이러한 순서는 우리의 손이 의식적인 마음이 알아채기 전에 우리가 무엇을 말할 것인지 ‘알고’ 있다는 놀라운 개념을 암시하며, 실제로 이런 경우가 종종 있다.", voca: ["sequences:순서", "startling:놀라운", "notion:개념", "conscious minds:의식적인 마음", "often the case:종종 있는 일", "suggest:암시하다", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Gesture can mentally prime a word so that the right term comes to our lips.", ko: "손짓은 정신적으로 단어를 준비시켜 정확한 용어가 입술에 도달하도록 할 수 있다.", voca: ["mentally:정신적으로", "prime:준비시키다", "term:용어", "lips:입술", "Gesture:손짓", "right:정확한", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "When people are prevented from gesturing, they talk less fluently; their speech becomes halting because their hands are no longer able to supply them with the next word, and the next.", ko: "사람들은 손짓을 하지 못하게 되면 덜 유창하게 말하게 되는데, 그들의 손이 더 이상 다음 단어를 제공할 수 없어서 말이 중단되기 때문이다.", voca: ["prevented from:~하지 못하게 된", "fluently:유창하게", "halting:중단되는/멈칫거리는", "no longer:더 이상 ~않다", "supply:제공하다", "speech:말", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Not being able to gesture has other deleterious effects: without gesture to help our mental processes along, we remember less useful information, we solve problems less well, and we are less able to explain our thinking.", ko: "손짓을 할 수 없게 되는 것은 또 다른 해로운 영향을 갖는다. 손짓이 없으면, 유용한 정보를 잘 기억하지 못하고, 문제를 잘 해결하지 못하며, 우리의 생각을 잘 설명하지 못한다.", voca: ["deleterious:해로운", "mental processes:정신적 과정", "solve:해결하다", "thinking:생각", "along:쭉/함께", "less:더 적게", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Far from tagging along as speech’s clumsy companion, gesture represents the leading edge of our thought.", ko: "손짓은 말의 어설픈 동반자로 뒤따라가는 것이 아니라, 우리의 사고를 선도하는 역할을 나타낸다.", voca: ["Far from:~이기는커녕", "tagging along:뒤따라가는", "clumsy:어설픈", "companion:동반자", "leading edge:선도하는 역할/최첨단", "represents:나타내다", "🍎", "🍎", "🍎", "🍎"] }
+        { en: "In most respects, humans are one of a relatively small number of species that evolved a very different strategy of investing more energy to reproduce more slowly.", ko: "대부분의 측면에서 인간은 더 천천히 번식하기 위해 더 많은 에너지를 투자하는 매우 다른 전략을 진화시킨 상대적으로 적은 수의 종 중 하나입니다.", voca: ["respects:측면", "relatively:상대적으로", "species:종", "evolved:진화시킨", "strategy:전략", "investing:투자하는", "energy:에너지", "reproduce:번식하다", "slowly:천천히", "humans:인간들"] },
+        { en: "Like apes and elephants, we mature at a leisurely pace, grow large bodies, and have few babies but devote much time and energy to raising them well.", ko: "유인원이나 코끼리처럼, 우리는 여유로운 속도로 성숙하고, 큰 몸집으로 자라며, 적은 수의 아기를 낳지만 그들을 잘 기르는 데 많은 시간과 에너지를 쏟습니다.", voca: ["mature:성숙하다", "leisurely pace:여유로운속도", "devote:쏟다/바치다", "raising:기르는것", "apes:유인원", "elephants:코끼리", "bodies:몸", "babies:아기들", "energy:에너지", "time:시간"] },
+        { en: "This unusual strategy succeeds because while apes and elephants produce fewer babies than mice, a larger percentage of their offspring survive to then reproduce.", ko: "이 이례적인 전략이 성공하는 이유는 유인원과 코끼리가 쥐보다 적은 수의 아기를 낳지만, 그들의 자손 중 더 많은 비율이 살아남아 번식하기 때문입니다.", voca: ["unusual:이례적인", "strategy:전략", "succeeds:성공하다", "percentage:비율", "offspring:자손", "survive:살아남다", "reproduce:번식하다", "fewer:더적은", "produce:낳다", "mice:쥐"] },
+        { en: "A house mouse can become a mother when she is just five weeks old, has four to ten pups per litter, and can have a new litter every two months over the course of her approximately twelve-month life.", ko: "생쥐는 생후 5주 만에 어미가 될 수 있고, 한 배에 4~10마리의 새끼를 낳으며, 약 12개월의 수명 동안 두 달마다 새로운 새끼를 낳을 수 있습니다.", voca: ["pups:새끼", "per litter:한배에", "approximately:약/대략", "course:과정/기간", "weeks:주", "mother:어미", "new:새로운", "months:달", "life:수명", "🍌"] },
+        { en: "However, the vast majority of her pups die young.", ko: "하지만, 그녀의 새끼들 중 대다수는 어릴 때 죽습니다.", voca: ["vast majority:대다수", "pups:새끼들", "die:죽다", "young:어리게", "However:하지만", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "In contrast, a chimp or elephant mother does not reproduce until she is at least twelve years old, and she gives birth to only one infant every five or six years over the next thirty or so years.", ko: "대조적으로, 침팬지나 코끼리 어미는 적어도 12살이 될 때까지 번식하지 않으며, 이후 30년 정도 동안 5~6년마다 단 한 마리의 새끼만 낳습니다.", voca: ["In contrast:대조적으로", "reproduce:번식하다", "at least:적어도", "gives birth:출산하다", "infant:새끼/유아", "thirty:삼십", "years:년", "chimp:침팬지", "elephant:코끼리", "🍌"] },
+        { en: "About half of these offspring make it to becoming parents.", ko: "이 자손들 중 약 절반이 부모가 되는 데 성공합니다.", voca: ["half:절반", "offspring:자손", "make it:해내다/성공하다", "parents:부모", "About:약", "becoming:되는것", "🍌", "🍌", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -81,70 +79,100 @@
             header.innerText = "English Master #33";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Leading Edge<br>of Thought</h1><p>2025년 3월 고2 33번</p></div>
-                
+                <div class="main-title-card"><h1>Quality over Quantity:<br>Reproductive Strategies</h1><p>2025년 6월 고1 모의고사 33번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 말을 수정하기 전 손짓이 먼저 멈추는 현상은 손이 의식보다 먼저 할 말을 알고 있음을 시사함.</p>
-                    <p>• <b>📍 본론 1:</b> 손짓은 단어를 정신적으로 준비시켜 유창한 발화를 돕는 핵심적인 역할을 수행함.</p>
-                    <p>• <b>📍 본론 2:</b> 손짓이 제한되면 발화가 덜 유창해질 뿐만 아니라 기억력, 문제 해결력, 설명 능력까지 저하됨.</p>
-                    <p>• <b>📍 결론:</b> 손짓은 말의 보조 수단이 아니라 우리의 사고 과정을 선도하는 주체적인 시스템임.</p>
+                    <p>• <b>📍 서론:</b> 인간과 대형 포유류는 적은 수의 자녀를 낳아 잘 기르는 번식 전략을 선택함.</p>
+                    <p>• <b>📍 본론:</b> 쥐는 수많은 새끼를 낳지만 생존율이 낮은 반면, 유인원과 코끼리는 적게 낳아 높은 생존율을 유지함.</p>
+                    <p>• <b>📍 결론:</b> 느린 성숙과 집중적인 양육은 더 높은 자손 번식 성공률로 이어지는 성공적인 전략임.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 사고를 선도하고 언어적·정신적 과정을 돕는 손짓의 중추적 역할</span>
-                    <span class="topic-eng">Topic: The leading role of gesture in driving thought and assisting cognitive processes</span>
+                    <span class="topic-kor">주제: 종에 따른 번식 전략의 차이: 양적 번식 vs 질적 양육</span>
+                    <span class="topic-eng">Topic: Differences in Reproductive Strategies Across Species: Quantity vs. Quality</span>
                 </div>
-                <button class="btn-intro-step" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
-                <button class="btn-intro-step" style="background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
             `;
-        } else {
+        } else if (currentMode === 'STEP2' || currentMode === 'STEP3') {
             const stepNum = currentMode === 'STEP2' ? 2 : 3;
-            header.innerText = `STEP ${stepNum} (${currentIdx + 1}/${fullData.length})`;
+            header.innerText = `STEP ${stepNum}. ${stepNum === 2 ? '문장 학습' : '영작 연습'} (${currentIdx + 1}/${fullData.length})`;
             nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
             
             const item = fullData[currentIdx];
             if (currentMode === 'STEP2') {
-                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인</button><div id="trans-area" class="trans-content">${item.ko}</div>`;
-                fillVoca(item.voca, '🍎', "#FF3B30");
+                area.innerHTML = `
+                    <div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.ko}</div>
+                `;
+                fillVoca(item.voca, '🍌', "#FFD600");
             } else {
-                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인</button><div id="trans-area" class="trans-content">${item.en}</div>`;
+                area.innerHTML = `
+                    <div class="kor-box">${item.ko}</div>
+                    <div class="blank-area" id="blank-area"></div>
+                    <div class="voca-grid" id="voca-area"></div>
+                    <button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button>
+                    <div id="trans-area" class="trans-content">${item.en}</div>
+                `;
                 fillBlanks(item.en);
                 fillVoca(item.voca, '🍇', "#9C27B0");
             }
         }
     }
 
-    function fillVoca(vList, emo, col) {
-        const area = document.getElementById('voca-area');
+    function fillVoca(vocaList, emoji, emojiColor) {
+        const container = document.getElementById('voca-area');
         for (let i = 0; i < 10; i++) {
             const div = document.createElement('div');
             div.className = 'voca-item';
-            if (vList[i] && vList[i].includes(':')) {
-                const [en, ko] = vList[i].split(':');
-                div.innerText = en;
-                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? ko : en; };
+            if (vocaList[i]) {
+                const [eng, kor] = vocaList[i].split(':');
+                div.innerText = eng;
+                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? kor : eng; };
             } else {
-                div.innerText = emo; div.style.color = col; div.style.cursor = "default";
+                div.innerText = emoji; div.style.color = emojiColor; div.style.cursor = "default";
             }
-            area.appendChild(div);
+            container.appendChild(div);
         }
     }
 
-    function fillBlanks(s) {
-        const area = document.getElementById('blank-area');
-        s.split(' ').forEach(w => {
-            const span = document.createElement('span');
-            const cw = w.replace(/[.,'"]/g, "").toLowerCase();
-            if(prepositions.includes(cw)) { span.innerText = w; span.style.margin="0 4px"; span.style.fontWeight="bold"; }
-            else { span.className = 'word-blank'; span.innerText = w; span.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'"]/g, "")); }; }
-            area.appendChild(span);
-        });
-    }
 
-    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
+
+    function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
     function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
-    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; synth.speak(u); }
+    function playTTS(text) { synth.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.9; synth.speak(utterance); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;
 </script>

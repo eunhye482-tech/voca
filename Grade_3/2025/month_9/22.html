@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #22 - 9월 모의고사 (Full)</title>
+    <title>English Master #22 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,18 +56,16 @@
 
 <script>
     const fullData = [
-        { en: "The act of gardening itself is a fantastic form of physical activity.", ko: "정원 가꾸기 행위 자체는 신체 활동의 환상적인 형태입니다.", voca: ["act:행위", "gardening:정원 가꾸기", "itself:그 자체", "fantastic:환상적인", "physical:신체의", "activity:활동", "form:형태", "🍌", "🍌", "🍌"] },
-        { en: "It involves a range of motions, from digging and planting to watering and harvesting.", ko: "그것은 땅파기와 심기부터 물주기와 수확하기까지 다양한 동작을 포함합니다.", voca: ["involves:포함하다", "range:범위", "motions:동작들", "digging:땅파기", "planting:심기", "watering:물주기", "harvesting:수확하기", "🍌", "🍌", "🍌"] },
-        { en: "These activities help improve strength, flexibility, and endurance.", ko: "이러한 활동들은 근력, 유연성, 그리고 지구력을 향상시키는 데 도움을 줍니다.", voca: ["activities:활동들", "improve:향상시키다", "strength:근력", "flexibility:유연성", "endurance:지구력", "help:돕다", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "You might not realize it, but small tasks like weeding or turning compost can burn many calories.", ko: "깨닫지 못할 수도 있지만, 잡초 뽑기나 퇴비 뒤섞기 같은 작은 일들이 많은 칼로리를 태울 수 있습니다.", voca: ["realize:깨닫다", "tasks:일/과업", "weeding:잡초 뽑기", "turning:뒤섞기", "compost:퇴비", "burn:태우다", "calories:칼로리", "small:작은", "🍌", "🍌"] },
-        { en: "Gardening is particularly beneficial for those who find traditional exercise challenging.", ko: "정원 가꾸기는 전통적인 운동이 어렵다고 느끼는 사람들에게 특히 유익합니다.", voca: ["particularly:특히", "beneficial:유익한", "traditional:전통적인", "exercise:운동", "challenging:어려운", "find:~라고 여기다", "those:사람들", "🍌", "🍌", "🍌"] },
-        { en: "It's a low-impact way to stay active and fit, making it accessible for people of all ages and physical abilities.", ko: "그것은 활동적이고 건강한 상태를 유지하는 충격이 적은 방법으로, 모든 연령대와 신체 능력을 가진 사람들이 접근하기 쉽게 만듭니다.", voca: ["low-impact:저충격의", "active:활동적인", "fit:건강한", "accessible:접근 가능한", "ages:연령", "abilities:능력", "way:방법", "stay:유지하다", "🍌", "🍌"] },
-        { en: "Besides physical health, gardening has profound mental health benefits.", ko: "신체적 건강 외에도, 정원 가꾸기는 깊은 정신 건강상의 이점을 가지고 있습니다.", voca: ["Besides:~외에도", "profound:깊은", "mental:정신의", "benefits:이점", "health:건강", "physical:신체의", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Tending to plants can be incredibly calming and meditative.", ko: "식물을 돌보는 것은 믿을 수 없을 정도로 차분해지고 명상적일 수 있습니다.", voca: ["Tending to:~돌보기", "plants:식물", "incredibly:믿을 수 없을 만큼", "calming:차분하게 하는", "meditative:명상적인", "can:할 수 있다", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "It allows you to focus on the present moment, reducing stress and anxiety.", ko: "그것은 당신이 현재의 순간에 집중하게 하여 스트레스와 불안을 줄여줍니다.", voca: ["allows:하게 하다", "focus on:~에 집중하다", "present:현재의", "moment:순간", "reducing:줄이는 것", "stress:스트레스", "anxiety:불안", "🍌", "🍌", "🍌"] },
-        { en: "The repetitive tasks involved in gardening can induce a state of mindfulness, similar to meditation.", ko: "정원 가꾸기에 포함된 반복적인 과업들은 명상과 유사한 마음챙김 상태를 유도할 수 있습니다.", voca: ["repetitive:반복적인", "tasks:과업", "involved:포함된", "induce:유도하다", "state:상태", "mindfulness:마음챙김", "similar:유사한", "meditation:명상", "🍌", "🍌"] },
-        { en: "Studies have shown that spending time in nature, even in a small garden, can elevate mood, improve cognition, and reduce depression symptoms.", ko: "연구에 따르면 작은 정원에서라도 자연 속에서 시간을 보내는 것이 기분을 고양시키고 인지 능력을 향상하며 우울증 증상을 줄일 수 있다고 합니다.", voca: ["Studies:연구들", "nature:자연", "elevate:고양시키다", "mood:기분", "cognition:인지", "depression:우울증", "symptoms:증상", "shown:보여주다", "improve:개선하다", "🍌"] },
-        { en: "The sense of accomplishment from watching your plants grow and thrive can also boost self-esteem and overall well-being.", ko: "식물이 자라고 번성하는 것을 지켜보는 데서 오는 성취감은 자존감과 전반적인 행복감을 높여줄 수도 있습니다.", voca: ["accomplishment:성취감", "thrive:번성하다", "boost:북돋우다", "self-esteem:자존감", "overall:전반적인", "well-being:행복", "watching:지켜보는 것", "grow:자라다", "sense:감각/느낌", "🍌"] }
+        { en: "Imagine following the spirit of a silence vow into daily life.", ko: "침묵 서약의 정신을 일상생활로 가져온다고 상상해 보십시오.", voca: ["Imagine:상상하다", "following:따르는것", "spirit:정신", "silence:침묵", "vow:서약", "daily:일상의", "life:생활", "into:~안으로", "🍌", "🍌"] },
+        { en: "Challenge yourself to spend an entire day saying only what you absolutely must say.", ko: "절대적으로 해야만 하는 말만 하면서 온종일 보내는 것에 도전해 보십시오.", voca: ["Challenge:도전하다", "spend:보내다", "entire:전체의/온", "absolutely:절대적으로", "must:해야한다", "saying:말하는것", "only:단지", "what:것", "day:하루", "🍌"] },
+        { en: "It’s been widely observed by behavioral psychology experts—and anyone who’s ever been on a first date—that we too often tend to treat 'conversation' as a game of waiting for our own turn to speak.", ko: "우리가 너무 자주 '대화'를 자신의 말할 차례를 기다리는 게임으로 취급하는 경향이 있다는 것은 행동 심리학 전문가들과 첫 데이트를 해본 적이 있는 사람이라면 누구나 널리 관찰해 온 사실입니다.", voca: ["observed:관찰된", "behavioral:행동의", "psychology:심리학", "experts:전문가", "tend to:~하는경향이있다", "treat:취급하다", "conversation:대화", "waiting:기다리는것", "turn:차례", "speak:말하다"] },
+        { en: "We miss what’s being said because we’re mentally rehearsing our next utterance.", ko: "우리는 다음 할 말을 마음속으로 연습하느라 상대방이 말하는 것을 놓칩니다.", voca: ["miss:놓치다", "mentally:정신적으로", "rehearsing:연습하는것", "utterance:발화/말", "next:다음의", "because:때문에", "being said:말해지는것", "what:것", "we are:우리는", "🍌"] },
+        { en: "What if you could eliminate the idea that the next available mini-silence is your next opening to express whatever is in your head?", ko: "다음번에 생기는 아주 짧은 침묵이 여러분의 머릿속에 있는 무엇이든 표현할 다음 기회라는 생각을 버릴 수 있다면 어떨까요?", voca: ["eliminate:제거하다/버리다", "available:이용가능한", "mini-silence:짧은침묵", "opening:기회/통로", "express:표현하다", "whatever:무엇이든", "head:머리/생각", "What if:어떨까", "idea:생각", "next:다음의"] },
+        { en: "What if you were limited to, say, fifty spoken words tomorrow?", ko: "만약 내일 여러분이 말하는 단어를, 예를 들어 50개로 제한한다면 어떨까요?", voca: ["limited:제한된", "spoken:말해지는", "words:단어들", "tomorrow:내일", "say:말하자면/예를들어", "fifty:오십", "What if:어떨까", "🍌", "🍌", "🍌"] },
+        { en: "I think you’d listen quite differently.", ko: "제 생각에 여러분은 상당히 다르게 들을 것입니다.", voca: ["listen:듣다", "quite:상당히", "differently:다르게", "think:생각하다", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "You’d attend quite carefully to every word you heard.", ko: "여러분은 여러분이 듣는 모든 단어에 상당히 주의를 기울일 것입니다.", voca: ["attend:주의를기울이다", "carefully:주의깊게", "every:모든", "heard:들었다", "quite:상당히", "word:단어", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "You’d be attuned to what you must respond to.", ko: "여러분은 여러분이 반드시 응답해야 하는 것에 귀를 기울이게 될 것입니다.", voca: ["attuned:귀를기울이는", "must:해야한다", "respond:응답하다", "what:것", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "You might discover that the less you say, the more you hear.", ko: "여러분은 말을 적게 할수록 더 많은 것을 듣게 된다는 것을 발견할지도 모릅니다.", voca: ["discover:발견하다", "the less:더적게할수록", "the more:더많이하다", "hear:듣다", "say:말하다", "might:할지도모른다", "🍌", "🍌", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -84,15 +82,15 @@
             header.innerText = "English Master #22";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Holistic Power<br>of Gardening</h1><p>2025년 9월 고1 모의고사 22번</p></div>
+                <div class="main-title-card"><h1>The Power of Silence:<br>Better Listening</h1><p>2025년 6월 고1 모의고사 22번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 정원 가꾸기는 근력과 유연성을 기르는 훌륭한 신체 활동임.</p>
-                    <p>• <b>📍 본론:</b> 저강도 운동으로서 접근성이 높으며, 명상과 같은 마음챙김 상태를 유도함.</p>
-                    <p>• <b>📍 결론:</b> 자연과의 교감은 기분과 인지를 개선하고 성취감을 통해 자존감을 높여줌.</p>
+                    <p>• <b>📍 서론:</b> 일상에서 말을 아끼는 '침묵 서약'의 정신을 실천해 보기.</p>
+                    <p>• <b>📍 본론:</b> 우리는 다음 할 말을 준비하느라 타인의 말을 진정으로 듣지 못함.</p>
+                    <p>• <b>📍 결론:</b> 말을 제한할 때 비로소 타인의 말에 더 깊이 주의를 기울이고 더 많이 듣게 됨.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 정원 가꾸기의 신체적 활동 가치와 정신 건강 및 웰빙 증진 효과</span>
-                    <span class="topic-eng">Topic: The Value of Gardening as Physical Activity and Its Effects on Mental Health and Well-being</span>
+                    <span class="topic-kor">주제: 경청의 능력을 높이기 위한 의도적인 침묵과 말하기의 제한</span>
+                    <span class="topic-eng">Topic: Intentional Silence and Limiting Speech to Enhance Listening Skills</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -142,15 +140,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

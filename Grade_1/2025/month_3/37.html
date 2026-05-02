@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>English Master #37 - Official Version</title>
     <style>
         :root { 
@@ -12,13 +12,13 @@
             --purple-dark: #673AB7;
             --pink-soft: #FFF0F6;
         }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
-        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
-        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
+        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
         /* STEP 1: 인트로 (서론/본론/결론 명시) */
@@ -41,7 +41,7 @@
 
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
     </style>
 </head>
 <body>
@@ -56,12 +56,12 @@
 
 <script>
     const fullData = [
-        { en: "Cartilage is extremely important for the healthy functioning of a joint, especially if that joint bears weight, like your knee.", ko: "연골은 관절의 건강한 기능을 위해 매우 중요한데, 특히 무릎처럼 체중을 지탱하는 관절의 경우 더욱 그렇습니다.", voca: ["Cartilage:연골", "extremely:매우", "functioning:기능", "joint:관절", "especially:특히", "bears:지탱하다", "weight:무게", "knee:무릎", "healthy:건강한", "important:중요한"] },
-        { en: "Imagine for a moment that you’re looking into the inner workings of your left knee as you walk down the street.", ko: "길을 걸을 때 여러분의 왼쪽 무릎 내부의 작용을 들여다보고 있다고 잠시 상상해 보십시오.", voca: ["Imagine:상상하다", "moment:잠시", "inner:내부의", "workings:작용", "left:왼쪽", "knee:무릎", "walk:걷다", "street:길", "looking:들여다보는", "🍌"] },
-        { en: "When you shift your weight from your left leg to your right, the pressure on your left knee is released.", ko: "체중을 왼쪽 다리에서 오른쪽으로 옮기면, 왼쪽 무릎에 가해지는 압력이 해제됩니다.", voca: ["shift:옮기다", "weight:체중", "leg:다리", "pressure:압력", "released:해제된", "from:A로부터", "to:B로", "knee:무릎", "🍌", "🍌"] },
-        { en: "The cartilage in your left knee then “drinks in” synovial fluid, in much the same way that a sponge soaks up liquid when put in water.", ko: "그러면 여러분의 왼쪽 무릎에 있는 연골은 스펀지가 물에 들어갔을 때 액체를 흡수하는 것과 거의 같은 방식으로 관절액을 '마십니다'.", voca: ["synovial fluid:관절액", "sponge:스펀지", "soaks up:흡수하다", "liquid:액체", "drinks in:흡수하다", "cartilage:연골", "same way:같은방식", "water:물", "put:넣어진", "much:매우"] },
-        { en: "When you take another step and transfer the weight back onto your left leg, much of the fluid squeezes out of the cartilage.", ko: "여러분이 또 다른 발걸음을 내딛고 체중을 다시 왼쪽 다리로 옮기면, 많은 양의 액체가 연골 밖으로 짜내어집니다.", voca: ["another:또다른", "step:발걸음", "transfer:옮기다", "weight:체중", "squeezes out:짜내다", "cartilage:연골", "fluid:액체", "back:다시", "onto:~위로", "leg:다리"] },
-        { en: "This squeezing of joint fluid into and out of the cartilage helps it respond to the off-and-on pressure of walking without breaking under the pressure.", ko: "연골 내부와 외부로 관절액이 짜내어지는 이 과정은 연골이 압력에 무너지지 않고 걷기의 반복적인 압력에 반응하도록 도와줍니다.", voca: ["squeezing:짜기", "joint fluid:관절액", "respond:반응하다", "off-and-on:반복적인", "pressure:압력", "breaking:무너지는것", "walking:걷기", "without:~없이", "helps:돕는다", "cartilage:연골"] }
+        { en: "Stanford psychology professor Dr. Carol Dweck is the internationally recognized pioneer of the concept of 'growth mindset' as a way to continually grow, learn, and persevere in our efforts.", ko: "스탠퍼드 대학교의 심리학 교수인 Carol Dweck 박사는 우리의 노력 속에서 지속적으로 성장하고, 배우고, 인내하는 방법으로서 '성장 마인드셋' 개념의 국제적으로 인정받는 선구자입니다.", voca: ["professor:교수", "internationally:국제적으로", "recognized:인정받는", "pioneer:선구자", "concept:개념", "growth mindset:성장마인드셋", "continually:지속적으로", "persevere:인내하다", "efforts:노력", "psychology:심리학"] },
+        { en: "Dweck found that kids who are told they’re 'smart' actually underperform in future tasks, by choosing easier tasks to avoid evidence that they are not smart, which Dweck calls having a 'fixed mindset.'", ko: "Dweck은 '똑똑하다'는 말을 들은 아이들이 자신이 똑똑하지 않다는 증거를 피하기 위해 더 쉬운 과제를 선택함으로써 실제로 미래의 과제에서 더 낮은 성과를 낸다는 것을 발견했는데, Dweck은 이를 '고정 마인드셋'을 가진 것이라고 부릅니다.", voca: ["underperform:낮은성과를내다", "future tasks:미래의과제", "choosing:선택하는것", "avoid:피하다", "evidence:증거", "fixed mindset:고정마인드셋", "smart:똑똑한", "actually:실제로", "calls:부르다", "kids:아이들"] },
+        { en: "In contrast, Dweck found, kids who are praised not for their smarts but for their effort develop what Dweck calls a 'growth mindset.'", ko: "반면에 Dweck은 지능이 아니라 노력에 대해 칭찬을 받은 아이들이 Dweck이 '성장 마인드셋'이라고 부르는 것을 발달시킨다는 것을 발견했습니다.", voca: ["In contrast:대조적으로", "praised:칭찬받은", "smarts:지능", "effort:노력", "develop:발달시키다", "found:발견했다", "kids:아이들", "calls:부르다", "what:것", "🍌"] },
+        { en: "They learn that their effort is what led to their success, and if they continue to try, over time they’ll improve and achieve more things.", ko: "그들은 자신의 노력이 성공으로 이어진 것이며, 계속 노력하면 시간이 지남에 따라 향상되고 더 많은 것을 성취할 것이라는 점을 배웁니다.", voca: ["effort:노력", "led to:~로이어지다", "success:성공", "continue:계속하다", "improve:향상되다", "achieve:성취하다", "things:것들", "over time:시간이지남에따라", "learn:배우다", "try:노력하다"] },
+        { en: "These kids end up taking on tougher things, and feel better about themselves.", ko: "이 아이들은 결국 더 힘든 일들을 맡게 되고, 자신에 대해 더 좋게 느끼게 됩니다.", voca: ["end up:결국~하게되다", "taking on:맡다/떠맡다", "tougher:더힘든", "feel better:기분이더좋다", "themselves:그들자신", "things:일들", "These:이러한", "kids:아이들", "about:~에대해", "🍌"] },
+        { en: "“Emphasizing effort gives a child a variable that they can control,” Dweck has explained.", ko: "Dweck은 “노력을 강조하는 것은 아이에게 스스로 조절할 수 있는 변수를 주는 것”이라고 설명했습니다.", voca: ["Emphasizing:강조하는것", "effort:노력", "variable:변수", "control:조절/통제하다", "explained:설명했다", "gives:주다", "child:아이", "can:할수있다", "they:그들", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -78,15 +78,16 @@
             header.innerText = "English Master #37";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Function of Cartilage<br>in Human Joints</h1><p>2025년 3월 고1 모의고사 37번</p></div>
+                <div class="main-title-card"><h1>Fixed vs. Growth Mindset:<br>The Power of Effort</h1><p>2025년 6월 고1 모의고사 37번</p></div>
+                
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 연골은 관절의 건강한 기능, 특히 체중 지탱에 매우 중요함.</p>
-                    <p>• <b>📍 본론:</b> 걷는 동안 체중 이동에 따라 연골이 관절액을 흡수하고 방출함.</p>
-                    <p>• <b>📍 결론:</b> 이러한 유체의 순환은 연골이 압력에 파괴되지 않고 견디게 해줌.</p>
+                    <p>• <b>📍 서론:</b> 캐럴 덱 박사는 지속적 성장을 위한 '성장 마인드셋' 개념의 선구자임.</p>
+                    <p>• <b>📍 본론:</b> 지능 칭찬은 고정 마인드셋(도전 회피)을 만들고, 노력 칭찬은 성장 마인드셋(도전 수용)을 만듦.</p>
+                    <p>• <b>📍 결론:</b> 노력을 강조하면 아이는 스스로 통제 가능한 변수를 얻게 되어 더 어려운 과제에 도전하게 됨.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 보행 시 압력 분산을 돕는 연골의 관절액 순환 작용</span>
-                    <span class="topic-eng">Topic: The Circulation of Synovial Fluid in Cartilage for Pressure Response</span>
+                    <span class="topic-kor">주제: 능력(지능)이 아닌 노력에 대한 칭찬이 마인드셋과 성취에 미치는 영향</span>
+                    <span class="topic-eng">Topic: The Impact of Praising Effort over Smarts on Mindset and Achievement</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -136,7 +137,8 @@
         }
     }
 
-  // 수정된 Step 3 빈칸 생성 로직
+
+// 수정된 Step 3 빈칸 생성 로직
 function fillBlanks(s) {
     const c = document.getElementById('blank-area');
     

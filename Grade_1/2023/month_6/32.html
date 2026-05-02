@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #32 - 23년 6월 고1 모의고사</title>
+    <title>English Master #32 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,14 +56,12 @@
 
 <script>
     const fullData = [
-        { en: "Think of the brain as a city.", ko: "뇌를 하나의 도시라고 생각해 보십시오.", voca: ["Think of:생각해 보다", "brain:뇌", "city:도시", "as:~로서", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "If you were to look out over a city and ask “where is the economy located?” you’d see there’s no good answer to the question.", ko: "만약 여러분이 도시를 내다보며 '경제는 어디에 위치해 있나요?'라고 묻는다면, 그 질문에 대한 좋은 답변이 없다는 것을 알게 될 것입니다.", voca: ["look out:내다보다", "economy:경제", "located:위치한", "answer:답변", "question:질문", "If:만약", "ask:묻다", "see:알다/보다", "no good:좋지 않은", "🍎"] },
-        { en: "Instead, the economy emerges from the interaction of all the elements—from the stores and the banks to the merchants and the customers.", ko: "대신에, 경제는 상점과 은행에서 상인과 고객에 이르기까지 모든 요소의 상호작용으로부터 나타납니다.", voca: ["Instead:대신에", "emerges:나타나다/출현하다", "interaction:상호작용", "elements:요소들", "merchants:상인들", "customers:고객들", "from A to B:A에서 B까지", "all:모든", "🍎", "🍎"] },
-        { en: "And so it is with the brain’s operation: it doesn’t happen in one spot.", ko: "뇌의 작동도 마찬가지입니다: 그것은 한 곳에서 일어나지 않습니다.", voca: ["operation:작동/운영", "happen:일어나다", "one spot:한 곳", "so it is:~도 마찬가지다", "brain:뇌", "🍎", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "Just as in a city, no neighborhood of the brain operates in isolation.", ko: "도시에서처럼, 뇌의 어떤 구역도 고립되어 작동하지 않습니다.", voca: ["Just as:~처럼", "neighborhood:구역/이웃", "operates:작동하다", "isolation:고립", "no:어떤 ~도 않는", "brain:뇌", "🍎", "🍎", "🍎", "🍎"] },
-        { en: "In brains and in cities, everything emerges from the interaction between residents, at all scales, locally and distantly.", ko: "뇌와 도시에서, 모든 것은 국지적으로나 원거리에서나 모든 규모의 거주자들 사이의 상호작용으로부터 나타납니다.", voca: ["residents:거주자들", "scales:규모", "locally:국지적으로", "distantly:원거리에서", "between:~ 사이에", "emerges:나타나다", "everything:모든 것", "🍎", "🍎", "🍎"] },
-        { en: "Just as trains bring materials and textiles into a city, which become processed into the economy, so the raw electrochemical signals from sensory organs are transported along superhighways of neurons.", ko: "기차가 재료와 직물을 도시로 가져오고 그것이 경제로 가공되는 것처럼, 감각 기관으로부터 온 가공되지 않은 전기화학적 신호들은 뉴런이라는 고속도로를 따라 운송됩니다.", voca: ["materials:재료", "textiles:직물", "processed:가공된", "raw:가공되지 않은", "electrochemical:전기화학적인", "sensory organs:감각 기관", "transported:운송된", "neurons:뉴런", "superhighways:고속도로", "🍎"] },
-        { en: "There the signals undergo processing and transformation into our conscious reality.", ko: "그곳에서 그 신호들은 우리의 의식적인 현실로 가공되고 변형되는 과정을 거칩니다.", voca: ["undergo:거치다/겪다", "processing:가공/처리", "transformation:변형", "conscious reality:의식적인 현실", "signals:신호들", "into:~로", "There:그곳에서", "🍎", "🍎", "🍎"] }
+        { en: "Most entrepreneurs put in tremendous amounts of time and effort in creating and launching new products and services and then make the mistake of overpricing them.", ko: "대부분의 기업가는 신제품과 서비스를 만들고 출시하는 데 엄청난 시간과 노력을 들이고 나서 그것들에 너무 높은 가격을 매기는 실수를 범합니다.", voca: ["entrepreneurs:기업가", "tremendous:엄청난", "amounts:양", "effort:노력", "launching:출시", "mistake:실수", "overpricing:과도하게가격을매기다", "products:제품", "services:서비스", "creating:창조/제작"] },
+        { en: "They have created something they care deeply about, it’s theirs, and this powerful sense of ownership distorts their perception of value which causes them to overprice their products.", ko: "그들은 자신들이 깊이 관심을 두는 무언가를 만들었고, 그것은 자신들의 것이며, 이러한 강력한 소유 의식은 가치에 대한 인식을 왜곡하여 그들이 제품 가격을 과하게 책정하게 만듭니다.", voca: ["care deeply:깊이관심두다", "ownership:소유권", "distorts:왜곡하다", "perception:인식", "value:가치", "causes:유발하다", "overprice:과하게가격매기다", "sense:의식/감각", "powerful:강력한", "theirs:그들의것"] },
+        { en: "While many of them are quick to realize that their initial prices are too high, not all these people are happy or willing to drop their prices to make their products more attractive.", ko: "그들 중 다수는 초기 가격이 너무 높다는 것을 빨리 깨닫지만, 이 사람들 모두가 제품을 더 매력적으로 만들기 위해 기꺼이 가격을 내리거나 기쁘게 생각하는 것은 아닙니다.", voca: ["realize:깨닫다", "initial:초기의", "willing to:기꺼이~하는", "drop:내리다", "attractive:매력적인", "while:~이지만", "quick:빠른", "prices:가격", "people:사람들", "happy:기쁜"] },
+        { en: "And this can be a very costly mistake that may lead to the failure of their new business.", ko: "그리고 이것은 새로운 사업의 실패로 이어질 수 있는 매우 큰 대가를 치르는 실수가 될 수 있습니다.", voca: ["costly:대가가큰/비싼", "mistake:실수", "lead to:~로이어지다", "failure:실패", "business:사업", "new:새로운", "can:할수있다", "very:매우", "may:일지도모른다", "🍌"] },
+        { en: "When you launch a new product or service, your priority should be to get sufficient market adoption as soon as possible and you should be ready to sacrifice your initial prices and profits to achieve this aim.", ko: "신제품이나 서비스를 출시할 때, 여러분의 우선순위는 가능한 한 빨리 충분한 시장 채택을 얻는 것이어야 하며, 이 목표를 달성하기 위해 초기 가격과 이익을 희생할 준비가 되어 있어야 합니다.", voca: ["priority:우선순위", "sufficient:충분한", "adoption:채택", "as soon as possible:가능한한빨리", "sacrifice:희생하다", "profits:이익", "achieve:달성하다", "aim:목표", "ready:준비된", "initial:초기의"] },
+        { en: "Once you have strong sales volumes, you can increase your prices to maximize your profits.", ko: "일단 강력한 판매량을 확보하면, 이익을 극대화하기 위해 가격을 올릴 수 있습니다.", voca: ["Once:일단~하면", "sales volumes:판매량", "increase:늘리다/인상하다", "maximize:극대화하다", "profits:이익", "strong:강력한", "prices:가격", "can:할수있다", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -80,16 +78,15 @@
             header.innerText = "English Master #32";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Brain as<br>a Living City</h1><p>2023년 6월 고1 모의고사 32번</p></div>
-                
+                <div class="main-title-card"><h1>The Trap of Overpricing:<br>Ownership Bias</h1><p>2025년 6월 고1 모의고사 32번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 뇌의 작동 원리는 도시의 경제 시스템과 매우 유사함.</p>
-                    <p>• <b>📍 본론:</b> 경제가 특정 장소가 아닌 모든 구성원의 상호작용에서 나오듯, 뇌의 작용도 고립된 구역이 아닌 전체 네트워크의 상호작용에서 발생함.</p>
-                    <p>• <b>📍 결론:</b> 기차가 물자를 실어 나르듯 감각 신호가 뉴런을 통해 전달되고, 이 복합적인 처리 과정을 통해 우리의 의식적 현실이 만들어짐.</p>
+                    <p>• <b>📍 서론:</b> 많은 기업가들이 신제품 출시 시 소유 의식 때문에 가격을 너무 높게 책정하는 실수를 함.</p>
+                    <p>• <b>📍 본론:</b> 소유권에 대한 애착은 가치 인식을 왜곡하며, 가격 인하를 주저하게 만들어 사업 실패를 초래함.</p>
+                    <p>• <b>📍 결론:</b> 초기에는 이익보다 시장 점유율 확보를 우선시해야 하며, 판매량이 안정된 후 가격을 올려야 함.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 개별 부위가 아닌 네트워크 상호작용을 통해 의식을 형성하는 뇌의 작동 원리</span>
-                    <span class="topic-eng">Topic: The brain's operation through network interaction rather than isolated spots</span>
+                    <span class="topic-kor">주제: 신제품 출시 시 과도한 가격 책정의 위험성과 시장 채택의 우선순위</span>
+                    <span class="topic-eng">Topic: The Dangers of Overpricing and the Priority of Market Adoption in New Product Launch</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -108,7 +105,7 @@
                     <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
                     <div id="trans-area" class="trans-content">${item.ko}</div>
                 `;
-                fillVoca(item.voca, '🍎', "#FF3B30");
+                fillVoca(item.voca, '🍌', "#FFD600");
             } else {
                 area.innerHTML = `
                     <div class="kor-box">${item.ko}</div>
@@ -139,15 +136,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #30 - 24년 9월 모의고사</title>
+    <title>English Master #30 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,14 +56,14 @@
 
 <script>
     const fullData = [
-        { en: "An excellent alternative to calming traffic is removing it.", ko: "교통을 진정시키는 것에 대한 훌륭한 대안은 그것을 제거하는 것입니다.", voca: ["excellent:훌륭한", "alternative:대안", "calming traffic:교통 진정", "removing:제거하는 것", "it:그것(교통)", "An:한", "to:~에 대한", "is:~이다", "🍌", "🍌"] },
-        { en: "Some cities reserve an extensive network of lanes and streets for bikes, pedestrians, and the occasional service vehicle.", ko: "일부 도시들은 자전거, 보행자, 그리고 가끔씩 다니는 서비스 차량을 위해 광범위한 차선과 도로망을 따로 남겨둡니다.", voca: ["reserve:따로 남겨두다/예약하다", "extensive:광범위한", "lanes:차선", "pedestrians:보행자들", "occasional:가끔의", "service vehicle:서비스 차량", "network:망", "streets:도로/거리", "for:~을 위해", "🍌"] },
-        { en: "This motivates people to travel by bike rather than by car, making streets safer for everyone.", ko: "이것은 사람들이 자동차보다는 자전거로 이동하도록 동기를 부여하여, 거리를 모두에게 더 안전하게 만듭니다.", voca: ["motivates:동기를 부여하다", "travel:이동하다/여행하다", "rather than:~보다 오히려", "making:만드는 것", "safer:더 안전한", "people:사람들", "by bike:자전거로", "by car:자동차로", "everyone:모두", "🍌"] },
-        { en: "As bicycles become more popular in a city, planners can convert more automobile lanes and entire streets to accommodate more of them.", ko: "도시에서 자전거가 더 인기를 얻게 됨에 따라, 계획가들은 더 많은 자전거를 수용하기 위해 더 많은 자동차 차선과 도로 전체를 전환할 수 있습니다.", voca: ["popular:인기 있는", "planners:계획가들", "convert:전환하다", "automobile lanes:자동차 차선", "entire:전체의", "accommodate:수용하다", "bicycles:자전거들", "city:도시", "more:더 많은", "🍌"] },
-        { en: "Nevertheless, even the most bikeable cities still require motor vehicle lanes for taxis, emergency vehicles, and delivery trucks.", ko: "그럼에도 불구하고, 자전거를 타기에 가장 좋은 도시들조차 택시, 응급 차량, 그리고 배달 트럭을 위한 자동차 차선을 여전히 필요로 합니다.", voca: ["Nevertheless:그럼에도 불구하고", "bikeable:자전거 타기에 좋은", "require:필요로 하다", "motor vehicle:자동차", "emergency:응급/비상", "delivery trucks:배달 트럭", "lanes:차선", "still:여전히", "even:조차", "🍌"] },
-        { en: "Delivery vehicles are frequently a target of animus, but they are actually an essential component to making cities greener.", ko: "배달 차량은 빈번하게 적대감의 대상이 되지만, 사실 도시를 더 친환경적으로 만드는 데 필수적인 요소입니다.", voca: ["frequently:빈번하게", "target:대상/표적", "animus:적대감/반감", "essential:필수적인", "component:요소/성분", "greener:더 친환경적인", "actually:사실", "Delivery:배달", "vehicles:차량", "🍌"] },
-        { en: "A tightly packed delivery truck is a far more efficient transporter of goods than several hybrids carrying a few shopping bags each.", ko: "물건을 꽉 채운 배달 트럭 한 대는 각각 몇 개의 쇼핑백을 운반하는 여러 대의 하이브리드 차량보다 훨씬 더 효율적인 상품 운송 수단입니다.", voca: ["tightly:꽉/단단히", "efficient:효율적인", "transporter:운송 수단/수송자", "goods:상품/물건", "hybrids:하이브리드 차량", "carrying:운반하는", "far more:훨씬 더", "packed:채워진", "than:~보다", "🍌"] },
-        { en: "Distributing food and other goods to neighborhood vendors allows them to operate smaller stores close to homes so that residents can walk, rather than drive, to get their groceries.", ko: "지역 상인들에게 식품과 기타 물품을 배달하는 것은 그들이 집 근처에서 더 작은 상점을 운영할 수 있게 하여, 주민들이 식료품을 사러 차를 모는 대신 걸어갈 수 있게 해줍니다.", voca: ["Distributing:배달/분배하는 것", "vendors:상인/판매자", "operate:운영하다", "residents:주민들", "groceries:식료품", "neighborhood:지역/이웃", "allows:허용하다", "rather than:~보다 오히려", "close to:~에 가까운", "🍌"] }
+        { en: "It is natural for people to observe happenings and then seek explanations for why those happenings occurred.", ko: "사람들이 일어난 일을 관찰하고 그 일이 왜 일어났는지에 대한 설명을 찾는 것은 자연스러운 일입니다.", voca: ["natural:자연스러운", "observe:관찰하다", "happenings:일어난일들", "seek:찾다", "explanations:설명", "occurred:일어났다", "people:사람들", "why:왜", "those:그러한", "🍌"] },
+        { en: "But sometimes the reasoning is wrong because of one or more misconceptions.", ko: "하지만 때때로 하나 이상의 오해 때문에 그 추론이 틀릴 수도 있습니다.", voca: ["reasoning:추론", "wrong:틀린", "misconceptions:오해", "because of:~때문에", "sometimes:때때로", "more:더많은", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "One of these is the ecological fallacy, where an argument claims that there is a causal relationship between two things merely because they occur together.", ko: "이 중 하나는 생태학적 오류로, 단순히 두 가지가 함께 발생한다는 이유만으로 인과 관계가 있다고 주장하는 것입니다.", voca: ["ecological:생태학적", "fallacy:오류", "argument:주장", "claims:주장하다", "causal:인과의", "relationship:관계", "merely:단순히", "occur:발생하다", "together:함께", "between:~사이에"] },
+        { en: "For example, in the 1950s it was found that crime rates were the highest in neighborhoods where immigrants were most numerous.", ko: "예를 들어, 1950년대에 이민자가 가장 많은 동네에서 범죄율이 가장 높다는 사실이 밝혀졌습니다.", voca: ["example:예시", "found:발견된", "crime rates:범죄율", "highest:가장높은", "neighborhoods:이웃/동네", "immigrants:이민자", "most:가장", "numerous:수많은", "where:~한곳", "🍌"] },
+        { en: "Some people used this 'co-occurrence' to argue that immigrants were a cause of crime.", ko: "어떤 사람들은 이 '공존'을 이민자가 범죄의 원인이라고 주장하는 데 사용했습니다.", voca: ["used:사용했다", "co-occurrence:공존", "argue:주장하다", "immigrants:이민자", "cause:원인", "crime:범죄", "Some:어떤", "this:이것", "🍌", "🍌"] },
+        { en: "But a careful analysis of this situation revealed that immigrants were forced to live in neighborhoods where crime rates were already high; they could not afford more expensive housing in safer neighborhoods.", ko: "하지만 이 상황을 주의 깊게 분석한 결과, 이민자들은 범죄율이 이미 높은 지역에 살도록 강요받았다는 사실이 드러났습니다. 그들은 더 안전한 동네의 비싼 집값을 감당할 수 없었기 때문입니다.", voca: ["careful:주의깊은", "analysis:분석", "revealed:드러냈다", "forced:강요받은", "already:이미", "afford:~할여유가되다", "expensive:비싼", "housing:주택", "safer:더안전한", "situation:상황"] },
+        { en: "Immigrants themselves committed very few of the crimes.", ko: "이민자들 스스로가 저지른 범죄는 극히 적었습니다.", voca: ["themselves:그들스스로", "committed:저질렀다", "very few:극히적은", "crimes:범죄들", "Immigrants:이민자들", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Unless you analyze the claim carefully, you would misinterpret the relationship and thereby construct a faulty belief.", ko: "주장을 주의 깊게 분석하지 않으면 관계를 오해하여 잘못된 믿음을 형성하게 될 것입니다.", voca: ["Unless:~하지않으면", "analyze:분석하다", "claim:주장", "misinterpret:오해하다", "relationship:관계", "thereby:그로인해", "construct:형성하다", "faulty:잘못된", "belief:믿음", "carefully:주의깊게"] }
     ];
 
     let currentMode = 'INTRO';
@@ -80,16 +80,15 @@
             header.innerText = "English Master #30";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Greener Cities via<br>Smart Logistics</h1><p>2024년 9월 고1 모의고사 30번</p></div>
-                
+                <div class="main-title-card"><h1>Avoiding Logical Errors:<br>Ecological Fallacy</h1><p>2025년 6월 고1 모의고사 30번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 교통 체증 해결의 훌륭한 대안은 차량을 제거하고 자전거와 보행자 전용 도로를 확대하는 것임.</p>
-                    <p>• <b>📍 본론:</b> 자전거 중심 도시는 안전을 높이지만, 응급 차량과 배달을 위한 필수 차선은 여전히 필요함.</p>
-                    <p>• <b>📍 결론:</b> 배달 트럭은 여러 대의 자가용보다 효율적이며, 집 근처 상점을 활성화해 주민들이 차 없이 장을 보게 하므로 도시를 더 친환경적으로 만듦.</p>
+                    <p>• <b>📍 서론:</b> 사람들은 어떤 현상을 관찰한 뒤 원인을 찾으려 하지만, 오해로 인해 잘못된 추론을 하기도 함.</p>
+                    <p>• <b>📍 본론:</b> 단순히 함께 발생한다고 인과관계로 단정 짓는 '생태학적 오류'가 대표적인 예임.</p>
+                    <p>• <b>📍 결론:</b> 면밀한 분석 없이 상관관계를 인과관계로 오해하면 잘못된 믿음을 형성하게 됨.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 자전거 중심 도로 확대와 효율적인 배달 시스템이 도시 환경에 미치는 긍정적 영향</span>
-                    <span class="topic-eng">Topic: The Positive Impact of Expanding Bike-Centered Streets and Efficient Delivery Systems on the Urban Environment</span>
+                    <span class="topic-kor">주제: 생태학적 오류와 인과관계 분석의 중요성</span>
+                    <span class="topic-eng">Topic: The Ecological Fallacy and the Importance of Analyzing Causal Relationships</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -139,15 +138,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+ 
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #20 - 24년 9월 모의고사</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Master #20 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -12,13 +12,13 @@
             --purple-dark: #673AB7;
             --pink-soft: #FFF0F6;
         }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; min-height: 100vh; }
-        .phone-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; position: sticky; top: 0; z-index: 10; }
-        #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: #F8F7FA; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .phone-container { width: 100%; max-width: 450px; height: 100%; background: white; display: flex; flex-direction: column; position: relative; }
+        .header { padding: 12px; text-align: center; font-weight: bold; color: var(--purple-dark); border-bottom: 1px solid #eee; background: white; font-size: 0.95rem; }
+        #display-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
         /* STEP 1: 인트로 (서론/본론/결론 명시) */
@@ -41,7 +41,7 @@
 
         .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
         .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -56,14 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "As the parent of a gifted child, you need to be aware of a certain common parent trap.", ko: "영재아의 부모로서, 여러분은 특정한 흔한 부모의 함정을 인식할 필요가 있습니다.", voca: ["gifted child:영재아", "aware of:~을 인식하는", "certain:특정한", "common:흔한", "parent trap:부모의 함정", "need to:~할 필요가 있다", "As:~로서", "the:그", "parent:부모", "🍌"] },
-        { en: "Of course you are a proud parent, and you should be.", ko: "물론 여러분은 자랑스러운 부모이며, 당연히 그래야 합니다.", voca: ["proud:자랑스러운", "of course:물론", "should be:그래야 한다", "parent:부모", "you:당신", "are:~이다", "and:그리고", "🍌", "🍌", "🍌"] },
-        { en: "While it is very easy to talk nonstop about your little genius and his or her remarkable behavior, this can be very stressful on your child.", ko: "여러분의 어린 천재와 그 아이의 놀라운 행동에 대해 쉬지 않고 말하기는 매우 쉽지만, 이것은 아이에게 매우 스트레스가 될 수 있습니다.", voca: ["nonstop:쉬지 않고", "genius:천재", "remarkable:놀라운", "behavior:행동", "stressful:스트레스가 되는", "While:~이지만", "easy:쉬운", "about:~에 대해", "little:작은/어린", "🍌"] },
-        { en: "It is extremely important to limit your bragging behavior to your very close friends, or your parents.", ko: "자랑하는 행동을 아주 가까운 친구나 여러분의 부모님으로 제한하는 것이 매우 중요합니다.", voca: ["extremely:매우/극도로", "limit:제한하다", "bragging:자랑하는", "close:가까운", "behavior:행동", "important:중요한", "friends:친구들", "parents:부모님", "or:또는", "🍌"] },
-        { en: "Gifted children feel pressured when their parents show them off too much.", ko: "영재아들은 부모가 자신을 너무 많이 과시할 때 압박감을 느낍니다.", voca: ["pressured:압박감을 느끼는", "show off:과시하다/자랑하다", "too much:너무 많이", "Gifted:영재의", "children:아이들", "feel:느끼다", "when:~할 때", "their:그들의", "parents:부모들", "🍌"] },
-        { en: "This behavior creates expectations that they may not be able to live up to, and also creates a false sense of self for your child.", ko: "이러한 행동은 아이들이 부응하지 못할 수도 있는 기대를 만들어내고, 또한 여러분의 아이에게 잘못된 자아감을 심어줍니다.", voca: ["expectations:기대", "live up to:~에 부응하다", "false:잘못된", "sense of self:자아감", "creates:만들다", "behavior:행동", "able to:~할 수 있는", "also:또한", "child:아이", "🍌"] },
-        { en: "You want your child to be who they are, not who they seem to be as defined by their incredible achievements.", ko: "여러분은 아이가 놀라운 성취에 의해 정의되는 모습이 아니라, 아이 본연의 모습이 되기를 원합니다.", voca: ["defined:정의되는", "incredible:놀라운", "achievements:성취", "seem to be:~인 것처럼 보이다", "who they are:그들 본연의 모습", "not:아니라", "want:원하다", "child:아이", "their:그들의", "🍌"] },
-        { en: "If not, you could end up with a driven perfectionist child or perhaps a drop-out, or worse.", ko: "그렇지 않으면, 여러분은 결국 의욕에 넘치는 완벽주의자 아이나 아마도 중도 탈락자, 혹은 더 나쁜 결과를 맞이하게 될 수도 있습니다.", voca: ["end up with:결국 ~하게 되다", "driven:의욕에 넘치는", "perfectionist:완벽주의자", "perhaps:아마도", "drop-out:중도 탈락자", "worse:더 나쁜 것", "child:아이", "If not:그렇지 않으면", "could:~할 수 있다", "🍌"] }
+        { en: "People often ask me, 'What surprises you most about habits?'", ko: "사람들은 종종 나에게 '습관에 대해 무엇이 당신을 가장 놀라게 하나요?'라고 묻습니다.", voca: ["habits:습관", "surprises:놀라게하다", "often:종종", "most:가장", "ask:묻다", "people:사람들", "about:~에대해", "what:무엇", "me:나에게", "🍌"] },
+        { en: "One thing that continually astonishes me is the degree to which we’re influenced by sheer convenience.", ko: "나를 계속해서 깜짝 놀라게 하는 한 가지는 우리가 순전한 편리함에 의해 영향을 받는 정도입니다.", voca: ["continually:계속해서", "astonishes:놀라게하다", "degree:정도", "influenced:영향을받는", "sheer:순전한", "convenience:편리함", "thing:것", "which:그것", "we are:우리는", "🍌"] },
+        { en: "The amount of effort, time, or decision making required by an action has a huge influence on habit formation.", ko: "행동에 요구되는 노력, 시간, 또는 의사 결정의 양은 습관 형성에 큰 영향을 미칩니다.", voca: ["effort:노력", "decision making:의사결정", "required:요구되는", "huge:거대한/큰", "influence:영향", "formation:형성", "amount:양", "action:행동", "habit:습관", "time:시간"] },
+        { en: "To a truly remarkable extent, we’re more likely to do something if it’s convenient, and less likely if it’s not.", ko: "정말로 주목할 만한 정도로, 우리는 어떤 일이 편리하면 그것을 할 가능성이 더 높고, 편리하지 않으면 그럴 가능성이 낮습니다.", voca: ["remarkable:주목할만한", "extent:정도", "more likely:더~할것같은", "convenient:편리한", "less likely:덜~할것같은", "truly:정말로", "something:무언가", "if:~라면", "🍌", "🍌"] },
+        { en: "For this reason, we should pay close attention to the convenience of any activity we want to make into a habit.", ko: "이러한 이유로, 우리는 습관으로 만들고 싶은 모든 활동의 편리함에 세심한 주의를 기울여야 합니다.", voca: ["reason:이유", "pay attention:주의를기울이다", "activity:활동", "habit:습관", "close:세심한", "should:~해야한다", "convenience:편리함", "any:어떤/모든", "want:원하다", "make:만들다"] },
+        { en: "Putting a wastebasket next to our front door made mail sorting slightly more convenient, and I stopped procrastinating with this chore.", ko: "현관 옆에 휴지통을 두는 것은 우편물 분류를 약간 더 편리하게 만들었고, 나는 이 잡일을 미루는 것을 그만두었습니다.", voca: ["wastebasket:휴지통", "sorting:분류", "slightly:약간", "procrastinating:미루는것", "chore:잡일", "putting:두는것", "next to:~옆에", "front door:현관", "stopped:그만두었다", "convenient:편리한"] },
+        { en: "Many people report that they do a much better job of staying close to distant family members now that tools like group chats make it easy to stay in touch.", ko: "많은 사람들은 이제 그룹 채팅과 같은 도구들이 연락을 유지하는 것을 쉽게 만들어 주기 때문에 멀리 떨어진 가족들과 친밀하게 지내는 일을 훨씬 더 잘한다고 보고합니다.", voca: ["report:보고하다", "distant:먼/떨어진", "group chats:그룹채팅", "stay in touch:연락을유지하다", "family members:가족구성원", "better:더나은", "tools:도구", "easy:쉬운", "stay:머물다", "like:~와같은"] }
     ];
 
     let currentMode = 'INTRO';
@@ -80,16 +79,16 @@
             header.innerText = "English Master #20";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Avoid the<br>Parent Trap</h1><p>2024년 9월 고1 모의고사 20번</p></div>
+                <div class="main-title-card"><h1>The Influence of Convenience<br>on Habit Formation</h1><p>2025년 6월 고1 모의고사 20번</p></div>
                 
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 영재아를 둔 부모는 자녀의 성취를 끊임없이 자랑하고 싶은 '부모의 함정'을 조심해야 함.</p>
-                    <p>• <b>📍 본론:</b> 과도한 자랑은 아이에게 부응하기 힘든 기대를 심어주고, 성취로만 정의되는 잘못된 자아감을 형성하여 큰 스트레스를 줌.</p>
-                    <p>• <b>📍 결론:</b> 자녀가 완벽주의나 중도 탈락에 빠지지 않도록, 자랑은 최소화하고 아이 본연의 모습을 존중해야 함.</p>
+                    <p>• <b>📍 서론:</b> 습관 형성에서 가장 놀라운 요소는 바로 '순전한 편리함'임.</p>
+                    <p>• <b>📍 본론:</b> 행동에 필요한 노력, 시간, 의사결정의 양이 적을수록 습관이 되기 쉬움.</p>
+                    <p>• <b>📍 결론:</b> 습관을 만들고 싶다면 그 활동을 최대한 편리하게 환경을 조성해야 함.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 영재 자녀에 대한 부모의 과도한 자랑이 아이에게 미치는 부정적 영향과 주의점</span>
-                    <span class="topic-eng">Topic: The Negative Effects of Excessive Parental Bragging on Gifted Children and Precautions to Take</span>
+                    <span class="topic-kor">주제: 편리함이 습관 형성에 미치는 지대한 영향</span>
+                    <span class="topic-eng">Topic: The Profound Influence of Convenience on the Formation of Habits</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -139,15 +138,36 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+  // 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

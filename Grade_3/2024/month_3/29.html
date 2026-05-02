@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #29 - 24년 3월 모의고사</title>
+    <title>English Master #29 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -56,11 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "It would be hard to overstate how important meaningful work is to human beings—work that provides a sense of fulfillment and empowerment.", ko: "의미 있는 일, 즉 성취감과 권한 부여를 제공하는 일이 인간에게 얼마나 중요한지는 아무리 강조해도 지나치지 않을 것입니다.", voca: ["overstate:과장하다", "meaningful:의미 있는", "fulfillment:성취감", "empowerment:권한 부여", "important:중요한", "human beings:인간", "sense:감각", "work:일", "hard:어려운", "🍌"] },
-        { en: "Those who have found deeper meaning in their careers find their days much more energizing and satisfying, and count their employment as one of their greatest sources of joy and pride.", ko: "자신의 직업에서 더 깊은 의미를 찾은 사람들은 자신의 하루가 훨씬 더 활기차고 만족스럽다는 것을 알게 되며, 자신의 고용을 기쁨과 자부심의 가장 큰 원천 중 하나로 여깁니다.", voca: ["career:직업/경력", "energizing:활기를 주는", "satisfying:만족스러운", "employment:고용", "sources:원천", "joy:기쁨", "pride:자부심", "deeper:더 깊은", "meaning:의미", "🍌"] },
-        { en: "Sonya Lyubomirsky, professor of psychology at the University of California, has conducted numerous workplace studies showing that when people are more fulfilled on the job, they not only produce higher quality work and a greater output, but also generally earn higher incomes.", ko: "캘리포니아 대학교의 심리학 교수인 Sonya Lyubomirsky는 사람들이 직장에서 더 큰 성취감을 느낄 때, 더 높은 질의 업무와 더 큰 결과물을 생산할 뿐만 아니라 일반적으로 더 높은 수입을 올린다는 것을 보여주는 수많은 직장 연구를 수행했습니다.", voca: ["psychology:심리학", "conducted:수행했다", "numerous:수많은", "output:결과물", "incomes:수입", "fulfilled:성취감을 느끼는", "quality:질", "produce:생산하다", "generally:일반적으로", "🍌"] },
-        { en: "Those most satisfied with their work are also much more likely to be happier with their lives overall.", ko: "자신의 일에 가장 만족하는 사람들은 또한 전반적인 삶에 있어 더 행복해질 가능성이 훨씬 더 높습니다.", voca: ["satisfied:만족하는", "likely:~할 가능성이 있는", "overall:전반적인", "happier:더 행복한", "lives:삶들", "most:가장", "work:일", "much:훨씬", "also:또한", "🍌"] },
-        { en: "For her book Happiness at Work, researcher Jessica Pryce-Jones conducted a study of 3,000 workers in seventy-nine countries, finding that those who took greater satisfaction from their work were 150 percent more likely to have a happier life overall.", ko: "그녀의 저서 'Happiness at Work'를 위해, 연구원 Jessica Pryce-Jones는 79개국 3,000명의 노동자를 대상으로 연구를 진행했고, 자신의 업무에서 더 큰 만족감을 얻은 사람들이 전반적으로 더 행복한 삶을 살 가능성이 150퍼센트 더 높다는 것을 발견했습니다.", voca: ["researcher:연구원", "conducted:수행했다", "satisfaction:만족감", "percent:퍼센트", "overall:전반적인", "finding:발견하는 것", "greater:더 큰", "likely:~할 가능성이 있는", "workers:노동자들", "🍌"] }
+        { en: "Studies of experts provide insight into what it means to have deep and flexible understanding.", ko: "전문가들에 대한 연구는 깊고 유연한 이해를 갖는다는 것이 무엇을 의미하는지에 대한 통찰력을 제공합니다.", voca: ["Studies:연구", "experts:전문가", "provide:제공하다", "insight:통찰력", "flexible:유연한", "understanding:이해", "means:의미하다", "deep:깊은", "into:~에대한", "🍌"] },
+        { en: "Experts in a particular domain are people who have deep, richly interconnected ideas about the world.", ko: "특정 분야의 전문가는 세상에 대해 깊고 풍부하게 상호 연결된 아이디어를 가진 사람들입니다.", voca: ["particular:특정한", "domain:분야/영역", "richly:풍부하게", "interconnected:상호연결된", "ideas:아이디어", "world:세상", "people:사람들", "about:~에대해", "deep:깊은", "🍌"] },
+        { en: "They are not just good thinkers or people who are exceptionally smart.", ko: "그들은 단순히 훌륭한 사고가이거나 예외적으로 똑똑한 사람들이 아닙니다.", voca: ["just:단순히", "thinkers:사고자", "exceptionally:예외적으로", "smart:똑똑한", "people:사람들", "They:그들", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Rather, experts have knowledge in a specific domain—such as chess, chemistry, or tennis—and are not generalists.", ko: "오히려 전문가는 체스, 화학 또는 테니스와 같은 특정 분야의 지식을 갖고 있으며 다방면에 능한 사람(제너럴리스트)이 아닙니다.", voca: ["Rather:오히려", "knowledge:지식", "specific:특정한", "chemistry:화학", "generalists:제너럴리스트", "domain:분야", "such as:~와같은", "🍌", "🍌", "🍌"] },
+        { en: "However, experts do not just know 'a bunch of facts.'", ko: "하지만 전문가는 단순히 '많은 사실'만을 알고 있는 것이 아닙니다.", voca: ["However:하지만", "just:단순히", "a bunch of:많은/다수의", "facts:사실들", "know:알다", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "In fact, having expertise in a topic means that knowledge is organized into coherent frameworks, and the expert understands the inter-relationship between facts and can distinguish which ideas are most central.", ko: "사실, 한 주제에 대해 전문 지식을 갖는다는 것은 지식이 일관된 체계로 조직되어 있다는 것을 의미하며, 전문가는 사실들 사이의 상호 관계를 이해하고 어떤 아이디어가 가장 핵심적인지 구별할 수 있습니다.", voca: ["expertise:전문지식", "organized:조직된", "coherent:일관된", "frameworks:체계/프레임워크", "inter-relationship:상호관계", "distinguish:구별하다", "central:핵심적인", "means:의미하다", "knowledge:지식", "between:~사이에"] },
+        { en: "This kind of deep but organized understanding allows for greater flexibility in learning and facilitates application across multiple contexts.", ko: "이러한 종류의 깊고 조직된 이해는 학습의 더 큰 유연성을 가능하게 하고 여러 맥락에 걸친 적용을 용이하게 합니다.", voca: ["kind:종류", "organized:조직된", "allows:가능하게하다", "flexibility:유연성", "facilitates:용이하게하다", "application:적용", "multiple:여러/다양한", "contexts:맥락", "across:~에걸쳐", "learning:학습"] }
     ];
 
     let currentMode = 'INTRO';
@@ -77,16 +79,16 @@
             header.innerText = "English Master #29";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Power of<br>Meaningful Work</h1><p>2024년 3월 고1 모의고사 29번</p></div>
-                
+                <div class="main-title-card"><h1>The Nature of Expertise:<br>Coherent Frameworks</h1><p>2025년 6월 고1 모의고사 29번</p></div>
+                [Image of structured knowledge organization versus a list of random facts]
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 인간에게 성취감과 권한을 주는 '의미 있는 일'의 중요성은 아무리 강조해도 지나치지 않음.</p>
-                    <p>• <b>📍 본론:</b> 직업에서 의미를 찾은 이들은 더 활기차며, 더 높은 성과와 수입을 올린다는 연구 결과가 있음.</p>
-                    <p>• <b>📍 결론:</b> 업무 만족도가 높은 사람은 그렇지 않은 사람보다 전반적인 삶의 행복도가 150%나 더 높게 나타남.</p>
+                    <p>• <b>📍 서론:</b> 전문가는 특정 분야에서 깊고 상호 연결된 아이디어를 가진 사람임.</p>
+                    <p>• <b>📍 본론:</b> 전문 지식은 단순히 사실을 아는 것이 아니라, 일관된 체계로 지식을 조직하고 핵심을 구별하는 능력임.</p>
+                    <p>• <b>📍 결론:</b> 이러한 조직된 이해는 학습의 유연성을 높이고 다양한 상황에 지식을 적용하게 해줌.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 의미 있는 업무가 개인의 성과, 수입 및 전반적인 삶의 행복에 미치는 영향</span>
-                    <span class="topic-eng">Topic: The Impact of Meaningful Work on Performance, Income, and Overall Life Happiness</span>
+                    <span class="topic-kor">주제: 전문가의 지식 조직화와 깊고 유연한 이해의 특성</span>
+                    <span class="topic-eng">Topic: Knowledge Organization and Characteristics of Deep and Flexible Understanding in Experts</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -136,15 +138,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

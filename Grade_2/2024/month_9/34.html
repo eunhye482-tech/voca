@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #34 - 24년 9월 모의고사</title>
+    <title>English Master #34 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,13 +56,12 @@
 
 <script>
     const fullData = [
-        { en: "While social media attention is potentially an instrument to achieve ends like elite celebrity, some content creators desire ordinary fame as a social end in itself.", ko: "소셜 미디어의 관심은 잠재적으로 엘리트 유명인과 같은 목적을 달성하기 위한 도구이지만, 일부 콘텐츠 제작자들은 그 자체로 사회적 목적인 평범한 명성을 원합니다.", voca: ["instrument:도구/수단", "achieve:달성하다", "ends:목적", "celebrity:유명인", "desire:원하다", "ordinary:평범한", "fame:명성", "in itself:그 자체로", "content:콘텐츠", "🍌"] },
-        { en: "Not unlike reality television stars, social media celebrities are often criticized for not having skills and talents associated with traditional, elite celebrity, such as acting or singing ability.", ko: "리얼리티 TV 스타들과 마찬가지로, 소셜 미디어 유명인들은 종종 연기나 노래 실력과 같은 전통적인 엘리트 유명인과 관련된 기술과 재능이 없다는 비판을 받습니다.", voca: ["criticized:비판받는", "talents:재능", "associated with:~와 관련된", "traditional:전통적인", "acting:연기", "ability:능력", "stars:스타들", "often:종종", "skills:기술들", "🍌"] },
-        { en: "This criticism highlights the fact that digital content creators face real barriers to crossing over to the sphere of elite celebrity.", ko: "이러한 비판은 디지털 콘텐츠 제작자들이 엘리트 유명인의 영역으로 넘어가는 데 실질적인 장벽에 직면해 있다는 사실을 강조합니다.", voca: ["highlights:강조하다", "barriers:장벽", "crossing over:넘어가는 것", "sphere:영역", "face:직면하다", "fact:사실", "digital:디지털", "real:실질적인", "🍌", "🍌"] },
-        { en: "However, the criticism also misses the point that the phenomenon of ordinary celebrity reconstructs the meaning of fame.", ko: "하지만, 그 비판은 평범한 유명인이라는 현상이 명성의 의미를 재구성한다는 점을 간과하고 있습니다.", voca: ["misses:간과하다/놓치다", "phenomenon:현상", "reconstructs:재구성하다", "meaning:의미", "fame:명성", "point:요점", "celebrity:유명인", "also:또한", "However:하지만", "🍌"] },
-        { en: "The elite celebrity is symbolized by the metaphor of the star, characterized by mystery and hierarchical distance and associated with naturalized qualities of talent and class.", ko: "엘리트 유명인은 별이라는 은유로 상징되며, 신비로움과 계층적 거리감이 특징이고 재능 및 계급이라는 선천적인 자질과 관련이 있습니다.", voca: ["symbolized:상징되는", "metaphor:은유", "characterized:특징지어지는", "mystery:신비로움", "hierarchical:계층적인", "distance:거리감", "qualities:자질", "talent:재능", "class:계급", "🍌"] },
-        { en: "The ordinary celebrity attracts attention through regular and frequent interactions with other ordinary people.", ko: "평범한 유명인은 다른 평범한 사람들과의 규칙적이고 빈번한 상호작용을 통해 관심을 끕니다.", voca: ["attracts:끌다", "attention:관심", "regular:규칙적인", "frequent:빈번한", "interactions:상호작용", "ordinary:평범한", "people:사람들", "through:~을 통해", "other:다른", "🍌"] },
-        { en: "Achieving ordinary fame as a social media celebrity is like doing well at a game, because in this sphere, fame is nothing more nor less than relatively high scores on attention scales, the metrics of subscribers, followers, Likes, or clicks built into social media applications.", ko: "소셜 미디어 유명인으로서 평범한 명성을 얻는 것은 게임을 잘하는 것과 같습니다. 왜냐하면 이 영역에서 명성은 소셜 미디어 애플리케이션에 내장된 구독자 수, 팔로워, '좋아요', 또는 클릭 수라는 지표, 즉 관심 척도에서의 상대적으로 높은 점수 그 이상도 이하도 아니기 때문입니다.", voca: ["relatively:상대적으로", "scales:척도", "metrics:지표", "subscribers:구독자", "followers:팔로워", "built into:내장된", "applications:애플리케이션", "nothing more nor less:그 이상도 이하도 아닌", "fame:명성", "🍌"] }
+        { en: "When scientists make an important new discovery or experimentally prove some hypothesis, they do not, in general, keep that information to themselves so that they alone can consider its meaning and derive additional theories from it.", ko: "과학자들이 중요한 새로운 발견을 하거나 어떤 가설을 실험적으로 증명할 때, 그들은 일반적으로 그 의미를 혼자서만 고찰하고 그로부터 추가적인 이론을 끌어낼 수 있도록 그 정보를 자신들만 알고 있지는 않습니다.", voca: ["discovery:발견", "experimentally:실험적으로", "hypothesis:가설", "in general:일반적으로", "derive:이끌어내다/유래하다", "theories:이론들", "consider:고찰하다/고려하다", "meaning:의미", "alone:홀로", "additional:추가적인"] },
+        { en: "Instead, they publish their results and make their data available for inspection.", ko: "대신에, 그들은 결과를 발표하고 자신들의 데이터를 검토할 수 있도록 공개합니다.", voca: ["Instead:대신에", "publish:발표/출판하다", "results:결과", "available:이용가능한", "inspection:검토/사찰", "data:자료", "make:만들다", "🍌", "🍌", "🍌"] },
+        { en: "This makes it possible for other scientists to reconsider their data and possibly refute their conclusions.", ko: "이것은 다른 과학자들이 그들의 데이터를 재고하고 아마도 그들의 결론을 반박하는 것을 가능하게 합니다.", voca: ["possible:가능한", "reconsider:재고하다", "possibly:아마도", "refute:반박하다", "conclusions:결론", "data:자료", "scientists:과학자들", "other:다른", "makes:만들다", "🍌"] },
+        { en: "More important, though, it makes it possible for other scientists to use that data to construct new hypotheses and perform new experiments.", ko: "하지만 더 중요한 것은, 그것이 다른 과학자들이 그 데이터를 사용하여 새로운 가설을 세우고 새로운 실험을 수행하는 것을 가능하게 한다는 점입니다.", voca: ["though:하지만", "construct:세우다/구성하다", "hypotheses:가설들", "perform:수행하다", "experiments:실험들", "use:사용하다", "scientists:과학자들", "possible:가능한", "data:자료", "important:중요한"] },
+        { en: "The assumption is that society as a whole will end up knowing more if information is spread as widely as possible, rather than being limited to a few people.", ko: "그 전제는 정보가 소수의 사람들에게 제한되기보다는 가능한 한 널리 퍼질 때 사회 전체가 결국 더 많은 것을 알게 될 것이라는 점입니다.", voca: ["assumption:전제/가정", "society:사회", "as a whole:전체적으로", "end up:결국~하게되다", "spread:퍼지다", "widely:널리", "limited:제한된", "rather than:~보다", "information:정보", "possible:가능한"] },
+        { en: "In a strict sense, every scientist depends on the work of other scientists.", ko: "엄격한 의미에서, 모든 과학자는 다른 과학자들의 작업에 의존합니다.", voca: ["strict:엄격한", "sense:의미", "depends on:~에의존하다", "work:작업/노력", "scientists:과학자들", "every:모든", "other:다른", "🍌", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -79,16 +78,15 @@
             header.innerText = "English Master #34";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The New Meaning<br>of Fame</h1><p>2024년 9월 고1 모의고사 34번</p></div>
-                
+                <div class="main-title-card"><h1>The Transparency of Science:<br>Sharing Knowledge</h1><p>2025년 6월 고1 모의고사 34번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 소셜 미디어 제작자들은 전통적인 스타가 되기 위한 수단뿐만 아니라, 그 자체로 '평범한 명성'을 얻는 것을 목적으로 함.</p>
-                    <p>• <b>📍 본론:</b> 엘리트 유명인이 신비로움과 선천적 재능으로 상징된다면, 평범한 유명인은 타인과의 빈번한 상호작용을 통해 대중의 관심을 끂.</p>
-                    <p>• <b>📍 결론:</b> 소셜 미디어에서의 명성은 구독자, 좋아요 등 '관심 지표'라는 게임 점수와 같으며, 이는 명성의 의미를 새롭게 재구성하고 있음.</p>
+                    <p>• <b>📍 서론:</b> 과학자들은 발견한 정보를 독점하지 않고 공개적으로 발표함.</p>
+                    <p>• <b>📍 본론:</b> 정보 공개는 동료 검토와 반박을 가능하게 하며, 새로운 가설과 실험의 토대가 됨.</p>
+                    <p>• <b>📍 결론:</b> 과학은 소수의 독점이 아닌 지식의 공유를 통해 사회 전체의 발전을 도모하는 의존적 체계임.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 소셜 미디어 지표를 통해 재구성되는 '평범한 유명인'과 명성의 새로운 의미</span>
-                    <span class="topic-eng">Topic: 'Ordinary Celebrity' and the New Meaning of Fame Reconstructed through Social Media Metrics</span>
+                    <span class="topic-kor">주제: 지식 공유와 상호 의존성을 통한 과학의 발전 원리</span>
+                    <span class="topic-eng">Topic: The Principles of Scientific Progress through Knowledge Sharing and Interdependence</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -138,15 +136,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

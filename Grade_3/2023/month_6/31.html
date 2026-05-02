@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #31 - 23년 6월 고1 모의고사</title>
+    <title>English Master #31 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,15 +56,16 @@
 
 <script>
     const fullData = [
-        { en: "Individuals who perform at a high level in their profession often have instant credibility with others.", ko: "자신의 직업에서 높은 수준으로 성과를 내는 개인들은 종종 타인에게 즉각적인 신뢰를 얻습니다.", voca: ["perform:성과를 내다", "high level:높은 수준", "profession:직업", "instant:즉각적인", "credibility:신뢰도/신뢰성", "individuals:개인들", "others:타인들", "often:종종", "have:가지다", "🍎"] },
-        { en: "People admire them, they want to be like them, and they feel connected to them.", ko: "사람들은 그들을 감탄하고, 그들처럼 되고 싶어 하며, 그들과 연결되어 있다고 느낍니다.", voca: ["admire:감탄하다/존경하다", "connected:연결된", "want to:~하고 싶어 하다", "be like:~처럼 되다", "feel:느끼다", "them:그들", "People:사람들", "🍎", "🍎", "🍎"] },
-        { en: "When they speak, others listen—even if the area of their skill has nothing to do with the advice they give.", ko: "그들이 말할 때, 그들의 기술 분야가 그들이 주는 조언과 전혀 관련이 없을지라도 다른 사람들은 경청합니다.", voca: ["listen:경청하다", "area:분야", "skill:기술", "nothing to do with:~와 관련이 없는", "advice:조언", "even if:비록 ~일지라도", "speak:말하다", "others:다른 사람들", "When:~할 때", "🍎"] },
-        { en: "Think about a world-famous basketball player. He has made more money from endorsements than he ever did playing basketball.", ko: "세계적으로 유명한 농구 선수를 생각해 보십시오. 그는 농구를 해서 벌었던 것보다 광고 홍보로부터 더 많은 돈을 벌어왔습니다.", voca: ["world-famous:세계적으로 유명한", "basketball player:농구 선수", "made money:돈을 벌다", "endorsements:광고 홍보(지지)", "ever:지금껏", "playing:경기를 하는 것", "than:~보다", "Think about:~을 생각하다", "🍎", "🍎"] },
-        { en: "Is it because of his knowledge of the products he endorses? No. It’s because of what he can do with a basketball.", ko: "그것이 그가 홍보하는 제품에 대한 그의 지식 때문입니까? 아닙니다. 그것은 그가 농구공으로 할 수 있는 것 때문입니다.", voca: ["knowledge:지식", "products:제품들", "endorses:홍보하다/지지하다", "because of:~ 때문에", "No:아니오", "basketball:농구(공)", "what:~하는 것", "can:할 수 있다", "do:하다", "🍎"] },
-        { en: "The same can be said of an Olympic medalist swimmer. People listen to him because of what he can do in the pool.", ko: "올림픽 메달리스트 수영 선수에 대해서도 마찬가지입니다. 사람들은 그가 수영장에서 할 수 있는 것 때문에 그의 말을 듣습니다.", voca: ["medalist:메달리스트", "swimmer:수영 선수", "pool:수영장", "listen to:~의 말을 듣다", "The same:마찬가지", "can be said:~라고 말해질 수 있다", "of:~에 대해", "because of:~ 때문에", "🍎", "🍎"] },
-        { en: "And when an actor tells us we should drive a certain car, we don’t listen because of his expertise on engines.", ko: "그리고 한 배우가 우리에게 어떤 차를 운전해야 한다고 말할 때, 우리는 그의 엔진에 대한 전문 지식 때문에 듣는 것이 아닙니다.", voca: ["actor:배우", "certain:어떤/특정한", "expertise:전문 지식", "engines:엔진", "tells:말하다", "should:~해야 한다", "drive:운전하다", "listen:듣다", "because of:~ 때문에", "🍎"] },
-        { en: "We listen because we admire his talent. Excellence connects.", ko: "우리는 그의 재능을 감탄하기 때문에 듣습니다. 탁월함은 연결됩니다.", voca: ["admire:감탄하다", "talent:재능", "Excellence:탁월함", "connects:연결된다", "We:우리", "listen:듣다", "because:~때문에", "🍎", "🍎", "🍎"] },
-        { en: "If you possess a high level of ability in an area, others may desire to connect with you because of it.", ko: "만약 여러분이 한 분야에서 높은 수준의 능력을 갖추고 있다면, 다른 사람들은 그것 때문에 여러분과 연결되기를 원할지도 모릅니다.", voca: ["possess:갖추다/소유하다", "ability:능력", "desire:원하다/열망하다", "connect with:~와 연결되다", "high level:높은 수준", "area:분야", "others:다른 사람들", "because of:~ 때문에", "may:~일지도 모른다", "🍎"] }
+        { en: "In everyday life, we use previous experience to predict where we should pay attention.", ko: "일상생활에서 우리는 이전의 경험을 사용하여 어디에 주의를 기울여야 할지 예측합니다.", voca: ["everyday life:일상생활", "previous:이전의", "experience:경험", "predict:예측하다", "pay attention:주의를기울이다", "where:어디에", "should:~해야한다", "use:사용하다", "🍌", "🍌"] },
+        { en: "Different environments create different expectations.", ko: "서로 다른 환경은 서로 다른 기대를 만듭니다.", voca: ["Different:다른", "environments:환경", "create:만들다", "expectations:기대", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "This was profoundly illustrated by the scientist Jared Diamond in his book Guns, Germs, and Steel.", ko: "이것은 과학자 Jared Diamond에 의해 그의 저서 '총, 균, 쇠'에서 깊이 있게 설명되었습니다.", voca: ["profoundly:깊이있게", "illustrated:설명된/그려진", "scientist:과학자", "Guns:총", "Germs:균", "Steel:쇠", "book:책", "🍌", "🍌", "🍌"] },
+        { en: "He describes an adventure wandering through the New Guinea jungle with native New Guineans.", ko: "그는 뉴기니 원주민들과 함께 뉴기니 정글을 헤매는 모험을 묘사합니다.", voca: ["describes:묘사하다", "adventure:모험", "wandering:헤매는", "through:~을통해", "native:원주민", "jungle:정글", "with:~와함께", "🍌", "🍌", "🍌"] },
+        { en: "He relates that these natives tend to perform poorly at tasks Westerners have been trained to do since childhood.", ko: "그는 이 원주민들이 서구인들이 어린 시절부터 하도록 훈련받아온 과업에서 서투른 성과를 내는 경향이 있다고 이야기합니다.", voca: ["relates:이야기하다", "tend to:~하는경향이있다", "perform:수행하다", "poorly:서투르게/형편없이", "tasks:과업/일", "Westerners:서구인들", "trained:훈련된", "since:~이후로", "childhood:어린시절", "natives:원주민들"] },
+        { en: "But they are hardly stupid.", ko: "하지만 그들은 결코 어리석지 않습니다.", voca: ["hardly:결코~않다", "stupid:어리석은", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "They can detect the most subtle changes in the jungle, good for following the tracks of a predator or for finding the way back home.", ko: "그들은 정글의 가장 미묘한 변화를 감지할 수 있는데, 이는 포식자의 흔적을 따라가거나 집으로 돌아가는 길을 찾는 데 유용합니다.", voca: ["detect:감지하다", "subtle:미묘한", "changes:변화들", "following:따라가는것", "tracks:흔적/자국", "predator:포식자", "finding:찾는것", "way back:돌아오는길", "good for:~에좋은", "jungle:정글"] },
+        { en: "They know which insects to leave alone, know where food exists, can build and tear down shelters with ease.", ko: "그들은 어떤 곤충을 건드리지 말아야 할지 알고, 음식이 어디에 있는지 알며, 숙소를 쉽게 짓고 허물 수 있습니다.", voca: ["insects:곤충", "leave alone:내버려두다", "exists:존재하다", "build:짓다", "tear down:허물다", "shelters:숙소/은신처", "with ease:쉽게", "know:알다", "where:어디에", "🍌"] },
+        { en: "Diamond, who had never spent time in such places, has no ability to pay attention to these things.", ko: "그런 장소에서 시간을 보낸 적이 없는 Diamond는 이러한 것들에 주의를 기울일 능력이 없습니다.", voca: ["spent time:시간을보내다", "such:그런", "places:장소들", "ability:능력", "pay attention:주의를기울이다", "things:것들", "never:결코~않은", "Diamond:다이아몬드", "🍌", "🍌"] },
+        { en: "Were he to be tested on such tasks, he also would perform poorly.", ko: "만약 그가 그런 과업으로 테스트를 받는다면, 그 또한 서투른 성과를 낼 것입니다.", voca: ["tested:테스트받는", "tasks:과업", "perform:수행하다", "poorly:서투르게", "also:또한", "such:그런", "🍌", "🍌", "🍌", "🍌"] }
     ];
 
     let currentMode = 'INTRO';
@@ -81,16 +82,15 @@
             header.innerText = "English Master #31";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Connecting Power<br>of Excellence</h1><p>2023년 6월 고1 모의고사 31번</p></div>
-                
+                <div class="main-title-card"><h1>Environment and<br>Attention Expectations</h1><p>2025년 6월 고1 모의고사 31번</p></div>
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 특정 분야에서 뛰어난 성과를 내는 사람은 타인에게 즉각적인 신뢰를 얻으며, 사람들은 그들과 연결되고 싶어 함.</p>
-                    <p>• <b>📍 본론:</b> 농구 선수나 수영 선수, 배우가 자신의 전문 분야와 무관한 광고를 할 때 사람들이 경청하는 이유는 그들의 '지식'이 아닌 그들의 '탁월함'과 '재능'에 감탄하기 때문임.</p>
-                    <p>• <b>📍 결론:</b> 탁월함은 사람을 연결하는 힘이 있음. 한 분야에서 높은 능력을 갖추면 사람들은 그 능력 자체만으로도 당신과 연결되길 원하게 됨.</p>
+                    <p>• <b>📍 서론:</b> 일상에서 우리는 이전 경험을 바탕으로 주의를 기울일 곳을 예측함.</p>
+                    <p>• <b>📍 본론:</b> 뉴기니 원주민들은 서구적 과업엔 서툴지만, 정글의 미묘한 변화를 읽는 데는 탁월함.</p>
+                    <p>• <b>📍 결론:</b> 능력은 지능의 문제가 아니라, 각자가 처한 환경과 훈련된 경험에 따라 달라짐.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 한 분야의 탁월함이 가져오는 즉각적인 신뢰도와 타인과의 연결 능력</span>
-                    <span class="topic-eng">Topic: The instant credibility and ability to connect with others brought by excellence in a specific area</span>
+                    <span class="topic-kor">주제: 환경과 경험에 따른 주의 집중 영역과 능력의 차이</span>
+                    <span class="topic-eng">Topic: Differences in Areas of Attention and Ability Based on Environment and Experience</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -109,7 +109,7 @@
                     <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
                     <div id="trans-area" class="trans-content">${item.ko}</div>
                 `;
-                fillVoca(item.voca, '🍎', "#FF3B30");
+                fillVoca(item.voca, '🍌', "#FFD600");
             } else {
                 area.innerHTML = `
                     <div class="kor-box">${item.ko}</div>
@@ -140,15 +140,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+ 
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }

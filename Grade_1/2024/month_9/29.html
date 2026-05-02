@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #29 - 24년 9월 모의고사</title>
+    <title>English Master #29 - Official Version</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -21,7 +21,7 @@
         .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
 
-        /* STEP 1: 인트로 */
+        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
         .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
@@ -56,13 +56,13 @@
 
 <script>
     const fullData = [
-        { en: "From an organizational viewpoint, one of the most fascinating examples of how any organization may contain many different types of culture is to recognize the functional operations of different departments within the organization.", ko: "조직적 관점에서 볼 때, 어떤 조직이든 다양한 유형의 문화를 포함할 수 있다는 가장 흥미로운 사례 중 하나는 조직 내 서로 다른 부서들의 기능적 운영을 인식하는 것입니다.", voca: ["organizational:조직의", "viewpoint:관점", "fascinating:흥미로운", "contain:포함하다", "functional:기능적인", "operations:운영", "departments:부서들", "recognize:인식하다", "within:~ 내의", "🍌"] },
-        { en: "The varying departments and divisions within an organization will inevitably view any given situation from their own biased and prejudiced perspective.", ko: "조직 내의 다양한 부서와 분과들은 필연적으로 어떤 주어진 상황을 자신들의 편향되고 편견에 찬 관점에서 바라보게 될 것입니다.", voca: ["inevitably:필연적으로", "biased:편향된", "prejudiced:편견에 찬", "perspective:관점", "divisions:분과/부서", "varying:다양한", "situation:상황", "given:주어진", "view:바라보다", "🍌"] },
-        { en: "A department and its members will acquire 'tunnel vision' which disallows them to see things as others see them.", ko: "한 부서와 그 구성원들은 다른 사람들이 사물을 보는 방식대로 보지 못하게 하는 '터널 시야'를 갖게 될 것입니다.", voca: ["acquire:습득하다/얻다", "tunnel vision:터널 시야", "disallows:허용하지 않다", "others:타인들", "members:구성원들", "things:사물/상황", "see:보다", "department:부서", "its:그것의", "🍌"] },
-        { en: "The very structure of organizations can create conflict.", ko: "조직의 구조 그 자체가 갈등을 유발할 수 있습니다.", voca: ["structure:구조", "conflict:갈등", "create:창조하다/유발하다", "organizations:조직들", "very:바로 그", "can:할 수 있다", "the:그", "of:~의", "🍌", "🍌"] },
-        { en: "The choice of whether the structure is 'mechanistic' or 'organic' can have a profound influence on conflict management.", ko: "구조가 '기계적'인지 혹은 '유기적'인지에 대한 선택은 갈등 관리에 깊은 영향을 미칠 수 있습니다.", voca: ["mechanistic:기계적인", "organic:유기적인", "profound:깊은/심오한", "influence:영향", "conflict management:갈등 관리", "choice:선택", "whether:~인지 아닌지", "is:~이다", "can:할 수 있다", "🍌"] },
-        { en: "A mechanistic structure has a vertical hierarchy with many rules, many procedures, and many levels of management involved in decision making.", ko: "기계적 구조는 많은 규칙, 많은 절차, 그리고 의사 결정에 관여하는 많은 관리 계층이 있는 수직적 위계 구조를 가집니다.", voca: ["vertical:수직적인", "hierarchy:위계/계층", "procedures:절차", "involved:관여하는", "decision making:의사 결정", "mechanistic:기계적인", "structure:구조", "rules:규칙", "levels:계층/수준", "🍌"] },
-        { en: "Organic structures are more horizontal in nature, where decision making is less centralized and spread across the plane of the organization.", ko: "유기적 구조는 본질적으로 더 수평적이며, 의사 결정이 덜 중앙 집중화되어 있고 조직의 평면 전체에 퍼져 있습니다.", voca: ["horizontal:수평적인", "in nature:본질적으로", "centralized:중앙 집중화된", "spread:퍼진", "across:가로질러/전체에", "plane:평면", "Organic:유기적인", "structures:구조들", "less:덜", "🍌"] }
+        { en: "Studies of experts provide insight into what it means to have deep and flexible understanding.", ko: "전문가들에 대한 연구는 깊고 유연한 이해를 갖는다는 것이 무엇을 의미하는지에 대한 통찰력을 제공합니다.", voca: ["Studies:연구", "experts:전문가", "provide:제공하다", "insight:통찰력", "flexible:유연한", "understanding:이해", "means:의미하다", "deep:깊은", "into:~에대한", "🍌"] },
+        { en: "Experts in a particular domain are people who have deep, richly interconnected ideas about the world.", ko: "특정 분야의 전문가는 세상에 대해 깊고 풍부하게 상호 연결된 아이디어를 가진 사람들입니다.", voca: ["particular:특정한", "domain:분야/영역", "richly:풍부하게", "interconnected:상호연결된", "ideas:아이디어", "world:세상", "people:사람들", "about:~에대해", "deep:깊은", "🍌"] },
+        { en: "They are not just good thinkers or people who are exceptionally smart.", ko: "그들은 단순히 훌륭한 사고가이거나 예외적으로 똑똑한 사람들이 아닙니다.", voca: ["just:단순히", "thinkers:사고자", "exceptionally:예외적으로", "smart:똑똑한", "people:사람들", "They:그들", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "Rather, experts have knowledge in a specific domain—such as chess, chemistry, or tennis—and are not generalists.", ko: "오히려 전문가는 체스, 화학 또는 테니스와 같은 특정 분야의 지식을 갖고 있으며 다방면에 능한 사람(제너럴리스트)이 아닙니다.", voca: ["Rather:오히려", "knowledge:지식", "specific:특정한", "chemistry:화학", "generalists:제너럴리스트", "domain:분야", "such as:~와같은", "🍌", "🍌", "🍌"] },
+        { en: "However, experts do not just know 'a bunch of facts.'", ko: "하지만 전문가는 단순히 '많은 사실'만을 알고 있는 것이 아닙니다.", voca: ["However:하지만", "just:단순히", "a bunch of:많은/다수의", "facts:사실들", "know:알다", "🍌", "🍌", "🍌", "🍌", "🍌"] },
+        { en: "In fact, having expertise in a topic means that knowledge is organized into coherent frameworks, and the expert understands the inter-relationship between facts and can distinguish which ideas are most central.", ko: "사실, 한 주제에 대해 전문 지식을 갖는다는 것은 지식이 일관된 체계로 조직되어 있다는 것을 의미하며, 전문가는 사실들 사이의 상호 관계를 이해하고 어떤 아이디어가 가장 핵심적인지 구별할 수 있습니다.", voca: ["expertise:전문지식", "organized:조직된", "coherent:일관된", "frameworks:체계/프레임워크", "inter-relationship:상호관계", "distinguish:구별하다", "central:핵심적인", "means:의미하다", "knowledge:지식", "between:~사이에"] },
+        { en: "This kind of deep but organized understanding allows for greater flexibility in learning and facilitates application across multiple contexts.", ko: "이러한 종류의 깊고 조직된 이해는 학습의 더 큰 유연성을 가능하게 하고 여러 맥락에 걸친 적용을 용이하게 합니다.", voca: ["kind:종류", "organized:조직된", "allows:가능하게하다", "flexibility:유연성", "facilitates:용이하게하다", "application:적용", "multiple:여러/다양한", "contexts:맥락", "across:~에걸쳐", "learning:학습"] }
     ];
 
     let currentMode = 'INTRO';
@@ -79,16 +79,16 @@
             header.innerText = "English Master #29";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Organizational Cultures<br>& Structures</h1><p>2024년 9월 고1 모의고사 29번</p></div>
-                
+                <div class="main-title-card"><h1>The Nature of Expertise:<br>Coherent Frameworks</h1><p>2025년 6월 고1 모의고사 29번</p></div>
+                [Image of structured knowledge organization versus a list of random facts]
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 조직 내 각 부서는 각기 다른 기능과 문화를 가지며, 이는 흥미로운 연구 대상임.</p>
-                    <p>• <b>📍 본론:</b> 부서들은 각자의 편향된 '터널 시야'를 가지게 되며, 이는 필연적으로 조직 내 갈등을 유발함.</p>
-                    <p>• <b>📍 결론:</b> 수직적인 '기계적 구조'와 수평적인 '유기적 구조' 중 무엇을 택하느냐가 조직 갈등 관리에 큰 영향을 미침.</p>
+                    <p>• <b>📍 서론:</b> 전문가는 특정 분야에서 깊고 상호 연결된 아이디어를 가진 사람임.</p>
+                    <p>• <b>📍 본론:</b> 전문 지식은 단순히 사실을 아는 것이 아니라, 일관된 체계로 지식을 조직하고 핵심을 구별하는 능력임.</p>
+                    <p>• <b>📍 결론:</b> 이러한 조직된 이해는 학습의 유연성을 높이고 다양한 상황에 지식을 적용하게 해줌.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 조직 내 부서별 문화 차이와 조직 구조가 갈등 관리에 미치는 영향</span>
-                    <span class="topic-eng">Topic: Differences in Cultures by Department and the Impact of Organizational Structure on Conflict Management</span>
+                    <span class="topic-kor">주제: 전문가의 지식 조직화와 깊고 유연한 이해의 특성</span>
+                    <span class="topic-eng">Topic: Knowledge Organization and Characteristics of Deep and Flexible Understanding in Experts</span>
                 </div>
                 <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
                 <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
@@ -138,15 +138,37 @@
         }
     }
 
-    function fillBlanks(sentence) {
-        const container = document.getElementById('blank-area');
-        sentence.split(' ').forEach(word => {
-            const span = document.createElement('span');
-            span.className = 'word-blank'; span.innerText = word;
-            span.onclick = function() { this.classList.add('revealed'); playTTS(word.replace(/[.,'"]/g, "")); };
-            container.appendChild(span);
-        });
-    }
+
+// 수정된 Step 3 빈칸 생성 로직
+function fillBlanks(s) {
+    const c = document.getElementById('blank-area');
+    
+    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
+    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
+
+    s.split(' ').forEach(w => {
+        const sp = document.createElement('span');
+        sp.className = 'word-blank';
+        sp.innerText = w;
+        
+        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
+        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
+        
+        if (prepositions.includes(pureWord)) {
+            // 전치사라면 처음부터 보여주고 밑줄 제거
+            sp.classList.add('revealed');
+            sp.style.borderBottomColor = 'transparent'; 
+        }
+
+        // 클릭하면 정답이 보이게 하는 기능
+        sp.onclick = function() {
+            this.classList.add('revealed');
+            this.style.borderBottomColor = 'transparent';
+            playTTS(w.replace(/[.,'"]/g, ""));
+        };
+        c.appendChild(sp);
+    });
+}
 
     function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
