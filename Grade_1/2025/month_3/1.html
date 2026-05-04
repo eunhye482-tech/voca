@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>주제문 영작 학습지 - Gestural Communication</title>
+    <style>
+        @page { size: A4; margin: 10mm; }
+        body { font-family: 'Malgun Gothic', sans-serif; line-height: 1.3; color: #333; margin: 0; padding: 0; background-color: #f0f2f5; }
+        .container { width: 190mm; margin: 0 auto; background-color: #fff; padding: 10mm; box-sizing: border-box; min-height: 275mm; }
+        h1 { text-align: center; color: #2c3e50; font-size: 18pt; margin: 0 0 10pt 0; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        .exercise-box { margin-bottom: 15pt; padding: 12pt; border: 1px solid #e1e4e8; border-radius: 8px; }
+        h2 { font-size: 13pt; color: #2980b9; margin: 0 0 8pt 0; display: flex; justify-content: space-between; align-items: center; }
+        .korean-guide { background-color: #f8f9fa; padding: 8pt; border-radius: 5px; margin-bottom: 8pt; font-size: 10.5pt; font-weight: bold; border-left: 4px solid #3498db; }
+        .word-list { font-size: 10pt; color: #555; margin-bottom: 12pt; }
+        .word-item { display: inline-block; margin-right: 12pt; background: #f1f1f1; padding: 2pt 6pt; border-radius: 3pt; }
+        .writing-area { font-family: 'Times New Roman', serif; font-size: 13.5pt; line-height: 2.2; }
+        .blank { display: inline-block; min-width: 65px; border-bottom: 1.5px solid #333; text-align: center; cursor: pointer; color: transparent; transition: color 0.1s; padding: 0 5px; }
+        .blank.reveal { color: #e74c3c; border-bottom-color: #e74c3c; }
+        .btn-speak { font-size: 9pt; cursor: pointer; background: #3498db; color: white; border: none; padding: 3px 8px; border-radius: 4px; }
+        .instruction { text-align: center; font-size: 8.5pt; color: #7f8c8d; margin-bottom: 10pt; }
+        @media print { body { background-color: #fff; } .container { box-shadow: none; margin: 0; width: 100%; padding: 5mm; } .instruction, .btn-speak { display: none; } .blank { color: transparent !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Topic Sentence Writing Practice</h1>
+    <p class="instruction">빈칸 클릭: <strong>정답 노출 + 발음</strong> | 우측 버튼: <strong>문장 전체 듣기</strong></p>
+
+    <!-- Exercise 1 -->
+    <div class="exercise-box">
+        <h2>
+            Exercise 1. 일반동사 활용문
+            <button class="btn-speak" onclick="speakSentence('Balanced gestures complement spoken messages and create an atmosphere of trust during conversations.')">문장 전체 듣기 🔊</button>
+        </h2>
+        <div class="korean-guide">균형 잡힌 몸짓은 대화 중에 구어 메시지를 보완하고 신뢰의 분위기를 조성한다.</div>
+        <div class="word-list">
+            <span class="word-item">1. balanced (형용사)</span>
+            <span class="word-item">2. complement (동사)</span>
+            <span class="word-item">3. message (명사)</span>
+            <span class="word-item">4. atmosphere (명사)</span>
+            <span class="word-item">5. trust (명사)</span>
+            <span class="word-item">6. conversation (명사)</span>
+        </div>
+        <div class="writing-area">
+            <!-- 접속사, 관사, 전치사(and, an, of, during) 노출 -->
+            <span class="blank" onclick="revealAndSpeak(this)">Balanced</span> 
+            <span class="blank" onclick="revealAndSpeak(this)">gestures</span> 
+            <span class="blank" onclick="revealAndSpeak(this)">complement</span> 
+            <span class="blank" onclick="revealAndSpeak(this)">spoken</span> 
+            <span class="blank" onclick="revealAndSpeak(this)">messages</span> 
+            and 
+            <span class="blank" onclick="revealAndSpeak(this)">create</span> 
+            an 
+            <span class="blank" onclick="revealAndSpeak(this)">atmosphere</span> 
+            of 
+            <span class="blank" onclick="revealAndSpeak(this)">trust</span> 
+            during 
+            <span class="blank" onclick="revealAndSpeak(this)">conversations</span>.
+        </div>
+    </div>
+
+    <!-- Exercise 2 -->
+    <div class="exercise-box">
+        <h2>
+            Exercise 2. be동사 활용문
+            <button class="btn-speak" onclick="speakSentence('Appropriate hand movements are essential for highlighting words without distracting the audience.')">문장 전체 듣기 🔊</button>
+        </h2>
+        <div class="korean-guide">적절한 손 움직임은 청중을 산만하게 하지 않으면서 단어를 강조하는 데 필수적이다.</div>
+        <div class="word-list">
+            <span class="word-item">1. appropriate (형용사)</span>
+            <span class="word-item">2. movement (명사)</span>
+            <span class="word-item">3. essential (형용사)</span>
+            <span class="word-item">4. highlight (동사)</span>
+            <span class="word-item">5. distract (동사)</span>
+            <span class="word-item">6. audience (명사)</span>
+        </div>
+        <div class="writing-area">
+            <!-- 관사, 전치사, be동사(are, for, without, the) 노출 -->
+            <span class="blank" onclick="revealAndSpeak(this)">Appropriate</span> 
+            <span class="blank" onclick="revealAndSpeak(this)">hand</span> 
+            <span class="blank" onclick="revealAndSpeak(this)">movements</span> 
+            are 
+            <span class="blank" onclick="revealAndSpeak(this)">essential</span> 
+            for 
+            <span class="blank" onclick="revealAndSpeak(this)">highlighting</span> 
+            <span class="blank" onclick="revealAndSpeak(this)">words</span> 
+            without 
+            <span class="blank" onclick="revealAndSpeak(this)">distracting</span> 
+            the 
+            <span class="blank" onclick="revealAndSpeak(this)">audience</span>.
+        </div>
+    </div>
+</div>
+
+<script>
+    function revealAndSpeak(element) {
+        element.classList.toggle('reveal');
+        if (element.classList.contains('reveal')) {
+            const utterance = new SpeechSynthesisUtterance(element.innerText);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function speakSentence(text) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8;
+        window.speechSynthesis.speak(utterance);
+    }
+</script>
+
+</body>
+</html>
