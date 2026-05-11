@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #24 - Official Version</title>
+    <title>English Master #24 - 23년 11월 고2</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -18,12 +18,11 @@
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+        
+        .btn-intro-step { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
 
-        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
-        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; color: #444; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
         .topic-kor { font-weight: bold; color: #D81B60; display: block; margin-bottom: 5px; }
         .topic-eng { font-size: 0.85rem; color: #888; font-style: italic; }
@@ -32,16 +31,19 @@
         .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
         
         .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #333; }
         .voca-item.revealed { background: var(--purple-main); color: white; }
         
         .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
         .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
         .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
 
-        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
-        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; color: #555; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; color: #444; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; gap: 10px; align-items: center; }
+        .btn-prev { background: #EDF2F7; color: #718096; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--purple-main); color: white; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1.5; display: flex; align-items: center; justify-content: center; margin-top: 0; }
     </style>
 </head>
 <body>
@@ -55,17 +57,17 @@
 </div>
 
 <script>
+    // 노출 타겟: 전치사, 접속사, 관사 등 (일관된 시스템 규칙)
+    const visibleWords = ["in", "to", "that", "for", "even", "if", "when", "for", "should", "it", "be", "just", "as", "on", "with", "into", "of", "by", "according", "so", "as", "at", "then", "no", "is", "where", "but", "not"];
+
     const fullData = [
-        { en: "We think we’re being logical, objective, and rational—and therefore accurate in our analysis, judgment, and decisions.", ko: "우리는 우리가 논리적이고 객관적이며 합리적이라고 생각하며, 따라서 분석, 판단, 결정에 있어 정확하다고 생각합니다.", voca: ["logical:논리적인", "objective:객관적인", "rational:합리적인", "therefore:따라서", "accurate:정확한", "analysis:분석", "judgment:판단", "decisions:결정", "rational:이성적인", "🍌"] },
-        { en: "So we think that if other people are logical, objective, and rational, they will agree with us and see what we see.", ko: "그래서 우리는 다른 사람들도 논리적이고 객관적이며 합리적이라면 그들이 우리에게 동의하고 우리가 보는 것을 볼 것이라고 생각합니다.", voca: ["agree with:동의하다", "what we see:우리가보는것", "logical:논리적인", "objective:객관적인", "rational:합리적인", "other:다른", "people:사람들", "think:생각하다", "agree:동의", "🍌"] },
-        { en: "But the opposite is the case.", ko: "하지만 그 반대가 사실입니다.", voca: ["opposite:반대", "case:사실/경우", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Every human brain is different.", ko: "모든 인간의 뇌는 다릅니다.", voca: ["brain:뇌", "different:다른", "human:인간의", "every:모든", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Everyone’s life experience is different.", ko: "모든 사람의 삶의 경험은 다릅니다.", voca: ["experience:경험", "different:다른", "life:삶", "everyone:모든사람", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "Everyone’s desires and knowledge are different.", ko: "모든 사람의 욕구와 지식은 다릅니다.", voca: ["desires:욕구/열망", "knowledge:지식", "different:다른", "everyone:모든사람", "🍌", "🍌", "🍌", "🍌", "🍌", "🍌"] },
-        { en: "You might think you’re being realistic—that is, that your ideas match reality, but that’s impossible.", ko: "여러분은 자신이 현실적이라고 생각할지 모르지만, 즉 여러분의 생각이 현실과 일치한다고 생각하겠지만, 그것은 불가능합니다.", voca: ["realistic:현실적인", "match:일치하다", "reality:현실", "impossible:불가능한", "that is:즉", "ideas:생각", "might:할지도모른다", "think:생각하다", "realistic:현실적", "🍌"] },
-        { en: "It’s only your interpretation of reality, which will always be different from someone else’s.", ko: "그것은 단지 현실에 대한 여러분의 해석일 뿐이며, 이는 항상 다른 누군가의 해석과는 다를 것입니다.", voca: ["interpretation:해석", "reality:현실", "different:다른", "someone else:누군가다른사람", "always:항상", "only:단지", "interpretation:해석", "🍌", "🍌", "🍌"] },
-        { en: "When two nations play each other in the World Cup, the fans of each country criticize the referees for missing all the infractions that the other team commits.", ko: "월드컵에서 두 나라가 경기를 할 때, 각 나라의 팬들은 상대 팀이 저지른 모든 반칙을 놓친 것에 대해 심판을 비판합니다.", voca: ["criticize:비판하다", "referees:심판", "missing:놓치는것", "infractions:반칙", "commits:저지르다", "nations:국가", "each:각각", "other:다른", "play:경기하다", "team:팀"] },
-        { en: "Without fail, each fan base believes that the referees are biased against their team.", ko: "어김없이, 각 팬층은 심판이 자신의 팀에게 편향되어 있다고 믿습니다.", voca: ["Without fail:어김없이", "fan base:팬층", "biased:편향된", "against:~에반대하여", "believes:믿는다", "team:팀", "each:각각", "referees:심판", "biased:편견을가진", "🍌"] }
+        { en: "In response to human-like care robots, critics might charge that human-robot interactions create moral hazards for dementia patients.", ko: "인간을 닮은 돌봄 로봇에 대한 반응으로, 비판가들은 인간과 로봇의 상호 작용이 치매 환자들에게 도덕적 위험을 초래한다고 비난할지도 모릅니다.", voca: ["In response to:~에 대한 반응으로", "human-like:인간을 닮은", "critics:비판가들", "charge:비난하다/청구하다", "interactions:상호 작용", "moral hazards:도덕적 위험", "dementia patients:치매 환자", "🍎", "🍎", "🍎"] },
+        { en: "Even if deception is sometimes allowed when it serves worthy goals, should it be allowed for vulnerable users?", ko: "기만이 가치 있는 목표를 위해 쓰일 때 때때로 허용된다 하더라도, 취약한 사용자들에게도 허용되어야 할까요?", voca: ["Even if:비록 ~일지라도", "deception:기만/속임수", "allowed:허용된", "serves:도움이 되다/섬기다", "worthy goals:가치 있는 목표", "vulnerable:취약한", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Just as children on the autism spectrum with robot companions might be easily fooled into thinking of robots as friends, older adults with cognitive deficits might be.", ko: "로봇 동반자와 함께하는 자폐 스펙트럼 아동들이 로봇을 친구로 생각하도록 쉽게 속을 수 있는 것과 마찬가지로, 인지 결함이 있는 노인들도 그럴 수 있습니다.", voca: ["Just as:~와 마찬가지로", "autism spectrum:자폐 스펙트럼", "companions:동반자", "fooled:속은", "cognitive deficits:인지 결함", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "According to Alexis Elder, a professor at UMD, robots are false friends, inferior to true friendship.", ko: "UMD의 교수인 Alexis Elder에 따르면, 로봇은 가짜 친구이며 진정한 우정보다 열등합니다.", voca: ["According to:~에 따르면", "false friends:가짜 친구", "inferior to:~보다 열등한", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Reasoning along similar lines, John Sullins, a professor at Sonoma State University, holds that robots should “remain iconic or cartoonish so that they are easily distinguished as synthetic even by unsophisticated users.” At least then no one is fooled.", ko: "Sonoma 주립 대학교의 교수인 John Sullins는 비슷한 맥락에서 로봇이 “세련되지 못한 사용자들에 의해서도 합성물로 쉽게 식별될 수 있도록 상징적이거나 만화처럼 남아 있어야 한다”고 주장합니다. 적어도 그러면 아무도 속지 않습니다.", voca: ["Reasoning:추론/논거", "along similar lines:비슷한 맥락에서", "holds:주장하다/보유하다", "iconic:상징적인", "distinguished:식별되는/구분되는", "synthetic:합성물/인조의", "unsophisticated:세련되지 못한/단순한", "🍎", "🍎", "🍎"] },
+        { en: "Making robots clearly fake also avoids the so-called “uncanny valley,” where robots are perceived as scary because they so closely resemble us, but not quite.", ko: "로봇을 분명하게 가짜로 만드는 것은 로봇이 우리와 너무 흡사하지만 완전히 똑같지는 않아서 무섭게 인식되는 소위 ‘불쾌한 골짜기’를 피하게 해주기도 합니다.", voca: ["clearly fake:분명한 가짜", "avoids:피하다", "so-called:소위/이른바", "uncanny valley:불쾌한 골짜기", "perceived:인식된", "resemble:닮다", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Other critics of robot deception argue that when care recipients are deceived into thinking that robots care, this crosses a line and violates human dignity.", ko: "로봇 기만에 대한 다른 비판가들은 돌봄 대상자들이 로봇이 보살핀다고 생각하도록 속을 때, 이것은 선을 넘는 것이며 인간의 존엄성을 침해한다고 주장합니다.", voca: ["care recipients:돌봄 대상자", "crosses a line:선을 넘다", "violates:침해하다/위반하다", "human dignity:인간의 존엄성", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] }
     ];
 
     let currentMode = 'INTRO';
@@ -82,100 +84,77 @@
             header.innerText = "English Master #24";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>The Subjectivity of Reality:<br>Interpretation Matters</h1><p>2025년 6월 고1 모의고사 24번</p></div>
+                <div class="main-title-card"><h1>The Dilemma of<br>Care Robots</h1><p>2023년 11월 고2 24번</p></div>
+                
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 우리는 자신이 논리적이고 정확하다고 믿으며 타인도 동의할 것이라 기대함.</p>
-                    <p>• <b>📍 본론:</b> 하지만 뇌, 경험, 욕구가 모두 다르기에 각자의 현실 해석은 다를 수밖에 없음.</p>
-                    <p>• <b>📍 결론:</b> 월드컵 팬들이 심판 판정을 서로 편향되었다고 느끼듯, 현실은 주관적인 해석의 결과임.</p>
+                    <p>• <b>📍 서론:</b> 인간을 닮은 돌봄 로봇은 인지적 취약 계층에게 도덕적 위험(기만)을 초래할 수 있음.</p>
+                    <p>• <b>📍 본론:</b> 로봇을 친구로 착각하게 만드는 것은 '가짜 우정'을 제공하는 것이며, 이를 방지하기 위해 로봇을 인공물임을 알 수 있게 디자인해야 함.</p>
+                    <p>• <b>📍 결론:</b> 로봇을 '로봇답게' 만드는 것은 불쾌한 골짜기를 피하는 동시에 인간의 존엄성을 지키는 방법이 됨.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 현실 인식의 주관성과 개인별 해석의 차이</span>
-                    <span class="topic-eng">Topic: The Subjectivity of Reality Perception and Individual Interpretational Differences</span>
+                    <span class="topic-kor">주제: 돌봄 로봇의 기만 방지와 인간 존엄성 보호를 위한 명확한 외형 디자인의 필요성</span>
+                    <span class="topic-eng">Topic: The need for clear appearance design of care robots to prevent deception and protect human dignity</span>
                 </div>
-                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
-                <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+                <button class="btn-intro-step" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-intro-step" style="background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
             `;
-        } else if (currentMode === 'STEP2' || currentMode === 'STEP3') {
+        } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3;
-            header.innerText = `STEP ${stepNum}. ${stepNum === 2 ? '문장 학습' : '영작 연습'} (${currentIdx + 1}/${fullData.length})`;
+            header.innerText = `STEP ${stepNum} (${currentIdx + 1}/${fullData.length})`;
             nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
             
             const item = fullData[currentIdx];
             if (currentMode === 'STEP2') {
-                area.innerHTML = `
-                    <div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div>
-                    <div class="voca-grid" id="voca-area"></div>
-                    <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
-                    <div id="trans-area" class="trans-content">${item.ko}</div>
-                `;
-                fillVoca(item.voca, '🍌', "#FFD600");
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인</button><div id="trans-area" class="trans-content">${item.ko}</div>`;
+                fillVoca(item.voca, '🍎', "#FF3B30");
             } else {
-                area.innerHTML = `
-                    <div class="kor-box">${item.ko}</div>
-                    <div class="blank-area" id="blank-area"></div>
-                    <div class="voca-grid" id="voca-area"></div>
-                    <button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button>
-                    <div id="trans-area" class="trans-content">${item.en}</div>
-                `;
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인</button><div id="trans-area" class="trans-content">${item.en}</div>`;
                 fillBlanks(item.en);
                 fillVoca(item.voca, '🍇', "#9C27B0");
             }
         }
     }
 
-    function fillVoca(vocaList, emoji, emojiColor) {
-        const container = document.getElementById('voca-area');
+    function fillVoca(vList, emo, col) {
+        const area = document.getElementById('voca-area');
         for (let i = 0; i < 10; i++) {
             const div = document.createElement('div');
             div.className = 'voca-item';
-            if (vocaList[i]) {
-                const [eng, kor] = vocaList[i].split(':');
-                div.innerText = eng;
-                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? kor : eng; };
+            if (vList[i] && vList[i].includes(':')) {
+                const [en, ko] = vList[i].split(':');
+                div.innerText = en;
+                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? ko : en; };
             } else {
-                div.innerText = emoji; div.style.color = emojiColor; div.style.cursor = "default";
+                div.innerText = emo; div.style.color = col; div.style.cursor = "default";
             }
-            container.appendChild(div);
+            area.appendChild(div);
         }
     }
 
+    function fillBlanks(s) {
+        const area = document.getElementById('blank-area');
+        s.split(' ').forEach(w => {
+            const span = document.createElement('span');
+            const cw = w.replace(/[.,'“”]/g, "").toLowerCase();
+            if(visibleWords.includes(cw)) { 
+                span.innerText = w; 
+                span.style.margin="0 4px"; 
+                span.style.fontWeight="bold"; 
+                span.style.color = "var(--purple-dark)";
+            } else { 
+                span.className = 'word-blank'; 
+                span.innerText = w; 
+                span.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'“”]/g, "")); }; 
+            }
+            area.appendChild(span);
+        });
+    }
 
-// 수정된 Step 3 빈칸 생성 로직
-function fillBlanks(s) {
-    const c = document.getElementById('blank-area');
-    
-    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
-    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
-
-    s.split(' ').forEach(w => {
-        const sp = document.createElement('span');
-        sp.className = 'word-blank';
-        sp.innerText = w;
-        
-        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
-        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
-        
-        if (prepositions.includes(pureWord)) {
-            // 전치사라면 처음부터 보여주고 밑줄 제거
-            sp.classList.add('revealed');
-            sp.style.borderBottomColor = 'transparent'; 
-        }
-
-        // 클릭하면 정답이 보이게 하는 기능
-        sp.onclick = function() {
-            this.classList.add('revealed');
-            this.style.borderBottomColor = 'transparent';
-            playTTS(w.replace(/[.,'"]/g, ""));
-        };
-        c.appendChild(sp);
-    });
-}
-
-    function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
     function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
-    function playTTS(text) { synth.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.9; synth.speak(utterance); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; synth.speak(u); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;
 </script>

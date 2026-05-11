@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>English Master #38 - Official Version</title>
+    <title>English Master #38 - 23년 11월 고2</title>
     <style>
         :root { 
             --lavender-light: #F3E5F5; 
@@ -18,12 +18,11 @@
         #display-area { flex: 1; padding: 20px; display: flex; flex-direction: column; }
         
         .hidden { display: none !important; }
-        .btn-next { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-prev { background: #EDF2F7; color: #718096; padding: 16px; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; width: 30%; margin-right: 10px; }
+        
+        .btn-intro-step { background: var(--purple-main); color: white; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
 
-        /* STEP 1: 인트로 (서론/본론/결론 명시) */
         .main-title-card { width: 100%; background: linear-gradient(135deg, #B39DDB 0%, #9575CD 100%); padding: 35px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
-        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; }
+        .intro-summary { background: var(--lavender-light); padding: 18px; border-radius: 15px; margin-bottom: 15px; border: 2px solid var(--purple-pale); font-size: 0.92rem; line-height: 1.6; color: #444; }
         .intro-topic { background: var(--pink-soft); padding: 18px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #F8BBD0; text-align: center; }
         .topic-kor { font-weight: bold; color: #D81B60; display: block; margin-bottom: 5px; }
         .topic-eng { font-size: 0.85rem; color: #888; font-style: italic; }
@@ -32,16 +31,19 @@
         .kor-box { background: #FFF5F7; padding: 20px; border-radius: 20px; font-size: 0.95rem; font-weight: 600; color: #D81B60; margin-bottom: 15px; border: 2px solid #F8BBD0; text-align: center; line-height: 1.6; }
         
         .voca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .voca-item { background: #fff; padding: 10px; border-radius: 10px; font-size: 0.82rem; border: 1px solid var(--purple-pale); cursor: pointer; text-align: center; font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #333; }
         .voca-item.revealed { background: var(--purple-main); color: white; }
         
         .blank-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; padding: 10px; background: #fdfdfd; border-radius: 15px; }
         .word-blank { border-bottom: 2px solid var(--purple-main); min-width: 35px; text-align: center; font-size: 1rem; color: transparent; cursor: pointer; padding: 0 2px; }
         .word-blank.revealed { color: var(--purple-dark); border-bottom-color: transparent; font-weight: bold; }
 
-        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; }
-        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; }
-        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; }
+        .btn-check { background: #f0f0f0; padding: 12px; border-radius: 12px; border: none; font-weight: bold; margin-bottom: 10px; cursor: pointer; width: 100%; font-size: 0.9rem; color: #555; }
+        .trans-content { display: none; padding: 15px; background: #fafafa; border-radius: 15px; border-left: 5px solid var(--purple-main); font-size: 0.9rem; margin-bottom: 10px; color: #444; }
+        
+        .nav-btns-fixed { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; margin-top: auto; position: sticky; bottom: 0; gap: 10px; align-items: center; }
+        .btn-prev { background: #EDF2F7; color: #718096; border-radius: 15px; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .btn-next { background: var(--purple-main); color: white; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; height: 55px; flex: 1.5; display: flex; align-items: center; justify-content: center; margin-top: 0; }
     </style>
 </head>
 <body>
@@ -55,15 +57,17 @@
 </div>
 
 <script>
+    // 노출 타겟: 전치사, 접속사, 관사 등 (일관된 시스템 규칙)
+    const visibleWords = ["do", "to", "the", "that", "are", "more", "although", "into", "between", "and", "in", "a", "as", "it", "not", "common", "than", "is", "becomes", "back", "to", "achieved", "by", "or", "but", "on"];
+
     const fullData = [
-        { en: "To monitor our surroundings is to focus on what’s outside of ourselves: what we see, hear, smell, feel, and perhaps even taste.", ko: "우리의 주변을 관찰하는 것은 우리 외부에 있는 것, 즉 우리가 보고, 듣고, 냄새 맡고, 느끼고, 아마도 심지어 맛보는 것에 집중하는 것입니다.", voca: ["monitor:관찰/감시하다", "surroundings:주변 환경", "focus on:~에 집중하다", "outside:외부", "perhaps:아마도", "taste:맛보다", "smell:냄새맡다", "ourselves:우리 자신", "hear:듣다", "see:보다"] },
-        { en: "But sometimes what really marks a place is something less specific—a feeling within us.", ko: "하지만 때때로 어떤 장소를 정말로 특징짓는 것은 덜 구체적인 것, 즉 우리 내면의 감정입니다.", voca: ["sometimes:때때로", "marks:특징짓다/표시하다", "specific:구체적인", "feeling:감정", "within:~내부의", "less:덜", "place:장소", "really:정말로", "🍌", "🍌"] },
-        { en: "An interesting example emerged from a study of subway passenger behavior.", ko: "지하철 승객 행동 연구에서 흥미로운 사례가 나타났습니다.", voca: ["emerged:나타나다/출현하다", "study:연구", "subway:지하철", "passenger:승객", "behavior:행동", "interesting:흥미로운", "example:사례", "🍌", "🍌", "🍌"] },
-        { en: "Researchers trying to understand why people sit where they sit or stand where they stand in subway and metro trains examined the factors that shape the way riders used and navigated that space in different situations.", ko: "지하철과 메트로 열차에서 사람들이 왜 그 자리에 앉는지 또는 그 자리에 서 있는지를 이해하려는 연구원들은 승객들이 다양한 상황에서 그 공간을 사용하고 이동하는 방식을 형성하는 요인들을 조사했습니다.", voca: ["examined:조사하다", "factors:요인들", "shape:형성하다", "navigated:이동하다/길을찾다", "space:공간", "situations:상황들", "understand:이해하다", "riders:승객/타는사람", "different:다른", "metro:메트로"] },
-        { en: "One of their findings involved the reasons many riders like to plant themselves close to the train’s doors.", ko: "그들의 발견 중 하나는 많은 승객이 열차 문 근처에 자리를 잡고 싶어 하는 이유와 관련이 있었습니다.", voca: ["findings:발견(물)", "involved:관련되다/포함하다", "reasons:이유들", "plant oneself:자리를 잡다", "close to:~에 가까이", "doors:문들", "riders:승객들", "train:열차", "like:좋아하다", "🍌"] },
-        { en: "Partly this was the obvious convenience of being able to exit more quickly.", ko: "부분적으로 이것은 더 빨리 내릴 수 있다는 분명한 편리함 때문이었습니다.", voca: ["Partly:부분적으로", "obvious:분명한", "convenience:편리함", "exit:나가다/내리다", "quickly:빨리", "being able to:~할 수 있음", "this:이것", "more:더", "🍌", "🍌"] },
-        { en: "But it was shaped partly by a more abstract sensation—the desire to avoid the sometimes uncomfortable feeling of accidentally making eye contact with seated passengers.", ko: "하지만 그것은 부분적으로 더 추상적인 느낌, 즉 앉아 있는 승객들과 우연히 눈이 마주치는 때때로 불편한 기분을 피하고 싶은 욕구에 의해 형성되었습니다.", voca: ["abstract:추상적인", "sensation:느낌/감각", "desire:욕구", "avoid:피하다", "uncomfortable:불편한", "accidentally:우연히", "eye contact:눈맞춤", "seated:앉아 있는", "passengers:승객들", "feeling:기분"] },
-        { en: "We can’t see feelings—but they’re very real, and they influence our experience of the world.", ko: "우리는 감정을 볼 수는 없지만, 그것들은 매우 실제적이며 우리가 세상을 경험하는 데 영향을 미칩니다.", voca: ["influence:영향을 주다", "experience:경험", "real:실제적인", "world:세상", "feelings:감정들", "very:매우", "they:그것들", "see:보다", "can't:할 수 없다", "🍌"] }
+        { en: "Introverted leaders do have to overcome the strong cultural presumption that extroverts are more effective leaders.", ko: "내향적인 리더들은 외향적인 사람들이 더 유능한 리더라는 강력한 문화적 가정을 극복해야만 합니다.", voca: ["Introverted:내향적인", "overcome:극복하다", "presumption:가정/추정", "extroverts:외향적인 사람들", "effective:유능한/효과적인", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Although the population splits into almost equal parts between introverts and extroverts, more than 96 percent of managers and executives are extroverted.", ko: "인구가 내향적인 사람과 외향적인 사람 사이에서 거의 대등한 비율로 나뉨에도 불구하고, 관리자와 임원의 96퍼센트 이상이 외향적입니다.", voca: ["population:인구", "splits into:~로 나뉘다", "equal parts:대등한 비율", "executives:임원", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "In a study done in 2006, 65 percent of senior corporate executives viewed introversion as a barrier to leadership.", ko: "2006년에 실시된 한 연구에서, 고위 기업 임원의 65퍼센트가 내향성을 리더십의 장벽으로 보았습니다.", voca: ["senior corporate executives:고위 기업 임원", "viewed A as B:A를 B로 보다", "introversion:내향성", "barrier:장벽", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "We must reexamine this stereotype, however, as it doesn’t always hold true.", ko: "하지만 이 고정관념은 항상 사실인 것은 아니기 때문에 우리는 그것을 재검토해야 합니다.", voca: ["reexamine:재검토하다", "stereotype:고정관념", "hold true:유효하다/사실이다", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Regent University found that a desire to be of service to others and to empower them to grow, which is more common among introverts than extroverts, is a key factor in becoming a leader and retaining leadership.", ko: "Regent 대학교는 타인에게 봉사하고 그들이 성장할 수 있도록 권한을 부여하려는 욕구가 (외향적인 사람보다 내향적인 사람 사이에서 더 흔한데) 리더가 되고 리더십을 유지하는 데 있어 핵심 요소라는 것을 발견했습니다.", voca: ["desire:욕구", "be of service:봉사하다/도움이 되다", "empower:권한을 부여하다", "retaining:유지하는 것", "🍎", "🍎", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "So-called servant leadership, dating back to ancient philosophical literature, adheres to the belief that a company’s goals are best achieved by helping workers or customers achieve their goals.", ko: "고대 철학 문헌까지 거슬러 올라가는 소위 서번트 리더십은 직원이 나 고객이 자신의 목표를 달성하도록 도움으로써 회사의 목표가 가장 잘 달성된다는 믿음을 고수합니다.", voca: ["so-called:소위", "servant leadership:서번트 리더십", "dating back to:~까지 거슬러 올라가는", "philosophical:철학적인", "adheres to:~을 고수하다", "achieved:달성된", "🍎", "🍎", "🍎", "🍎"] },
+        { en: "Such leaders do not seek attention but rather want to shine a light on others’ wins and achievements; servant leadership requires humility, but that humility ultimately pays off.", ko: "그러한 리더들은 관심을 구하지 않고 오히려 타인의 승리와 성취를 비추고 싶어 합니다. 서번트 리더십은 겸손을 필요로 하지만, 그 겸손은 결국 결실을 맺습니다.", voca: ["seek attention:관심을 구하다", "shine a light:빛을 비추다", "achievements:성취", "humility:겸손", "ultimately:결국/궁극적으로", "pays off:결실을 맺다/보상을 얻다", "🍎", "🍎", "🍎", "🍎"] }
     ];
 
     let currentMode = 'INTRO';
@@ -80,100 +84,77 @@
             header.innerText = "English Master #38";
             nav.classList.add('hidden');
             area.innerHTML = `
-                <div class="main-title-card"><h1>Inside the Mind:<br>Feelings Shape Experience</h1><p>2025년 6월 고1 모의고사 38번</p></div>
+                <div class="main-title-card"><h1>The Power of<br>Introverted Leaders</h1><p>2023년 11월 고2 38번</p></div>
+                
                 <div class="intro-summary">
-                    <p>• <b>📍 서론:</b> 주변 관찰은 외부 자극에 집중하는 것이지만, 내면의 감정이 장소를 특징짓기도 함.</p>
-                    <p>• <b>📍 본론:</b> 지하철 승객들이 문 근처에 서는 이유는 편리함 외에도 승객과의 눈맞춤을 피하려는 심리적 요인이 큼.</p>
-                    <p>• <b>📍 결론:</b> 감정은 눈에 보이지 않지만 매우 실제적이며 우리가 세상을 경험하는 방식에 큰 영향을 미침.</p>
+                    <p>• <b>📍 서론:</b> 외향적인 사람이 더 나은 리더라는 통념 때문에 내향적 리더는 이를 극복해야 하는 과제가 있음.</p>
+                    <p>• <b>📍 본론:</b> 실제 임원의 대다수가 외향적이지만, 내향적 리더는 타인을 돕고 성장시키는 '서번트 리더십'에 더 강점이 있음.</p>
+                    <p>• <b>📍 결론:</b> 관심을 받기보다 타인의 성취를 빛내주는 겸손한 서번트 리더십은 결국 조직의 목표 달성에 큰 보상을 가져다줌.</p>
                 </div>
                 <div class="intro-topic">
-                    <span class="topic-kor">주제: 보이지 않는 내면의 감정이 공간 이용과 경험에 미치는 영향</span>
-                    <span class="topic-eng">Topic: How Invisible Internal Feelings Influence Spatial Use and World Experience</span>
+                    <span class="topic-kor">주제: 내향적 리더들이 가진 서번트 리더십의 특징과 그 효과성</span>
+                    <span class="topic-eng">Topic: The characteristics and effectiveness of servant leadership possessed by introverted leaders</span>
                 </div>
-                <button class="btn-next" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
-                <button class="btn-next" style="margin-top:10px; background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
+                <button class="btn-intro-step" onclick="startStep(2)">STEP 2: 문장 학습 시작 ▶</button>
+                <button class="btn-intro-step" style="background:#9C27B0;" onclick="startStep(3)">STEP 3: 영작 연습 시작 ▶</button>
             `;
-        } else if (currentMode === 'STEP2' || currentMode === 'STEP3') {
+        } else {
             const stepNum = currentMode === 'STEP2' ? 2 : 3;
-            header.innerText = `STEP ${stepNum}. ${stepNum === 2 ? '문장 학습' : '영작 연습'} (${currentIdx + 1}/${fullData.length})`;
+            header.innerText = `STEP ${stepNum} (${currentIdx + 1}/${fullData.length})`;
             nav.classList.remove('hidden');
             document.getElementById('main-next-btn').innerText = (currentIdx === fullData.length - 1) ? "FINISH" : "NEXT";
             
             const item = fullData[currentIdx];
             if (currentMode === 'STEP2') {
-                area.innerHTML = `
-                    <div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div>
-                    <div class="voca-grid" id="voca-area"></div>
-                    <button class="btn-check" onclick="toggleView('trans-area')">해석 확인하기</button>
-                    <div id="trans-area" class="trans-content">${item.ko}</div>
-                `;
-                fillVoca(item.voca, '🍌', "#FFD600");
+                area.innerHTML = `<div class="sentence-box" onclick="playTTS('${item.en.replace(/'/g, "\\'")}')">${item.en}</div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">해석 확인</button><div id="trans-area" class="trans-content">${item.ko}</div>`;
+                fillVoca(item.voca, '🍎', "#FF3B30");
             } else {
-                area.innerHTML = `
-                    <div class="kor-box">${item.ko}</div>
-                    <div class="blank-area" id="blank-area"></div>
-                    <div class="voca-grid" id="voca-area"></div>
-                    <button class="btn-check" onclick="toggleView('trans-area')">정답 확인하기</button>
-                    <div id="trans-area" class="trans-content">${item.en}</div>
-                `;
+                area.innerHTML = `<div class="kor-box">${item.ko}</div><div class="blank-area" id="blank-area"></div><div class="voca-grid" id="voca-area"></div><button class="btn-check" onclick="toggleView('trans-area')">정답 확인</button><div id="trans-area" class="trans-content">${item.en}</div>`;
                 fillBlanks(item.en);
                 fillVoca(item.voca, '🍇', "#9C27B0");
             }
         }
     }
 
-    function fillVoca(vocaList, emoji, emojiColor) {
-        const container = document.getElementById('voca-area');
+    function fillVoca(vList, emo, col) {
+        const area = document.getElementById('voca-area');
         for (let i = 0; i < 10; i++) {
             const div = document.createElement('div');
             div.className = 'voca-item';
-            if (vocaList[i]) {
-                const [eng, kor] = vocaList[i].split(':');
-                div.innerText = eng;
-                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? kor : eng; };
+            if (vList[i] && vList[i].includes(':')) {
+                const [en, ko] = vList[i].split(':');
+                div.innerText = en;
+                div.onclick = function() { this.classList.toggle('revealed'); this.innerText = this.classList.contains('revealed') ? ko : en; };
             } else {
-                div.innerText = emoji; div.style.color = emojiColor; div.style.cursor = "default";
+                div.innerText = emo; div.style.color = col; div.style.cursor = "default";
             }
-            container.appendChild(div);
+            area.appendChild(div);
         }
     }
 
+    function fillBlanks(s) {
+        const area = document.getElementById('blank-area');
+        s.split(' ').forEach(w => {
+            const span = document.createElement('span');
+            const cw = w.replace(/[.,'“”]/g, "").toLowerCase();
+            if(visibleWords.includes(cw)) { 
+                span.innerText = w; 
+                span.style.margin="0 4px"; 
+                span.style.fontWeight="bold"; 
+                span.style.color = "var(--purple-dark)";
+            } else { 
+                span.className = 'word-blank'; 
+                span.innerText = w; 
+                span.onclick = function() { this.classList.add('revealed'); playTTS(w.replace(/[.,'“”]/g, "")); }; 
+            }
+            area.appendChild(span);
+        });
+    }
 
-// 수정된 Step 3 빈칸 생성 로직
-function fillBlanks(s) {
-    const c = document.getElementById('blank-area');
-    
-    // 🍎 영어에서 자주 쓰이는 전치사 목록 (이 목록에 있으면 자동으로 보임)
-    const prepositions = ["in", "on", "at", "by", "for", "from", "of", "with", "to", "into", "onto", "upon", "about", "above", "across", "after", "against", "along", "among", "around", "as", "before", "behind", "below", "beneath", "beside", "between", "beyond", "during", "except", "inside", "near", "off", "outside", "over", "past", "since", "through", "throughout", "under", "underneath", "until", "up", "within", "without"];
-
-    s.split(' ').forEach(w => {
-        const sp = document.createElement('span');
-        sp.className = 'word-blank';
-        sp.innerText = w;
-        
-        // 🍎 단어에서 문장부호(.,'":;?!)를 제거하고 소문자로 변환하여 전치사인지 확인
-        const pureWord = w.toLowerCase().replace(/[.,'":;?!()“”]/g, "");
-        
-        if (prepositions.includes(pureWord)) {
-            // 전치사라면 처음부터 보여주고 밑줄 제거
-            sp.classList.add('revealed');
-            sp.style.borderBottomColor = 'transparent'; 
-        }
-
-        // 클릭하면 정답이 보이게 하는 기능
-        sp.onclick = function() {
-            this.classList.add('revealed');
-            this.style.borderBottomColor = 'transparent';
-            playTTS(w.replace(/[.,'"]/g, ""));
-        };
-        c.appendChild(sp);
-    });
-}
-
-    function startStep(step) { currentMode = 'STEP' + step; currentIdx = 0; render(); }
+    function startStep(s) { currentMode = 'STEP' + s; currentIdx = 0; render(); }
     function nextSentence() { if (currentIdx < fullData.length - 1) { currentIdx++; render(); } else { currentMode = 'INTRO'; render(); } }
     function prevSentence() { if (currentIdx > 0) { currentIdx--; render(); } else { currentMode = 'INTRO'; render(); } }
-    function playTTS(text) { synth.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.9; synth.speak(utterance); }
+    function playTTS(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; synth.speak(u); }
     function toggleView(id) { const el = document.getElementById(id); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; }
     window.onload = render;
 </script>
