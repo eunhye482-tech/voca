@@ -1,146 +1,353 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>English Master - Main Selection</title>
-    <style>
-        :root { 
-            --mint-dark: #00796B; /* 진한 민트색 */
-            --mint-pale: #B2DFDB; 
-            --black: #000000; /* 세컨 컬러 */
-            --yellow-point: #FFEB3B; /* 포인트 노랑색 */
-            --white: #FFFFFF;
-            --gray-light: #F5F5F5;
-        }
-        body { font-family: 'Pretendard', sans-serif; margin: 0; background: var(--gray-light); display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .phone-container { width: 100%; max-width: 450px; height: 100%; background: var(--white); display: flex; flex-direction: column; position: relative; border: 1px solid #eee; }
-        .header { padding: 15px; text-align: center; font-weight: bold; color: var(--white); border-bottom: 2px solid var(--black); background: var(--mint-dark); font-size: 1.1rem; }
-        .content { flex: 1; padding: 20px; overflow-y: auto; background: var(--white); }
-        .section-label { font-size: 0.9rem; font-weight: bold; color: var(--black); margin: 20px 0 10px 5px; display: block; text-transform: uppercase; letter-spacing: 1px; }
-        .section-label:first-child { margin-top: 5px; }
-        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
-        button { 
-            border: 1.5px solid var(--mint-pale); 
-            background: var(--white); 
-            border-radius: 8px; 
-            padding: 12px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            color: var(--mint-dark);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        button:hover {
-            border-color: var(--mint-dark);
-        }
-        button:active, button.selected { 
-            background: var(--mint-dark); 
-            color: var(--white); 
-            border-color: var(--mint-dark); 
-            box-shadow: 0 4px 10px rgba(0, 121, 107, 0.3);
-        }
-        button.selected::after {
-            content: ' ✓';
-            color: var(--yellow-point); /* 선택된 버튼에 노랑색 체크 표시 */
-        }
-        .grade-btn { flex: 1; min-width: 90px; }
-        .year-btn { width: calc(33.33% - 7px); }
-        .month-btn { width: calc(50% - 5px); }
-        .num-btn { width: calc(20% - 8px); font-size: 0.85rem; padding: 10px 0; }
-        .footer { padding: 20px; background: var(--white); border-top: 1px solid #eee; }
-        .btn-start-final { background: var(--black); color: var(--yellow-point); padding: 18px; border-radius: 12px; border: 2px solid var(--black); font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-start-final:hover {
-            background: var(--mint-dark);
-            border-color: var(--mint-dark);
-            color: var(--white);
-        }
-        .btn-start-final:active {
-            transform: scale(0.98);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Mobile Learning App</title>
+  <style>
+    :root {
+      --outer-bg: #030712;
+      --app-bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* PC 화면 전체 배경 */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--outer-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 스마트폰 비율 고정 프레임 (430px) */
+    .mobile-app-frame {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      max-height: 932px; /* 스마트폰 높이 비율 */
+      background-color: var(--app-bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    /* PC 화면일 때 스마트폰 단말기 스타일 적용 */
+    @media (min-width: 480px) {
+      .mobile-app-frame {
+        height: 884px;
+        border-radius: 44px;
+        border: 10px solid #1e293b;
+      }
+    }
+
+    /* 앱 헤더 */
+    .app-header {
+      padding: 16px 20px;
+      background-color: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .app-header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .path-badge {
+      font-size: 0.75rem;
+      background: var(--accent-glow);
+      color: var(--accent-color);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    /* 앱 콘텐츠 스크롤 영역 */
+    .app-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* 레벨/스텝 탭 바 */
+    .controls-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .segment-bar {
+      display: flex;
+      background-color: var(--card-bg);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .segment-btn {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .segment-btn.active {
+      background-color: var(--accent-color);
+      color: #0f172a;
+    }
+
+    .sub-bar .segment-btn.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+    }
+
+    /* 검색 바 */
+    .search-input {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* 파일 리스트 */
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .file-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 14px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: transform 0.1s ease, background-color 0.15s ease;
+    }
+
+    .file-card:active {
+      transform: scale(0.98);
+      background-color: rgba(56, 189, 248, 0.1);
+    }
+
+    .card-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-badge {
+      background-color: var(--accent-glow);
+      color: var(--accent-color);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .card-arrow {
+      color: var(--text-sub);
+      font-size: 0.8rem;
+    }
+
+    /* 하단 앱 네비게이션 바 */
+    .app-bottom-nav {
+      height: 60px;
+      background-color: rgba(30, 41, 59, 0.9);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: var(--text-sub);
+      font-size: 0.7rem;
+    }
+
+    .nav-item.active {
+      color: var(--accent-color);
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: var(--text-sub);
+      padding: 30px 0;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
-<div class="phone-container">
-    <div class="header">English Master - 지문 선택</div>
-    <div class="content">
-        <span class="section-label">📍 학년 선택</span>
-        <div class="btn-group">
-            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_1')">고1</button>
-            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_2')">고2</button>
-            <button class="grade-btn" onclick="select(this, 'grade', 'Grade_3')">고3</button>
+
+  <!-- 휴대폰 전용 화면 영역 -->
+  <div class="mobile-app-frame">
+    <header class="app-header">
+      <h1>Study Mobile Hub</h1>
+      <span class="path-badge" id="pathBadge">L1 / S1</span>
+    </header>
+
+    <main class="app-content">
+      <!-- Level & Step 선택 -->
+      <div class="controls-container">
+        <div class="segment-bar" id="levelTabs">
+          <button class="segment-btn active" onclick="setLevel('level1')">Level 1</button>
+          <button class="segment-btn" onclick="setLevel('level2')">Level 2</button>
+          <button class="segment-btn" onclick="setLevel('level3')">Level 3</button>
         </div>
 
-        <span class="section-label">📅 연도 선택</span>
-        <div class="btn-group">
-            <button class="year-btn" onclick="select(this, 'year', '2022')">2022</button>
-            <button class="year-btn" onclick="select(this, 'year', '2023')">2023</button>
-            <button class="year-btn" onclick="select(this, 'year', '2024')">2024</button>
-            <button class="year-btn" onclick="select(this, 'year', '2025')">2025</button>
-            <button class="year-btn" onclick="select(this, 'year', '2026')">2026</button>
+        <div class="segment-bar sub-bar" id="stepTabs">
+          <button class="segment-btn active" onclick="setStep('step1')">Step 1</button>
+          <button class="segment-btn" onclick="setStep('step2')">Step 2</button>
+          <button class="segment-btn" onclick="setStep('step3')">Step 3</button>
         </div>
+      </div>
 
-        <span class="section-label">🗓️ 시행월 선택</span>
-        <div class="btn-group">
-            <button class="month-btn" onclick="select(this, 'month', 'month_3')">3월</button>
-            <button class="month-btn" onclick="select(this, 'month', 'month_6')">6월</button>
-            <button class="month-btn" onclick="select(this, 'month', 'month_9')">9월</button>
-            <button class="month-btn" onclick="select(this, 'month', 'month_11')">11월</button>
-        </div>
+      <!-- 빠른 번호 검색 -->
+      <input type="number" id="searchInput" class="search-input" placeholder="페이지 번호 검색 (1~30)" oninput="filterFiles()" min="1" max="30" />
 
-        <span class="section-label">🔢 문항 번호 선택</span>
-        <div class="btn-group">
-            <button class="num-btn" onclick="select(this, 'num', '20')">20</button>
-            <button class="num-btn" onclick="select(this, 'num', '21')">21</button>
-            <button class="num-btn" onclick="select(this, 'num', '22')">22</button>
-            <button class="num-btn" onclick="select(this, 'num', '23')">23</button>
-            <button class="num-btn" onclick="select(this, 'num', '24')">24</button>
-            <button class="num-btn" onclick="select(this, 'num', '29')">29</button>
-            <button class="num-btn" onclick="select(this, 'num', '30')">30</button>
-            <button class="num-btn" onclick="select(this, 'num', '31')">31</button>
-            <button class="num-btn" onclick="select(this, 'num', '32')">32</button>
-            <button class="num-btn" onclick="select(this, 'num', '33')">33</button>
-            <button class="num-btn" onclick="select(this, 'num', '34')">34</button>
-            <button class="num-btn" onclick="select(this, 'num', '35')">35</button>
-            <button class="num-btn" onclick="select(this, 'num', '36')">36</button>
-            <button class="num-btn" onclick="select(this, 'num', '37')">37</button>
-            <button class="num-btn" onclick="select(this, 'num', '38')">38</button>
-            <button class="num-btn" onclick="select(this, 'num', '39')">39</button>
-            <button class="num-btn" onclick="select(this, 'num', '40')">40</button>
-        </div>
-    </div>
+      <!-- 파일 리스트 -->
+      <div class="file-list" id="fileList"></div>
+    </main>
 
-    <div class="footer">
-        <button class="btn-start-final" onclick="startLearning()">지문 학습 시작 ▶</button>
-    </div>
-</div>
+    <!-- 하단 고정 탭 바 -->
+    <nav class="app-bottom-nav">
+      <div class="nav-item active">
+        <span>📱</span>
+        <span>메인</span>
+      </div>
+      <div class="nav-item" onclick="alert('모바일 화면 비율이 적용된 index 페이지입니다.')">
+        <span>⚙️</span>
+        <span>설정</span>
+      </div>
+    </nav>
+  </div>
 
-<script>
-    // 선택된 실제 폴더 경로 값을 저장하는 변수입니다
-    let selections = { grade: '', year: '', month: '', num: '' };
+  <script>
+    let currentLevel = 'level1';
+    let currentStep = 'step1';
+    const TOTAL_FILES = 30;
 
-    function select(el, type, folderName) {
-        const buttons = el.parentElement.querySelectorAll('button');
-        buttons.forEach(btn => btn.classList.remove('selected'));
-        el.classList.add('selected');
-        
-        // 버튼 텍스트 대신 'Grade_1' 같은 실제 폴더명을 저장합니다
-        selections[type] = folderName || el.innerText;
+    function renderList() {
+      const query = document.getElementById('searchInput').value;
+      const container = document.getElementById('fileList');
+      container.innerHTML = '';
+
+      let count = 0;
+      for (let i = 1; i <= TOTAL_FILES; i++) {
+        if (query && !String(i).includes(query)) continue;
+
+        count++;
+        const card = document.createElement('a');
+        card.className = 'file-card';
+        card.href = `${currentLevel}/${currentStep}/${i}.html`;
+        card.innerHTML = `
+          <div class="card-info">
+            <span class="card-badge">#${String(i).padStart(2, '0')}</span>
+            <span class="card-title">${i}.html</span>
+          </div>
+          <span class="card-arrow">❯</span>
+        `;
+        container.appendChild(card);
+      }
+
+      if (count === 0) {
+        container.innerHTML = '<div class="empty-msg">검색 결과가 없습니다.</div>';
+      }
+
+      // 상단 상태 경로 표시 업데이트
+      const l = currentLevel.replace('level', '');
+      const s = currentStep.replace('step', '');
+      document.getElementById('pathBadge').innerText = `L${l} / S${s}`;
     }
 
-    function startLearning() {
-        if (!selections.grade || !selections.year || !selections.month || !selections.num) {
-            alert('모든 항목을 선택해 주세요!');
-            return;
+    function setLevel(lvl) {
+      currentLevel = lvl;
+      updateActiveTab('levelTabs', lvl);
+      renderList();
+    }
+
+    function setStep(stp) {
+      currentStep = stp;
+      updateActiveTab('stepTabs', stp);
+      renderList();
+    }
+
+    function filterFiles() {
+      renderList();
+    }
+
+    function updateActiveTab(groupId, value) {
+      const btns = document.getElementById(groupId).querySelectorAll('.segment-btn');
+      btns.forEach(btn => {
+        if (btn.getAttribute('onclick').includes(`'${value}'`)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
         }
-
-        // 사용자님의 컴퓨터 폴더 구조에 맞춰 경로를 생성합니다
-        // 예: ./Grade_1/2025/month_3/20.html
-        const targetPath = `./${selections.grade}/${selections.year}/${selections.month}/${selections.num}.html`;
-        
-        // 생성된 경로로 이동합니다
-        window.location.href = targetPath;
+      });
     }
-</script>
+
+    // 초기 화면 생성
+    renderList();
+  </script>
 </body>
-</html>s
+</html>
