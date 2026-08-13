@@ -3,188 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>영단어 암기장 (Mobile Web App)</title>
+  <title>영단어 암기장</title>
   <style>
-    :root {
-      --bg-color: #fefcf0;       /* 연한 노란색 바탕 */
-      --card-bg: #ffffff;
-      --primary-orange: #f57c00; /* 포인트 주황색 */
-      --primary-green: #1b5e20;  /* 포인트 진한 녹색 */
-      --green-light: #e8f5e9;
-      --text-dark: #212121;
-      --border-color: #ffe082;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-dark);
-      padding: 16px 12px;
-      max-width: 500px;
+      background-color: #fefcf0;
+      color: #212121;
+      padding: 12px;
+      max-width: 480px;
       margin: 0 auto;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
     header {
       text-align: center;
-      padding: 14px 0;
-      margin-bottom: 14px;
-      background: #fff8e1;
-      border-radius: 16px;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
+      padding: 12px;
+      margin-bottom: 12px;
+      background-color: #fff8e1;
+      border-radius: 14px;
+      border: 2px solid #ffe082;
     }
 
     h1 {
-      font-size: 1.3rem;
-      color: var(--primary-green);
+      font-size: 1.25rem;
+      color: #1b5e20;
       font-weight: 800;
     }
 
     .sub-title {
       font-size: 0.8rem;
-      color: var(--primary-orange);
+      color: #f57c00;
       margin-top: 4px;
       font-weight: 600;
     }
 
-    /* 페이지 네비게이션 (1~5 페이지) */
     .page-nav {
+      background-color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #ffe082;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      gap: 6px;
-      background: var(--card-bg);
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1.5px solid var(--border-color);
-      box-shadow: var(--shadow);
     }
 
     .page-btn-group {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .page-btn {
-      width: 38px;
-      height: 38px;
-      border: 1.5px solid var(--primary-orange);
-      background-color: #fff;
-      color: var(--primary-orange);
+      width: 36px;
+      height: 36px;
+      line-height: 34px;
+      text-align: center;
+      border: 1.5px solid #f57c00;
+      background-color: #ffffff;
+      color: #f57c00;
       font-weight: bold;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       border-radius: 50%;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
     }
 
     .page-btn.active {
-      background-color: var(--primary-orange);
-      color: white;
-      box-shadow: 0 2px 6px rgba(245, 124, 0, 0.3);
+      background-color: #f57c00;
+      color: #ffffff;
     }
 
-    .tts-indicator {
+    .info-text {
       font-size: 0.75rem;
-      color: var(--primary-green);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      color: #1b5e20;
+      font-weight: bold;
     }
 
-    /* 단어 카드 리스트 */
     .word-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
-      flex: 1;
+      width: 100%;
     }
 
     .word-card {
-      background: var(--card-bg);
+      background-color: #ffffff;
       border: 2px solid #ffe082;
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 14px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
       user-select: none;
-      transition: transform 0.1s ease, border-color 0.2s ease, background-color 0.2s ease;
-      min-height: 58px;
     }
 
     .word-card:active {
-      transform: scale(0.98);
+      background-color: #fffde7;
     }
 
     .word-card.ko-mode {
-      background-color: var(--green-light);
-      border-color: var(--primary-green);
+      background-color: #e8f5e9;
+      border-color: #1b5e20;
     }
 
-    .word-index {
-      font-size: 0.85rem;
+    .idx-col {
+      width: 28px;
       font-weight: bold;
       color: #9e9e9e;
-      width: 26px;
-      flex-shrink: 0;
+      font-size: 0.85rem;
     }
 
-    .word-card.ko-mode .word-index {
-      color: var(--primary-green);
+    .word-card.ko-mode .idx-col {
+      color: #1b5e20;
     }
 
-    .word-text {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text-dark);
+    .text-col {
       flex: 1;
-      text-align: left;
-      padding: 0 8px;
-      word-break: break-word;
-    }
-
-    .word-card.ko-mode .word-text {
-      color: var(--primary-green);
       font-size: 1.1rem;
+      font-weight: 700;
+      color: #212121;
+      padding: 0 8px;
+      word-break: break-all;
     }
 
-    .sound-icon {
-      font-size: 1.2rem;
-      color: var(--primary-orange);
-      flex-shrink: 0;
-      opacity: 0.8;
+    .word-card.ko-mode .text-col {
+      color: #1b5e20;
     }
 
-    .word-card.ko-mode .sound-icon {
-      color: var(--primary-green);
+    .icon-col {
+      font-size: 1.1rem;
     }
 
     footer {
       text-align: center;
       font-size: 0.75rem;
-      color: #888;
-      padding: 10px 0;
-      margin-top: auto;
+      color: #888888;
+      padding: 20px 0;
     }
   </style>
 </head>
@@ -195,191 +153,140 @@
     <div class="sub-title">터치 시 발음 재생 + 영한 전환</div>
   </header>
 
-  <!-- 페이지 넘김 버튼 (1 ~ 5 페이지) -->
   <div class="page-nav">
-    <div class="page-btn-group" id="page-grid">
-      <!-- JS로 1~5 버튼 생성 -->
-    </div>
-    <div class="tts-indicator">
-      <span>🔊 터치 시 발음 재생</span>
-    </div>
+    <div class="page-btn-group" id="page-grid"></div>
+    <div class="info-text">🔊 터치 시 발음</div>
   </div>
 
-  <!-- 단어 카드 리스트 (10개) -->
-  <div class="word-list" id="word-list">
-    <!-- JS로 10개 카드가 들어옴 -->
-  </div>
+  <div class="word-list" id="word-list"></div>
 
   <footer>
-    GitHub Pages Ready | iOS & Android TTS Optimized
+    Chrome / Samsung Internet Optimized
   </footer>
 
   <script>
-    // 새로 전달받은 이미지 속 50개 단어 데이터
-    const wordsData = [
-      { en: "terrible", ko: "끔찍한[심한]" },
-      { en: "optimism", ko: "낙관주의" },
-      { en: "pessimism", ko: "비관주의" },
-      { en: "value", ko: "평가하다, 가치(를두다)" },
-      { en: "postwar", ko: "전(쟁)후의" },
-      { en: "necessary", ko: "필수적인" },
-      { en: "postscript", ko: "후기" },
-      { en: "prospect", ko: "전망(하다),가능성" },
-      { en: "aspect", ko: "측면[양상]" },
-      { en: "unexpected", ko: "예상치않은" },
+    var wordsData = [
+      { en: "estimation", ko: "평가, 판단, 추정" },
+      { en: "dock", ko: "부두, 선착장" },
+      { en: "compound", ko: "합성물, 혼합하다" },
+      { en: "liquid", ko: "액체(의)" },
+      { en: "enclose", ko: "동봉하다, 둘러싸다" },
+      { en: "chemical", ko: "화학적인, 화학의" },
+      { en: "chemicals", ko: "화학물질" },
+      { en: "chemistry", ko: "화학" },
+      { en: "chemist", ko: "화학자" },
+      { en: "drill", ko: "구멍을 뚫다, 시추하다, 훈련(시키다)" },
 
-      { en: "expect", ko: "기대하다" },
-      { en: "prospective", ko: "장래의[가능성있는]" },
-      { en: "portion", ko: "(일)부분[1인분]" },
-      { en: "position", ko: "위치[자리], 지위" },
-      { en: "downstairs", ko: "아래층" },
-      { en: "sole", ko: "유일한" },
-      { en: "mount", ko: "증가하다[오르다]" },
-      { en: "amount", ko: "액수[총액], 양" },
-      { en: "amount to", ko: "~에(총계가)이른다[해당된다]" },
-      { en: "precious", ko: "귀중한[비싼]" },
+      { en: "ideological", ko: "이념적인" },
+      { en: "vein", ko: "정맥" },
+      { en: "artery", ko: "동맥" },
+      { en: "plight", ko: "곤경, 어려운 처지" },
+      { en: "boost", ko: "증진시키다, 후원(하다)" },
+      { en: "stout", ko: "통통한, 뚱뚱한, 튼튼한" },
+      { en: "ineffective", ko: "효과적이지 못한, 효과 없는" },
+      { en: "undergo", ko: "경험하다, 받다" },
+      { en: "unfamiliar", ko: "낯선" },
+      { en: "cell", ko: "세포, 감방, 전지" },
 
-      { en: "release", ko: "개봉[발매/발표]하다, 발산[배출]하다, 석방하다[풀어주다]" },
-      { en: "ingredient", ko: "재료[성분]" },
-      { en: "furthermore", ko: "게다가" },
-      { en: "further", ko: "추가의, 더멀리" },
-      { en: "fur", ko: "털[모피]" },
-      { en: "hence", ko: "그러므로" },
-      { en: "monitor", ko: "관찰[감시]하다" },
-      { en: "install", ko: "설치하다" },
-      { en: "defeat", ko: "패배시키다[이기다]" },
-      { en: "medical", ko: "의료의[의학의]" },
+      { en: "cellular", ko: "세포의" },
+      { en: "craft", ko: "공예품, 기술, 비행기" },
+      { en: "alleviate", ko: "완화시키다" },
+      { en: "aggravate", ko: "악화시키다" },
+      { en: "apparatus", ko: "(몸의)기관, 장치[기구]" },
+      { en: "delegate", ko: "대표자, 위임하다" },
+      { en: "defendant", ko: "피고" },
+      { en: "attorney", ko: "변호사, 법률 대리인" },
+      { en: "article", ko: "물건, 기사" },
+      { en: "wreck", ko: "난파(선), 난파시키다, 망가뜨리다" },
 
-      { en: "feat", ko: "위업[위대한업적,기술,묘기]" },
-      { en: "destruction", ko: "파괴" },
-      { en: "context", ko: "문맥[맥락,상황,환경]" },
-      { en: "construction", ko: "건설[공사]" },
-      { en: "arrest", ko: "체포하다" },
-      { en: "risk", ko: "위험(을무릅쓰다)" },
-      { en: "measurement", ko: "측정[평가]" },
-      { en: "priority", ko: "우선사항[우선권]" },
-      { en: "prime", ko: "주된[첫째의,우수한]" },
-      { en: "primitive", ko: "원시적인" },
+      { en: "outlook", ko: "전망, 관점" },
+      { en: "devastate", ko: "파괴하다" },
+      { en: "devastating", ko: "파괴적인" },
+      { en: "devastation", ko: "파괴" },
+      { en: "outrage", ko: "분노, 격노" },
+      { en: "stand", ko: "견디다, 참다, 가판대, 입장, 태도" },
+      { en: "confederate", ko: "공모자, 공범, 동맹국, 동맹하다, 연합한" },
+      { en: "claw", ko: "발톱" },
+      { en: "endow", ko: "기부하다, 부여하다" },
+      { en: "endowed", ko: "부여 받은, 타고난" },
 
-      { en: "prior", ko: "사전의" },
-      { en: "award", ko: "주다[수여하다],상" },
-      { en: "sunscreen", ko: "자외선차단제" },
-      { en: "grand", ko: "웅장한" },
-      { en: "bang", ko: "쿵 닫다[치다],쿵(소리)" },
-      { en: "explain", ko: "설명하다" },
-      { en: "locate", ko: "(위치를)찾아내다,위치시키다" },
-      { en: "local", ko: "지역의[장소의]" },
-      { en: "complain", ko: "불평하다" },
-      { en: "complaint", ko: "불평" }
+      { en: "vessel", ko: "배, 그릇, 용기, 혈관" },
+      { en: "compatible", ko: "양립[화합, 호환]할 수 있는" },
+      { en: "incompatible", ko: "호환[양립]할 수 없는" },
+      { en: "obsession", ko: "강박관념, 집착" },
+      { en: "obsessed", ko: "집착하는, 사로잡힌" },
+      { en: "usage", ko: "사용(량), 용법, 어법" },
+      { en: "serve", ko: "도움이 되다, 복무[복역]하다" },
+      { en: "rebel", ko: "반항하다, 반역자" },
+      { en: "rebellion", ko: "반란, 반항" },
+      { en: "rebellious", ko: "반항하는, 반역하는" }
     ];
 
-    let currentPage = 1;
-    const cardStates = {};
+    var currentPage = 1;
+    var cardStates = {};
 
-    // TTS 음성 객체 초기화
-    let synth = window.speechSynthesis;
-    let englishVoice = null;
-
-    function initVoices() {
-      if (!synth) return;
-      let voices = synth.getVoices();
-      englishVoice = voices.find(v => v.lang === 'en-US') || 
-                     voices.find(v => v.lang.startsWith('en')) || null;
-    }
-
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = initVoices;
-    }
-
-    // 발음 재생 함수 (Android & iOS 대응)
     function speakWord(text) {
-      if (!('speechSynthesis' in window)) {
-        alert('이 브라우저는 음성 재생을 지원하지 않습니다.');
-        return;
-      }
-
-      synth.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.9;
-      
-      if (!englishVoice) {
-        initVoices();
-      }
-      if (englishVoice) {
-        utterance.voice = englishVoice;
-      }
-
-      synth.speak(utterance);
-    }
-
-    // 모바일 터치 오디오 언락
-    let audioUnlocked = false;
-    function unlockAudio() {
-      if (!audioUnlocked && synth) {
-        let dummyUtterance = new SpeechSynthesisUtterance("");
-        dummyUtterance.volume = 0;
-        synth.speak(dummyUtterance);
-        audioUnlocked = true;
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        var utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.log(e);
       }
     }
-    document.addEventListener('touchstart', unlockAudio, { once: true });
-    document.addEventListener('click', unlockAudio, { once: true });
 
-    // 페이지 버튼 렌더링 (1 ~ 5)
     function renderPageButtons() {
-      const pageGrid = document.getElementById('page-grid');
-      pageGrid.innerHTML = '';
-      for (let p = 1; p <= 5; p++) {
-        const btn = document.createElement('button');
-        btn.className = `page-btn ${p === currentPage ? 'active' : ''}`;
-        btn.innerText = p;
-        btn.onclick = () => {
-          currentPage = p;
-          renderPageButtons();
-          renderWords();
-        };
-        pageGrid.appendChild(btn);
+      var grid = document.getElementById('page-grid');
+      if (!grid) return;
+      var html = '';
+      for (var p = 1; p <= 5; p++) {
+        var activeClass = (p === currentPage) ? ' active' : '';
+        html += '<div class="page-btn' + activeClass + '" onclick="changePage(' + p + ')">' + p + '</div>';
       }
+      grid.innerHTML = html;
     }
 
-    // 단어 목록 렌더링 (10개씩)
-    function renderWords() {
-      const listContainer = document.getElementById('word-list');
-      listContainer.innerHTML = '';
-
-      const startIndex = (currentPage - 1) * 10;
-      const pageWords = wordsData.slice(startIndex, startIndex + 10);
-
-      pageWords.forEach((wordObj, idx) => {
-        const globalIdx = startIndex + idx;
-        const isKoMode = !!cardStates[globalIdx];
-
-        const card = document.createElement('div');
-        card.className = `word-card ${isKoMode ? 'ko-mode' : ''}`;
-        
-        card.innerHTML = `
-          <span class="word-index">${globalIdx + 1}</span>
-          <span class="word-text">${isKoMode ? wordObj.ko : wordObj.en}</span>
-          <span class="sound-icon">${isKoMode ? '🇰🇷' : '🔊'}</span>
-        `;
-
-        card.onclick = () => {
-          speakWord(wordObj.en);
-          cardStates[globalIdx] = !cardStates[globalIdx];
-          renderWords();
-        };
-
-        listContainer.appendChild(card);
-      });
-    }
-
-    window.onload = () => {
-      initVoices();
+    function changePage(p) {
+      currentPage = p;
       renderPageButtons();
       renderWords();
-    };
+    }
+
+    function renderWords() {
+      var list = document.getElementById('word-list');
+      if (!list) return;
+
+      var start = (currentPage - 1) * 10;
+      var pageWords = wordsData.slice(start, start + 10);
+      var html = '';
+
+      for (var i = 0; i < pageWords.length; i++) {
+        var globalIdx = start + i;
+        var isKo = !!cardStates[globalIdx];
+        var cardClass = isKo ? 'word-card ko-mode' : 'word-card';
+        var wordText = isKo ? pageWords[i].ko : pageWords[i].en;
+        var soundIcon = isKo ? '🇰🇷' : '🔊';
+
+        html += '<div class="' + cardClass + '" onclick="clickCard(' + globalIdx + ', \'' + pageWords[i].en + '\')">' +
+                  '<div class="idx-col">' + (globalIdx + 1) + '</div>' +
+                  '<div class="text-col">' + wordText + '</div>' +
+                  '<div class="icon-col">' + soundIcon + '</div>' +
+                '</div>';
+      }
+      list.innerHTML = html;
+    }
+
+    function clickCard(idx, enText) {
+      cardStates[idx] = !cardStates[idx];
+      speakWord(enText);
+      renderWords();
+    }
+
+    renderPageButtons();
+    renderWords();
   </script>
 </body>
 </html>

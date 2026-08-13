@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>영단어 암기장</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #fefcf0;
+      color: #212121;
+      padding: 12px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 12px;
+      background-color: #fff8e1;
+      border-radius: 14px;
+      border: 2px solid #ffe082;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      color: #1b5e20;
+      font-weight: 800;
+    }
+
+    .sub-title {
+      font-size: 0.8rem;
+      color: #f57c00;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .page-nav {
+      background-color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #ffe082;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-btn-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      line-height: 34px;
+      text-align: center;
+      border: 1.5px solid #f57c00;
+      background-color: #ffffff;
+      color: #f57c00;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .page-btn.active {
+      background-color: #f57c00;
+      color: #ffffff;
+    }
+
+    .info-text {
+      font-size: 0.75rem;
+      color: #1b5e20;
+      font-weight: bold;
+    }
+
+    .word-list {
+      width: 100%;
+    }
+
+    .word-card {
+      background-color: #ffffff;
+      border: 2px solid #ffe082;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .word-card:active {
+      background-color: #fffde7;
+    }
+
+    .word-card.ko-mode {
+      background-color: #e8f5e9;
+      border-color: #1b5e20;
+    }
+
+    .idx-col {
+      width: 28px;
+      font-weight: bold;
+      color: #9e9e9e;
+      font-size: 0.85rem;
+    }
+
+    .word-card.ko-mode .idx-col {
+      color: #1b5e20;
+    }
+
+    .text-col {
+      flex: 1;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #212121;
+      padding: 0 8px;
+      word-break: break-all;
+    }
+
+    .word-card.ko-mode .text-col {
+      color: #1b5e20;
+    }
+
+    .icon-col {
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #888888;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📖 초스피드 영단어 50</h1>
+    <div class="sub-title">터치 시 발음 재생 + 영한 전환</div>
+  </header>
+
+  <div class="page-nav">
+    <div class="page-btn-group" id="page-grid"></div>
+    <div class="info-text">🔊 터치 시 발음</div>
+  </div>
+
+  <div class="word-list" id="word-list"></div>
+
+  <footer>
+    Chrome / Samsung Internet Optimized
+  </footer>
+
+  <script>
+    var wordsData = [
+      { en: "conviction", ko: "확신, 유죄 선고(판결)" },
+      { en: "allot", ko: "할당(분배)하다" },
+      { en: "acute", ko: "예민한(극심한,날카로운)" },
+      { en: "telecommute", ko: "재택근무하다" },
+      { en: "dissolve", ko: "녹이다(용해시키다), 해산시키다" },
+      { en: "case", ko: "소송(사건), 사실" },
+      { en: "incomparable", ko: "비할 데 없는(최고의)" },
+      { en: "brutal", ko: "야만적인" },
+      { en: "brute", ko: "짐승(같은사람)" },
+      { en: "excel", ko: "뛰어나다" },
+
+      { en: "accelerate", ko: "가속화하다" },
+      { en: "acceleration", ko: "가속(도)" },
+      { en: "retard", ko: "지체시키다" },
+      { en: "contradict", ko: "부정(반박)하다, 모순되다" },
+      { en: "derive", ko: "끌어내다, 유래하다" },
+      { en: "interruption", ko: "중단(방해)" },
+      { en: "uninterrupted", ko: "방해 받지 않은(연속된)" },
+      { en: "deserted", ko: "버려진(사람이 없는)" },
+      { en: "devote", ko: "쏟다(바치다)" },
+      { en: "devour", ko: "게걸스럽게 먹다" },
+
+      { en: "register", ko: "등록(신고)하다, (등록)명부" },
+      { en: "registration", ko: "등록(신고)" },
+      { en: "sniff", ko: "킁킁거리며 냄새 맡다(코를 훌쩍이다)" },
+      { en: "infer", ko: "추론하다" },
+      { en: "refer", ko: "참고하다, 부르다(언급하다)" },
+      { en: "confer", ko: "상의(논의)하다, 수여하다" },
+      { en: "complicated", ko: "복잡한" },
+      { en: "conference", ko: "회의" },
+      { en: "inference", ko: "추론" },
+      { en: "reference", ko: "참고 , 언급, 추천(서)" },
+
+      { en: "referee", ko: "심판(을 보다)" },
+      { en: "resistance", ko: "저항(반대)" },
+      { en: "resistant", ko: "내성이 있는(잘 견디는), 저항하는" },
+      { en: "irresistible", ko: "저항할(억누를)수 없는" },
+      { en: "submission", ko: "복종, 제출" },
+      { en: "tremble", ko: "떨(리)다, 흔들리다" },
+      { en: "tremendous", ko: "엄청난(대단한)" },
+      { en: "trivial", ko: "사소한(하찮은)" },
+      { en: "morale", ko: "사기(의욕)" },
+      { en: "vow", ko: "맹세하다" },
+
+      { en: "vowel", ko: "모음" },
+      { en: "fancy", ko: "상상, 화려한(값비싼), 선호(하다)" },
+      { en: "copper", ko: "구리" },
+      { en: "radical", ko: "급진적인(과격한), 근본적인" },
+      { en: "cope", ko: "대처하다" },
+      { en: "demolish", ko: "파괴(철거)하다" },
+      { en: "demolition", ko: "파괴(철거)" },
+      { en: "compress", ko: "압축하다" },
+      { en: "suppress", ko: "억제(진압)하다" },
+      { en: "suppression", ko: "억제(진압)" }
+    ];
+
+    var currentPage = 1;
+    var cardStates = {};
+
+    function speakWord(text) {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        var utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    function renderPageButtons() {
+      var grid = document.getElementById('page-grid');
+      if (!grid) return;
+      var html = '';
+      for (var p = 1; p <= 5; p++) {
+        var activeClass = (p === currentPage) ? ' active' : '';
+        html += '<div class="page-btn' + activeClass + '" onclick="changePage(' + p + ')">' + p + '</div>';
+      }
+      grid.innerHTML = html;
+    }
+
+    function changePage(p) {
+      currentPage = p;
+      renderPageButtons();
+      renderWords();
+    }
+
+    function renderWords() {
+      var list = document.getElementById('word-list');
+      if (!list) return;
+
+      var start = (currentPage - 1) * 10;
+      var pageWords = wordsData.slice(start, start + 10);
+      var html = '';
+
+      for (var i = 0; i < pageWords.length; i++) {
+        var globalIdx = start + i;
+        var isKo = !!cardStates[globalIdx];
+        var cardClass = isKo ? 'word-card ko-mode' : 'word-card';
+        var wordText = isKo ? pageWords[i].ko : pageWords[i].en;
+        var soundIcon = isKo ? '🇰🇷' : '🔊';
+
+        html += '<div class="' + cardClass + '" onclick="clickCard(' + globalIdx + ', \'' + pageWords[i].en.replace(/'/g, "\\'") + '\')">' +
+                  '<div class="idx-col">' + (globalIdx + 1) + '</div>' +
+                  '<div class="text-col">' + wordText + '</div>' +
+                  '<div class="icon-col">' + soundIcon + '</div>' +
+                '</div>';
+      }
+      list.innerHTML = html;
+    }
+
+    function clickCard(idx, enText) {
+      cardStates[idx] = !cardStates[idx];
+      speakWord(enText);
+      renderWords();
+    }
+
+    renderPageButtons();
+    renderWords();
+  </script>
+</body>
+</html>
