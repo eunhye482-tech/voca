@@ -13,15 +13,29 @@
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", Roboto, sans-serif;
     }
 
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
     body {
+<<<<<<< HEAD
       background-color: #fefcf0;
       color: #212121;
       padding: 16px 12px 40px 12px;
+=======
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      padding: 16px 12px 32px 12px; /* 하단여백 추가 */
+>>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
       max-width: 500px;
       margin: 0 auto;
       min-height: 100vh;
+      min-height: 100dvh; /* 모바일 동적 뷰포트 지원 */
       display: flex;
       flex-direction: column;
+      overflow-y: auto; /* 갤럭시 주소창 가림 방지 스크롤 지원 */
     }
 
     header {
@@ -30,8 +44,14 @@
       margin-bottom: 14px;
       background: #fff8e1;
       border-radius: 16px;
+<<<<<<< HEAD
       border: 2px solid #ffe082;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+=======
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+>>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
     }
 
     h1 {
@@ -56,8 +76,14 @@
       background: #ffffff;
       padding: 10px 12px;
       border-radius: 14px;
+<<<<<<< HEAD
       border: 1.5px solid #ffe082;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+=======
+      border: 1.5px solid var(--border-color);
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+>>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
     }
 
     .page-btn-group {
@@ -172,6 +198,7 @@
       color: #888;
       padding: 10px 0 20px 0;
       margin-top: auto;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -196,7 +223,12 @@
   </footer>
 
   <script>
+<<<<<<< HEAD
     var wordsData = [
+=======
+    // 전달받은 50개 단어 데이터
+    const wordsData = [
+>>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
       { en: "glory", ko: "영광" },
       { en: "disapprove", ko: "반대하다" },
       { en: "snore", ko: "코를골다" },
