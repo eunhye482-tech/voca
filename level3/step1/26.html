@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>영단어 암기장</title>
+  <title>영단어 암기장 (Mobile Web App)</title>
   <style>
+    :root {
+      --bg-color: #fefcf0;       /* 연한 노란색 바탕 */
+      --card-bg: #ffffff;
+      --primary-orange: #f57c00; /* 포인트 주황색 */
+      --primary-green: #1b5e20;  /* 포인트 진한 녹색 */
+      --green-light: #e8f5e9;
+      --text-dark: #212121;
+      --border-color: #ffe082;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,29 +24,15 @@
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", Roboto, sans-serif;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow-x: hidden;
-    }
-
     body {
-<<<<<<< HEAD
-      background-color: #fefcf0;
-      color: #212121;
-      padding: 16px 12px 40px 12px;
-=======
       background-color: var(--bg-color);
       color: var(--text-dark);
-      padding: 16px 12px 32px 12px; /* 하단여백 추가 */
->>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
+      padding: 16px 12px;
       max-width: 500px;
       margin: 0 auto;
       min-height: 100vh;
-      min-height: 100dvh; /* 모바일 동적 뷰포트 지원 */
       display: flex;
       flex-direction: column;
-      overflow-y: auto; /* 갤럭시 주소창 가림 방지 스크롤 지원 */
     }
 
     header {
@@ -44,46 +41,35 @@
       margin-bottom: 14px;
       background: #fff8e1;
       border-radius: 16px;
-<<<<<<< HEAD
-      border: 2px solid #ffe082;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-=======
       border: 2px solid var(--border-color);
       box-shadow: var(--shadow);
-      flex-shrink: 0;
->>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
     }
 
     h1 {
       font-size: 1.3rem;
-      color: #1b5e20;
+      color: var(--primary-green);
       font-weight: 800;
     }
 
     .sub-title {
       font-size: 0.8rem;
-      color: #f57c00;
+      color: var(--primary-orange);
       margin-top: 4px;
       font-weight: 600;
     }
 
+    /* 페이지 네비게이션 (1~5 페이지) */
     .page-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
       gap: 6px;
-      background: #ffffff;
+      background: var(--card-bg);
       padding: 10px 12px;
       border-radius: 14px;
-<<<<<<< HEAD
-      border: 1.5px solid #ffe082;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-=======
       border: 1.5px solid var(--border-color);
       box-shadow: var(--shadow);
-      flex-shrink: 0;
->>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
     }
 
     .page-btn-group {
@@ -94,9 +80,9 @@
     .page-btn {
       width: 38px;
       height: 38px;
-      border: 1.5px solid #f57c00;
+      border: 1.5px solid var(--primary-orange);
       background-color: #fff;
-      color: #f57c00;
+      color: var(--primary-orange);
       font-weight: bold;
       font-size: 0.95rem;
       border-radius: 50%;
@@ -108,30 +94,31 @@
     }
 
     .page-btn.active {
-      background-color: #f57c00;
+      background-color: var(--primary-orange);
       color: white;
       box-shadow: 0 2px 6px rgba(245, 124, 0, 0.3);
     }
 
     .tts-indicator {
       font-size: 0.75rem;
-      color: #1b5e20;
+      color: var(--primary-green);
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 4px;
     }
 
+    /* 단어 카드 리스트 */
     .word-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-bottom: 16px;
-      min-height: 200px;
+      flex: 1;
     }
 
     .word-card {
-      background: #ffffff;
+      background: var(--card-bg);
       border: 2px solid #ffe082;
       border-radius: 14px;
       padding: 14px 16px;
@@ -150,8 +137,8 @@
     }
 
     .word-card.ko-mode {
-      background-color: #e8f5e9;
-      border-color: #1b5e20;
+      background-color: var(--green-light);
+      border-color: var(--primary-green);
     }
 
     .word-index {
@@ -163,13 +150,13 @@
     }
 
     .word-card.ko-mode .word-index {
-      color: #1b5e20;
+      color: var(--primary-green);
     }
 
     .word-text {
       font-size: 1.15rem;
       font-weight: 700;
-      color: #212121;
+      color: var(--text-dark);
       flex: 1;
       text-align: left;
       padding: 0 8px;
@@ -177,28 +164,27 @@
     }
 
     .word-card.ko-mode .word-text {
-      color: #1b5e20;
+      color: var(--primary-green);
       font-size: 1.1rem;
     }
 
     .sound-icon {
       font-size: 1.2rem;
-      color: #f57c00;
+      color: var(--primary-orange);
       flex-shrink: 0;
       opacity: 0.8;
     }
 
     .word-card.ko-mode .sound-icon {
-      color: #1b5e20;
+      color: var(--primary-green);
     }
 
     footer {
       text-align: center;
       font-size: 0.75rem;
       color: #888;
-      padding: 10px 0 20px 0;
+      padding: 10px 0;
       margin-top: auto;
-      flex-shrink: 0;
     }
   </style>
 </head>
@@ -209,26 +195,28 @@
     <div class="sub-title">터치 시 발음 재생 + 영한 전환</div>
   </header>
 
+  <!-- 페이지 넘김 버튼 (1 ~ 5 페이지) -->
   <div class="page-nav">
-    <div class="page-btn-group" id="page-grid"></div>
+    <div class="page-btn-group" id="page-grid">
+      <!-- JS로 1~5 버튼 생성 -->
+    </div>
     <div class="tts-indicator">
       <span>🔊 터치 시 발음 재생</span>
     </div>
   </div>
 
-  <div class="word-list" id="word-list"></div>
+  <!-- 단어 카드 리스트 (10개) -->
+  <div class="word-list" id="word-list">
+    <!-- JS로 10개 카드가 들어옴 -->
+  </div>
 
   <footer>
-    GitHub Pages Ready | Mobile Optimized
+    GitHub Pages Ready | iOS & Android TTS Optimized
   </footer>
 
   <script>
-<<<<<<< HEAD
-    var wordsData = [
-=======
-    // 전달받은 50개 단어 데이터
+    // 새로 전달받은 이미지 속 50개 단어 데이터
     const wordsData = [
->>>>>>> 160a3be53d636f55907b4dde9c17bb03ebdd4c06
       { en: "glory", ko: "영광" },
       { en: "disapprove", ko: "반대하다" },
       { en: "snore", ko: "코를골다" },
@@ -285,78 +273,113 @@
       { en: "suicide", ko: "자살" }
     ];
 
-    var currentPage = 1;
-    var cardStates = {};
+    let currentPage = 1;
+    const cardStates = {};
 
+    // TTS 음성 객체 초기화
+    let synth = window.speechSynthesis;
+    let englishVoice = null;
+
+    function initVoices() {
+      if (!synth) return;
+      let voices = synth.getVoices();
+      englishVoice = voices.find(v => v.lang === 'en-US') || 
+                     voices.find(v => v.lang.startsWith('en')) || null;
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    // 발음 재생 함수 (Android & iOS 대응)
     function speakWord(text) {
-      try {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          var u = new SpeechSynthesisUtterance(text);
-          u.lang = 'en-US';
-          u.rate = 0.9;
-          window.speechSynthesis.speak(u);
-        }
-      } catch (e) {
-        console.log("TTS Error:", e);
+      if (!('speechSynthesis' in window)) {
+        alert('이 브라우저는 음성 재생을 지원하지 않습니다.');
+        return;
       }
+
+      synth.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      
+      if (!englishVoice) {
+        initVoices();
+      }
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+
+      synth.speak(utterance);
     }
 
+    // 모바일 터치 오디오 언락
+    let audioUnlocked = false;
+    function unlockAudio() {
+      if (!audioUnlocked && synth) {
+        let dummyUtterance = new SpeechSynthesisUtterance("");
+        dummyUtterance.volume = 0;
+        synth.speak(dummyUtterance);
+        audioUnlocked = true;
+      }
+    }
+    document.addEventListener('touchstart', unlockAudio, { once: true });
+    document.addEventListener('click', unlockAudio, { once: true });
+
+    // 페이지 버튼 렌더링 (1 ~ 5)
     function renderPageButtons() {
-      var grid = document.getElementById('page-grid');
-      if (!grid) return;
-      grid.innerHTML = '';
-      for (var p = 1; p <= 5; p++) {
-        (function(pageNum) {
-          var btn = document.createElement('button');
-          btn.className = 'page-btn ' + (pageNum === currentPage ? 'active' : '');
-          btn.innerText = pageNum;
-          btn.onclick = function() {
-            currentPage = pageNum;
-            renderPageButtons();
-            renderWords();
-          };
-          grid.appendChild(btn);
-        })(p);
+      const pageGrid = document.getElementById('page-grid');
+      pageGrid.innerHTML = '';
+      for (let p = 1; p <= 5; p++) {
+        const btn = document.createElement('button');
+        btn.className = `page-btn ${p === currentPage ? 'active' : ''}`;
+        btn.innerText = p;
+        btn.onclick = () => {
+          currentPage = p;
+          renderPageButtons();
+          renderWords();
+        };
+        pageGrid.appendChild(btn);
       }
     }
 
+    // 단어 목록 렌더링 (10개씩)
     function renderWords() {
-      var list = document.getElementById('word-list');
-      if (!list) return;
-      list.innerHTML = '';
-      var start = (currentPage - 1) * 10;
-      var pageWords = wordsData.slice(start, start + 10);
+      const listContainer = document.getElementById('word-list');
+      listContainer.innerHTML = '';
 
-      pageWords.forEach(function(wordObj, idx) {
-        var globalIdx = start + idx;
-        var isKoMode = !!cardStates[globalIdx];
-        var card = document.createElement('div');
-        card.className = 'word-card ' + (isKoMode ? 'ko-mode' : '');
-        card.innerHTML = 
-          '<span class="word-index">' + (globalIdx + 1) + '</span>' +
-          '<span class="word-text">' + (isKoMode ? wordObj.ko : wordObj.en) + '</span>' +
-          '<span class="sound-icon">' + (isKoMode ? '🇰🇷' : '🔊') + '</span>';
+      const startIndex = (currentPage - 1) * 10;
+      const pageWords = wordsData.slice(startIndex, startIndex + 10);
 
-        card.onclick = function() {
+      pageWords.forEach((wordObj, idx) => {
+        const globalIdx = startIndex + idx;
+        const isKoMode = !!cardStates[globalIdx];
+
+        const card = document.createElement('div');
+        card.className = `word-card ${isKoMode ? 'ko-mode' : ''}`;
+        
+        card.innerHTML = `
+          <span class="word-index">${globalIdx + 1}</span>
+          <span class="word-text">${isKoMode ? wordObj.ko : wordObj.en}</span>
+          <span class="sound-icon">${isKoMode ? '🇰🇷' : '🔊'}</span>
+        `;
+
+        card.onclick = () => {
           speakWord(wordObj.en);
           cardStates[globalIdx] = !cardStates[globalIdx];
           renderWords();
         };
-        list.appendChild(card);
+
+        listContainer.appendChild(card);
       });
     }
 
-    function initApp() {
+    window.onload = () => {
+      initVoices();
       renderPageButtons();
       renderWords();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
-    } else {
-      initApp();
-    }
+    };
   </script>
 </body>
 </html>
